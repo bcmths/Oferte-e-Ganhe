@@ -1,0 +1,8 @@
+Dependências para tratamento de rotas HTTP
+-npm i express
+
+Dependência para reset automático do servidor
+-npm i nodemon
+
+Dependências a serem instaladas para conexão com banco de dados
+- npm i pg

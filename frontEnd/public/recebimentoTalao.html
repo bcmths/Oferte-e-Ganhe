@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recebimento de Talões</title>
+  </head>
+  <body>
+    <div class="receiving-container">
+      <h2>Recebimento de Talões</h2>
+      <form>
+        <div class="form-group">
+          <label for="remessa">Remessa:</label>
+          <input type="text" id="remessa" name="remessa" required />
+        </div>
+        <div class="form-group">
+          <label for="quantidade">Quantidade de Talões:</label>
+          <input
+            type="number"
+            id="quantidade"
+            name="quantidade"
+            required
+            min="1"
+          />
+        </div>
+        <div class="form-group">
+          <label for="loja">Loja:</label>
+          <input type="text" id="loja" name="loja" required />
+        </div>
+        <div class="form-group">
+          <label for="dataRecebimento">Data de Recebimento:</label>
+          <input
+            type="date"
+            id="dataRecebimento"
+            name="dataRecebimento"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="dataPrevista">Data Prevista:</label>
+          <input type="date" id="dataPrevista" name="dataPrevista" required />
+        </div>
+        <div class="form-group">
+          <label for="funcionario">Funcionário (ID):</label>
+          <input type="text" id="funcionario" name="funcionario" required />
+        </div>
+        <div class="form-group">
+          <label for="status">Status:</label>
+          <select id="status" name="status" required>
+            <option value="" disabled selected>Selecione um status</option>
+            <option value="recebido">Recebido</option>
+            <option value="pendente">Pendente</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+        <button type="submit" class="submit-btn">Receber Talões</button>
+      </form>
+    </div>
+  </body>
+</html>
