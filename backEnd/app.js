@@ -11,10 +11,11 @@ const stockRoutes = require("./routes/stockRoutes");
 const solicitationRoutes = require("./routes/solicitationRoutes");
 const statusSolicitacaoRoutes = require("./routes/statusSolicitacaoRoutes");
 const statusMovimentacaoRoutes = require("./routes/statusMovimentacaoRoutes");
+const authRoutes = require("./routes/authRoutes");
+const authenticateToken = require("./middlewares/authMiddleware");
 
 const app = express();
 
-// Middleware para servir arquivos estáticos (CSS e JS)
 app.use(express.static(path.join(__dirname, "../frontend/public")));
 
 app.use(express.json());
@@ -22,6 +23,10 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Servidor rodando!");
 });
+
+app.use("/api/auth", authRoutes);
+
+app.use(authenticateToken);
 
 app.use("/api/users", userRoutes);
 app.use("/api/stores", storeRoutes);

@@ -1,15 +1,26 @@
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 function authenticateToken(req, res, next) {
-  const token = req.header("Authorization")?.split(" ")[1];
+  const authHeader = req.header("Authorization");
 
-  if (!token) {
-    return res.status(401).json({ message: "Token não fornecido!" });
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Formato do token inválido!" });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET || "seu-segredo", (err, user) => {
+  const token = authHeader.split(" ")[1];
+  const jwtSecret = process.env.JWT_SECRET;
+
+  if (!jwtSecret) {
+    throw new Error("JWT_SECRET is not defined!");
+  }
+
+  jwt.verify(token, jwtSecret, (err, user) => {
     if (err) {
-      return res.status(403).json({ message: "Token inválido!" });
+      if (err.name === "TokenExpiredError") {
+        return res.status(403).json({ message: "Token expirado!" });
+      }
+      return res.status(403).json({ message: "Autenticação falhou!", err });
     }
 
     req.user = user;
