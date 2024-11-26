@@ -13,8 +13,11 @@ const statusSolicitacaoRoutes = require("./routes/statusSolicitacaoRoutes");
 const statusMovimentacaoRoutes = require("./routes/statusMovimentacaoRoutes");
 const authRoutes = require("./routes/authRoutes");
 const authenticateToken = require("./middlewares/authMiddleware");
+const cookieParser = require("cookie-parser");
 
 const app = express();
+
+app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, "../frontend/public")));
 
