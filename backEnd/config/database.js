@@ -1,19 +1,19 @@
-const { Pool } = require("pg");
+const { Sequelize } = require("sequelize");
 
-const pool = new Pool({
-  user: "postgres",
+const sequelize = new Sequelize("postgres", "postgres", "postgres", {
   host: "localhost",
-  database: "postgres",
-  password: "postgres",
-  port: "5432",
+  dialect: "postgres",
+  port: 5432,
+  logging: false,
 });
 
-pool.connect((err, client, realease) => {
-  if (err) {
-    return console.error("Erro ao conectar ao banco de dados:", err.stack);
-  }
-  console.log("Conexão estabelecida com sucesso");
-  realease();
-});
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Conexão com o banco de dados estabelecida com sucesso.");
+  })
+  .catch((err) => {
+    console.error("Erro ao conectar ao banco de dados:", err);
+  });
 
-module.exports = pool;
+module.exports = sequelize;
