@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-const { Perfil, Permissao } = require("./associations");
+const Perfil = require("../models/profileModel");
+const Permissao = require("../models/permissionModel");
 
 const PerfilPermissao = sequelize.define(
   "PerfilPermissao",
@@ -9,7 +10,7 @@ const PerfilPermissao = sequelize.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
       references: {
-        model: "perfil",
+        model: Perfil,
         key: "id_perfil",
       },
     },
@@ -17,7 +18,7 @@ const PerfilPermissao = sequelize.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
       references: {
-        model: "permissao",
+        model: Permissao,
         key: "id_permissao",
       },
     },
@@ -40,16 +41,14 @@ const PerfilPermissao = sequelize.define(
   }
 );
 
-PerfilPermissao.associate = () => {
-  PerfilPermissao.belongsTo(Perfil, {
-    foreignKey: "id_perfil",
-    as: "perfil",
-  });
+Perfil.belongsToMany(Permissao, {
+  through: PerfilPermissao,
+  foreignKey: "id_perfil",
+});
 
-  PerfilPermissao.belongsTo(Permissao, {
-    foreignKey: "id_loja",
-    as: "loja",
-  });
-};
+Permissao.belongsToMany(Perfil, {
+  through: PerfilPermissao,
+  foreignKey: "id_permissao",
+});
 
 module.exports = PerfilPermissao;

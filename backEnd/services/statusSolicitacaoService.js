@@ -1,4 +1,4 @@
-const { StatusSolicitacao } = require("../models/statusSolicitacaoModel");
+const StatusSolicitacao = require("../models/statusSolicitacaoModel");
 
 async function consultarStatusSolicitacoes() {
   try {

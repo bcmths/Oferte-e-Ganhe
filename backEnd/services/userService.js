@@ -1,4 +1,6 @@
-const { Usuario, Perfil, Loja } = require("../models/associations");
+const Usuario = require("../models/userModel");
+const Perfil = require("../models/profileModel");
+const Loja = require("../models/storeModel");
 const bcrypt = require("bcryptjs");
 
 async function consultarUsuarios() {

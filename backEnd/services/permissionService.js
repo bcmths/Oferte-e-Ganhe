@@ -1,4 +1,4 @@
-const { Permissao } = require("../models/associations");
+const Permissao = require("../models/permissionModel");
 
 async function consultarPermissoes() {
   try {

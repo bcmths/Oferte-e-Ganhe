@@ -9,6 +9,10 @@ const Loja = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    cod_loja: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     nome: {
       type: DataTypes.STRING,
       allowNull: false,

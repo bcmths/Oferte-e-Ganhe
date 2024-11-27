@@ -1,4 +1,5 @@
-const { Perfil, Permissao } = require("../models/associations");
+const Perfil = require("../models/profileModel");
+const Permissao = require("../models/permissionModel");
 
 async function consultarPerfilPermissao() {
   try {

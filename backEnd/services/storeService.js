@@ -13,6 +13,7 @@ async function consultarLojas() {
 async function inserirLoja(nome, cidade) {
   try {
     const novaLoja = await Loja.create({
+      cod_loja,
       nome,
       cidade,
       created_at: new Date(),
@@ -25,13 +26,14 @@ async function inserirLoja(nome, cidade) {
   }
 }
 
-async function editarLoja(id_loja, nome, cidade) {
+async function editarLoja(id_loja, cod_loja, nome, cidade) {
   try {
     const loja = await Loja.findByPk(id_loja);
     if (!loja) {
       throw new Error("Loja não encontrada");
     }
 
+    loja.cod_loja = cod_loja
     loja.nome = nome;
     loja.cidade = cidade;
     loja.updated_at = new Date();

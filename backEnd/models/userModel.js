@@ -1,5 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
+const Perfil = require("./profileModel");
+const Loja = require("./storeModel");
+
 const Usuario = sequelize.define(
   "Usuario",
   {
@@ -33,7 +36,7 @@ const Usuario = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Perfil',
+        model: "Perfil",
         key: "id_perfil",
       },
     },
@@ -41,7 +44,7 @@ const Usuario = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Loja',
+        model: "Loja",
         key: "id_loja",
       },
     },
@@ -62,16 +65,17 @@ const Usuario = sequelize.define(
   }
 );
 
-Usuario.associate = (models) => {
-  Usuario.belongsTo(models.Perfil, {
-    foreignKey: "id_perfil",
-    as: "perfil",
-  });
+Usuario.belongsTo(Perfil, {
+  foreignKey: "id_perfil",
+  as: "perfil",
+});
 
-  Usuario.belongsTo(models.Loja, {
-    foreignKey: "id_loja",
-    as: "loja",
-  });
-};
+Usuario.belongsTo(Loja, {
+  foreignKey: "id_loja",
+  as: "loja",
+});
+
+Perfil.hasMany(Usuario, { foreignKey: "id_perfil" });
+Loja.hasMany(Usuario, { foreignKey: "id_loja" });
 
 module.exports = Usuario;

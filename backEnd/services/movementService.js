@@ -1,4 +1,6 @@
-const { Movimentacoes, StatusMovimentacao, Solicitacao } = require("../models/associations");
+const Movimentacoes = require("../models/movementModel");
+const StatusMovimentacao = require("../models/statusMovimentacaoModel");
+const Solicitacao = require("../models/solicitacionModel");
 
 async function consultarMovimentacoes() {
   try {
@@ -22,7 +24,7 @@ async function inserirMovimentacao(
   data_prevista,
   quantidade,
   id_status,
-  id_solicitacao,
+  id_solicitacao
 ) {
   try {
     const movimentacao = await Movimentacoes.create({

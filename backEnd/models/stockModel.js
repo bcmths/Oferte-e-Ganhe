@@ -1,5 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
+const Loja = require("../models/storeModel");
+
 const Estoque = sequelize.define(
   "Estoque",
   {
@@ -24,7 +26,7 @@ const Estoque = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Loja",
+        model: Loja,
         key: "id_loja",
       },
       onDelete: "CASCADE",
@@ -46,11 +48,13 @@ const Estoque = sequelize.define(
   }
 );
 
-Estoque.associate = (models) => {
-  Estoque.belongsTo(models.Loja, {
-    foreignKey: "id_loja",
-    as: "loja",
-  });
-};
+Estoque.belongsTo(Loja, {
+  foreignKey: "id_loja",
+  as: "loja",
+});
+
+Loja.hasOne(Estoque, {
+  foreignKey: "id_loja",
+});
 
 module.exports = Estoque;

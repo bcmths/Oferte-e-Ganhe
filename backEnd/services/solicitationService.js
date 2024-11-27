@@ -1,4 +1,6 @@
-const { Solicitacao, StatusSolicitacao, Usuario } = require("../models/associations");
+const Solicitacao = require("../models/solicitacionModel");
+const StatusSolicitacao = require("../models/statusSolicitacaoModel");
+const Usuario = require("../models/userModel");
 
 async function consultarSolicitacoes() {
   try {

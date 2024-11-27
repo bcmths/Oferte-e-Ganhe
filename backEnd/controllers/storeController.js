@@ -1,9 +1,9 @@
 const storeService = require("../services/storeService");
 
 exports.createStore = async (req, res) => {
-  const { nome, cidade } = req.body;
+  const { cod_loja, nome, cidade } = req.body;
   try {
-    const novaLoja = await storeService.inserirLoja(nome, cidade);
+    const novaLoja = await storeService.inserirLoja(cod_loja, nome, cidade);
     res.status(201).json(novaLoja);
   } catch (erro) {
     console.error("Erro ao inserir loja:", erro);
@@ -29,9 +29,14 @@ exports.getAllStores = async (req, res) => {
 
 exports.updateStore = async (req, res) => {
   const { id_loja } = req.params;
-  const { nome, cidade } = req.body;
+  const { cod_loja, nome, cidade } = req.body;
   try {
-    const lojaAtualizada = await storeService.editarLoja(id_loja, nome, cidade);
+    const lojaAtualizada = await storeService.editarLoja(
+      id_loja,
+      cod_loja,
+      nome,
+      cidade
+    );
     if (lojaAtualizada) {
       res.status(200).json({
         message: "Loja atualizada com sucesso!",
