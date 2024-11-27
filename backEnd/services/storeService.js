@@ -1,28 +1,24 @@
-const pool = require("../config/database");
+const Loja = require("../models/storeModel");
 
 async function consultarLojas() {
-  const query = `
-    SELECT * FROM loja;
-  `;
   try {
-    const resultado = await pool.query(query);
-    return resultado.rows;
+    const lojas = await Loja.findAll();
+    return lojas;
   } catch (erro) {
-    console.error("Erro ao buscar lojas: ", erro);
+    console.error("Erro ao buscar lojas:", erro);
     throw erro;
   }
 }
 
 async function inserirLoja(nome, cidade) {
-  const query = `
-    INSERT INTO loja (nome, cidade, created_at, updated_at)
-    VALUES ($1, $2, NOW(), NOW())
-    RETURNING *;
-  `;
-  const valores = [nome, cidade];
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0];
+    const novaLoja = await Loja.create({
+      nome,
+      cidade,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+    return novaLoja;
   } catch (erro) {
     console.error("Erro ao inserir loja:", erro);
     throw erro;
@@ -30,16 +26,18 @@ async function inserirLoja(nome, cidade) {
 }
 
 async function editarLoja(id_loja, nome, cidade) {
-  const query = `
-    UPDATE loja
-    SET nome = $1, cidade = $2, updated_at = NOW()
-    WHERE id_loja = $3
-    RETURNING *;
-  `;
-  const valores = [nome, cidade, id_loja];
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0];
+    const loja = await Loja.findByPk(id_loja);
+    if (!loja) {
+      throw new Error("Loja não encontrada");
+    }
+
+    loja.nome = nome;
+    loja.cidade = cidade;
+    loja.updated_at = new Date();
+
+    await loja.save();
+    return loja;
   } catch (erro) {
     console.error("Erro ao editar loja:", erro);
     throw erro;
@@ -47,14 +45,14 @@ async function editarLoja(id_loja, nome, cidade) {
 }
 
 async function deletarLoja(id_loja) {
-  const query = `
-    DELETE FROM loja
-    WHERE id_loja = $1
-    RETURNING *;
-  `;
   try {
-    const resultado = await pool.query(query, [id_loja]);
-    return resultado.rows[0];
+    const loja = await Loja.findByPk(id_loja);
+    if (!loja) {
+      throw new Error("Loja não encontrada");
+    }
+
+    await loja.destroy();
+    return loja;
   } catch (erro) {
     console.error("Erro ao deletar loja:", erro);
     throw erro;

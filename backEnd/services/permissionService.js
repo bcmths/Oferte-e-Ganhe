@@ -1,11 +1,9 @@
-const pool = require("../config/database");
+const { Permissao } = require("../models/associations");
 
 async function consultarPermissoes() {
-  const query = `SELECT * FROM permissao;`;
-
   try {
-    const resultado = await pool.query(query);
-    return resultado.rows;
+    const permissoes = await Permissao.findAll();
+    return permissoes;
   } catch (erro) {
     console.error("Erro ao buscar permissões:", erro);
     throw erro;
@@ -13,17 +11,14 @@ async function consultarPermissoes() {
 }
 
 async function inserirPermissao(modulo, tipo_permissao) {
-  const query = `
-    INSERT INTO permissao (modulo, tipo_permissao, created_at, updated_at)
-    VALUES ($1, $2, NOW(), NOW())
-    RETURNING *;
-  `;
-
-  const valores = [modulo, tipo_permissao];
-
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0];
+    const novaPermissao = await Permissao.create({
+      modulo,
+      tipo_permissao,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+    return novaPermissao;
   } catch (erro) {
     console.error("Erro ao inserir permissão:", erro);
     throw erro;
@@ -31,18 +26,18 @@ async function inserirPermissao(modulo, tipo_permissao) {
 }
 
 async function editarPermissao(id_permissao, modulo, tipo_permissao) {
-  const query = `
-    UPDATE permissao
-    SET modulo = $1, tipo_permissao = $2, updated_at = NOW()
-    WHERE id_permissao = $3
-    RETURNING *;
-  `;
-
-  const valores = [modulo, tipo_permissao, id_permissao];
-
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0];
+    const permissao = await Permissao.findByPk(id_permissao);
+    if (!permissao) {
+      throw new Error("Permissão não encontrada");
+    }
+
+    permissao.modulo = modulo;
+    permissao.tipo_permissao = tipo_permissao;
+    permissao.updated_at = new Date();
+
+    await permissao.save();
+    return permissao;
   } catch (erro) {
     console.error("Erro ao editar permissão:", erro);
     throw erro;
@@ -50,15 +45,14 @@ async function editarPermissao(id_permissao, modulo, tipo_permissao) {
 }
 
 async function deletarPermissao(id_permissao) {
-  const query = `
-    DELETE FROM permissao
-    WHERE id_permissao = $1
-    RETURNING *;
-  `;
-
   try {
-    const resultado = await pool.query(query, [id_permissao]);
-    return resultado.rows[0];
+    const permissao = await Permissao.findByPk(id_permissao);
+    if (!permissao) {
+      throw new Error("Permissão não encontrada");
+    }
+
+    await permissao.destroy();
+    return permissao;
   } catch (erro) {
     console.error("Erro ao deletar permissão:", erro);
     throw erro;

@@ -1,9 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-
-const Perfil = require("./perfilModel");
-const Loja = require("./lojaModel");
-
 const Usuario = sequelize.define(
   "Usuario",
   {
@@ -37,7 +33,7 @@ const Usuario = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Perfil",
+        model: 'Perfil',
         key: "id_perfil",
       },
     },
@@ -45,7 +41,7 @@ const Usuario = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Loja",
+        model: 'Loja',
         key: "id_loja",
       },
     },
@@ -66,13 +62,13 @@ const Usuario = sequelize.define(
   }
 );
 
-Usuario.associate = () => {
-  Usuario.belongsTo(Perfil, {
+Usuario.associate = (models) => {
+  Usuario.belongsTo(models.Perfil, {
     foreignKey: "id_perfil",
     as: "perfil",
   });
 
-  Usuario.belongsTo(Loja, {
+  Usuario.belongsTo(models.Loja, {
     foreignKey: "id_loja",
     as: "loja",
   });

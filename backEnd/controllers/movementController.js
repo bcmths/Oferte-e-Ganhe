@@ -1,4 +1,4 @@
-const talonService = require("../services/talonService");
+const movementService = require("../services/movementService");
 
 exports.createMovimentacao = async (req, res) => {
   const {
@@ -13,7 +13,7 @@ exports.createMovimentacao = async (req, res) => {
   } = req.body;
 
   try {
-    const novaMovimentacao = await talonService.inserirMovimentacao(
+    const novaMovimentacao = await movementService.inserirMovimentacao(
       remessa,
       tipo_movimentacao,
       data_movimentacao,
@@ -32,7 +32,7 @@ exports.createMovimentacao = async (req, res) => {
 
 exports.getAllMovimentacoes = async (req, res) => {
   try {
-    const movimentacoes = await talonService.consultarMovimentacoes();
+    const movimentacoes = await movementService.consultarMovimentacoes();
     res.status(200).json({
       message: "Consulta de movimentações realizada com sucesso!",
       movimentacoes,
@@ -56,7 +56,7 @@ exports.updateMovimentacao = async (req, res) => {
   } = req.body;
 
   try {
-    const movimentacaoAtualizada = await talonService.editarMovimentacao(
+    const movimentacaoAtualizada = await movementService.editarMovimentacao(
       id_movimentacao,
       remessa,
       tipo_movimentacao,
@@ -84,7 +84,7 @@ exports.deleteMovimentacao = async (req, res) => {
   const { id_movimentacao } = req.params;
 
   try {
-    const movimentacaoDeletada = await talonService.deletarMovimentacao(
+    const movimentacaoDeletada = await movementService.deletarMovimentacao(
       id_movimentacao
     );
     if (movimentacaoDeletada) {

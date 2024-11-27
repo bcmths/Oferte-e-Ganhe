@@ -1,11 +1,10 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 const StatusMovimentacao = require("./statusMovimentacaoModel");
-const Solicitacao = require("./solicitacaoModel");
-const Usuario = require("./usuarioModel");
+const Solicitacao = require("./solicitacionModel");
 
-const Movimentacao = sequelize.define(
-  "Movimentacao",
+const Movimentacoes = sequelize.define(
+  "Movimentacoes",
   {
     id_movimentacao: {
       type: DataTypes.INTEGER,
@@ -51,15 +50,6 @@ const Movimentacao = sequelize.define(
       },
       onDelete: "CASCADE",
     },
-    id_usuario: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: Usuario,
-        key: "id_usuario",
-      },
-      onDelete: "CASCADE",
-    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -77,19 +67,15 @@ const Movimentacao = sequelize.define(
   }
 );
 
-Movimentacao.belongsTo(StatusMovimentacao, {
+Movimentacoes.belongsTo(StatusMovimentacao, {
   foreignKey: "id_status",
   as: "status",
 });
 
-Movimentacao.belongsTo(Solicitacao, {
+Movimentacoes.belongsTo(Solicitacao, {
   foreignKey: "id_solicitacao",
   as: "solicitacao",
 });
 
-Movimentacao.belongsTo(Usuario, {
-  foreignKey: "id_usuario",
-  as: "usuario",
-});
 
-module.exports = Movimentacao;
+module.exports = Movimentacoes;

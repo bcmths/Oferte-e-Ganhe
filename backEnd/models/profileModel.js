@@ -26,8 +26,20 @@ const Perfil = sequelize.define(
   },
   {
     tableName: "perfil",
-    timestamps: false, 
+    timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
   }
 );
+
+Perfil.associate = (models) => {
+  
+  Perfil.belongsToMany(models.Permissao, {
+    through: "perfil_permissao",
+    foreignKey: "id_perfil",
+    otherKey: "id_permissao",
+    as: "permissoes", 
+  });
+};
 
 module.exports = Perfil;

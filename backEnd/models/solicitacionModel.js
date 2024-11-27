@@ -1,7 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-const StatusSolicitacao = require("./statusSolicitacaoModel");
-const Usuario = require("./usuarioModel");
 
 const Solicitacao = sequelize.define(
   "Solicitacao",
@@ -24,7 +22,7 @@ const Solicitacao = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: StatusSolicitacao,
+        model: "StatusSolicitacao",
         key: "id_status_solicitacao",
       },
       onDelete: "SET NULL",
@@ -33,7 +31,7 @@ const Solicitacao = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: Usuario,
+        model: "Usuario",
         key: "id_usuario",
       },
       onDelete: "CASCADE",
@@ -54,15 +52,16 @@ const Solicitacao = sequelize.define(
     timestamps: false,
   }
 );
+Solicitacao.associate = (models) => {
+  Solicitacao.belongsTo(models.StatusSolicitacao, {
+    foreignKey: "id_status_solicitacao",
+    as: "status",
+  });
 
-Solicitacao.belongsTo(StatusSolicitacao, {
-  foreignKey: "id_status_solicitacao",
-  as: "status",
-});
-
-Solicitacao.belongsTo(Usuario, {
-  foreignKey: "id_usuario",
-  as: "usuario",
-});
+  Solicitacao.belongsTo(models.Usuario, {
+    foreignKey: "id_usuario",
+    as: "usuario",
+  });
+};
 
 module.exports = Solicitacao;

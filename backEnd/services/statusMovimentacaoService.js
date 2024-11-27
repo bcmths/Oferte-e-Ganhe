@@ -1,29 +1,24 @@
-const pool = require("../config/database");
+const StatusMovimentacao = require("../models/statusMovimentacaoModel");
 
 async function consultarStatusMovimentacao() {
-  const query = `
-    SELECT * FROM status_movimentacao;
-  `;
   try {
-    const resultado = await pool.query(query);
-    return resultado.rows;
+    const status = await StatusMovimentacao.findAll();
+    return status;
   } catch (erro) {
-    console.error("Erro ao buscar status de movimentação: ", erro);
+    console.error("Erro ao buscar status de movimentação:", erro);
     throw erro;
   }
 }
 
 async function inserirStatusMovimentacao(status, descricao) {
-  const query = `
-    INSERT INTO status_movimentacao (status, descricao, created_at, updated_at)
-    VALUES ($1, $2, NOW(), NOW())
-    RETURNING *;
-  `;
-  const valores = [status, descricao];
-
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0];
+    const novoStatus = await StatusMovimentacao.create({
+      status,
+      descricao,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+    return novoStatus;
   } catch (erro) {
     console.error("Erro ao inserir status de movimentação:", erro);
     throw erro;
@@ -35,17 +30,20 @@ async function editarStatusMovimentacao(
   status,
   descricao
 ) {
-  const query = `
-    UPDATE status_movimentacao
-    SET status = $1, descricao = $2, updated_at = NOW()
-    WHERE id_status_movimentacao = $3
-    RETURNING *;
-  `;
-  const valores = [status, descricao, id_status_movimentacao];
-
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0];
+    const statusMovimentacao = await StatusMovimentacao.findByPk(
+      id_status_movimentacao
+    );
+    if (!statusMovimentacao) {
+      throw new Error("Status de movimentação não encontrado");
+    }
+
+    statusMovimentacao.status = status;
+    statusMovimentacao.descricao = descricao;
+    statusMovimentacao.updated_at = new Date();
+
+    await statusMovimentacao.save();
+    return statusMovimentacao;
   } catch (erro) {
     console.error("Erro ao editar status de movimentação:", erro);
     throw erro;
@@ -53,14 +51,16 @@ async function editarStatusMovimentacao(
 }
 
 async function deletarStatusMovimentacao(id_status_movimentacao) {
-  const query = `
-    DELETE FROM status_movimentacao
-    WHERE id_status_movimentacao = $1
-    RETURNING *;
-  `;
   try {
-    const resultado = await pool.query(query, [id_status_movimentacao]);
-    return resultado.rows[0];
+    const statusMovimentacao = await StatusMovimentacao.findByPk(
+      id_status_movimentacao
+    );
+    if (!statusMovimentacao) {
+      throw new Error("Status de movimentação não encontrado");
+    }
+
+    await statusMovimentacao.destroy();
+    return statusMovimentacao;
   } catch (erro) {
     console.error("Erro ao deletar status de movimentação:", erro);
     throw erro;

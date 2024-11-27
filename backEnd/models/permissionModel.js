@@ -30,8 +30,19 @@ const Permissao = sequelize.define(
   },
   {
     tableName: "permissao",
-    timestamps: false,
+    timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
   }
 );
+
+Permissao.associate = (models) => {
+  Permissao.belongsToMany(models.Perfil, {
+    through: "perfil_permissao",
+    foreignKey: "id_permissao",
+    otherKey: "id_perfil",
+    as: "perfis",
+  });
+};
 
 module.exports = Permissao;

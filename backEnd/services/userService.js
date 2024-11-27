@@ -1,11 +1,21 @@
-const pool = require("../config/database");
+const { Usuario, Perfil, Loja } = require("../models/associations");
+const bcrypt = require("bcryptjs");
 
 async function consultarUsuarios() {
-  const query = `SELECT * FROM usuario;`;
-
   try {
-    const resultado = await pool.query(query);
-    return resultado.rows;
+    const usuarios = await Usuario.findAll({
+      include: [
+        {
+          model: Perfil,
+          as: "perfil",
+        },
+        {
+          model: Loja,
+          as: "loja",
+        },
+      ],
+    });
+    return usuarios;
   } catch (erro) {
     console.error("Erro ao buscar usuários: ", erro);
     throw erro;
@@ -20,17 +30,19 @@ async function inserirUsuario(
   id_perfil,
   id_loja
 ) {
-  const query = `
-    INSERT INTO usuario (nome, matricula, email, senha, id_perfil, id_loja, created_at, updated_at)
-    VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
-    RETURNING *;
-  `;
-
-  const valores = [nome, matricula, email, senha, id_perfil, id_loja];
-
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0];
+    const senhaHash = await bcrypt.hash(senha, 10);
+
+    const novoUsuario = await Usuario.create({
+      nome,
+      matricula,
+      email,
+      senha: senhaHash,
+      id_perfil,
+      id_loja,
+    });
+
+    return novoUsuario;
   } catch (erro) {
     console.error("Erro ao inserir usuário:", erro);
     throw erro;
@@ -38,6 +50,7 @@ async function inserirUsuario(
 }
 
 async function editarUsuario(
+  id_usuario,
   nome,
   matricula,
   email,
@@ -45,34 +58,42 @@ async function editarUsuario(
   id_perfil,
   id_loja
 ) {
-  const query = `
-    UPDATE usuario
-    SET nome = $1, email = $2, senha = $3, id_perfil = $4, id_loja = $5, updated_at = NOW()
-    WHERE matricula = $6
-    RETURNING *;
-  `;
-
-  const valores = [nome, email, senha, id_perfil, id_loja, matricula];
-
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0];
+    const valoresAtualizados = { nome, matricula, email, id_perfil, id_loja };
+    if (senha) {
+      valoresAtualizados.senha = await bcrypt.hash(senha, 10);
+    }
+
+    const [linhasAfetadas, [usuarioAtualizado]] = await Usuario.update(
+      valoresAtualizados,
+      {
+        where: { id_usuario },
+        returning: true,
+      }
+    );
+
+    if (linhasAfetadas === 0) {
+      throw new Error("Usuário não encontrado para atualização.");
+    }
+
+    return usuarioAtualizado;
   } catch (erro) {
     console.error("Erro ao editar usuário:", erro);
     throw erro;
   }
 }
 
-async function deletarUsuario(id) {
-  const query = `
-    DELETE FROM usuario
-    WHERE id_usuario = $1
-    RETURNING *;
-  `;
-
+async function deletarUsuario(id_usuario) {
   try {
-    const resultado = await pool.query(query, [id]);
-    return resultado.rows[0];
+    const usuarioDeletado = await Usuario.destroy({
+      where: { id_usuario },
+    });
+
+    if (!usuarioDeletado) {
+      throw new Error("Usuário não encontrado para exclusão.");
+    }
+
+    return { mensagem: "Usuário deletado com sucesso." };
   } catch (erro) {
     console.error("Erro ao deletar usuário:", erro);
     throw erro;

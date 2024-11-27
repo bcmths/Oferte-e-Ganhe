@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const userRoutes = require("./routes/userRoutes");
 const storeRoutes = require("./routes/storeRoutes");
-const talonRoutes = require("./routes/talonRoutes");
+const movementRoutes = require("./routes/movementRoutes");
 const viewRoutes = require("./routes/viewRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const permissionRoutes = require("./routes/permissionRoutes");
@@ -33,7 +33,7 @@ app.use(authenticateToken);
 
 app.use("/api/users", userRoutes);
 app.use("/api/stores", storeRoutes);
-app.use("/api/talons", talonRoutes);
+app.use("/api/talons", movementRoutes);
 app.use("/api/profiles", profileRoutes);
 app.use("/api/permissions", permissionRoutes);
 app.use("/api/associations", profilePermissionRoutes);

@@ -1,16 +1,12 @@
-const pool = require("../config/database");
+const Usuario = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 
 async function consultarUsuarioPorEmail(email) {
-  const query = `
-      SELECT * 
-      FROM usuario
-      WHERE email = $1;
-    `;
-
   try {
-    const resultado = await pool.query(query, [email]);
-    return resultado.rows[0];
+    const usuario = await Usuario.findOne({
+      where: { email },
+    });
+    return usuario;
   } catch (erro) {
     console.error("Erro ao consultar usuário por email:", erro);
     throw erro;
@@ -18,15 +14,11 @@ async function consultarUsuarioPorEmail(email) {
 }
 
 async function consultarUsuarioPorMatricula(matricula) {
-  const query = `
-      SELECT * 
-      FROM usuario
-      WHERE matricula = $1;
-    `;
-
   try {
-    const resultado = await pool.query(query, [matricula]);
-    return resultado.rows[0];
+    const usuario = await Usuario.findOne({
+      where: { matricula },
+    });
+    return usuario;
   } catch (erro) {
     console.error("Erro ao consultar usuário por matrícula:", erro);
     throw erro;
@@ -42,17 +34,18 @@ async function inserirUsuario(
   id_perfil
 ) {
   const senhaHash = await bcrypt.hash(senha, 10);
-  const query = `
-    INSERT INTO usuario (nome, matricula, email, senha, id_loja, id_perfil, created_at, updated_at)
-    VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
-    RETURNING *;
-  `;
-
-  const valores = [nome, matricula, email, senhaHash, id_loja, id_perfil];
 
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0];
+    const novoUsuario = await Usuario.create({
+      nome,
+      matricula,
+      email,
+      senha: senhaHash,
+      id_loja,
+      id_perfil,
+    });
+
+    return novoUsuario;
   } catch (erro) {
     console.error("Erro ao cadastrar usuário:", erro);
     throw erro;
