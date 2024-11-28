@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
+const Perfil = require("./profileModel");
 
 const Permissao = sequelize.define(
   "Permissao",
@@ -30,9 +31,7 @@ const Permissao = sequelize.define(
   },
   {
     tableName: "permissao",
-    timestamps: true,
-    createdAt: "created_at",
-    updatedAt: "updated_at",
+    timestamps: false,
   }
 );
 

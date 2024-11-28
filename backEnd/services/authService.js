@@ -1,3 +1,5 @@
+const Permissao = require("../models/permissionModel");
+const Perfil = require("../models/profileModel");
 const Usuario = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 
@@ -5,7 +7,21 @@ async function consultarUsuarioPorEmail(email) {
   try {
     const usuario = await Usuario.findOne({
       where: { email },
+      include: [
+        {
+          model: Perfil, // Relacionamento com Perfil
+          as: "perfil", // Alias para o relacionamento de Perfil
+          include: [
+            {
+              model: Permissao, // Relacionamento com Permissão
+              as: "permissao", // Alias para as permissões associadas ao perfil
+              through: { attributes: [] }, // Ignora atributos da tabela associativa
+            },
+          ],
+        },
+      ],
     });
+
     return usuario;
   } catch (erro) {
     console.error("Erro ao consultar usuário por email:", erro);

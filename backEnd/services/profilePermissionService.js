@@ -24,7 +24,6 @@ async function consultarPerfilPermissao() {
     throw erro;
   }
 }
-
 async function inserirPerfilPermissao(id_perfil, permissoes) {
   try {
     const perfil = await Perfil.findByPk(id_perfil);

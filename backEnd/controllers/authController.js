@@ -57,11 +57,17 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Senha inválida." });
     }
 
+    const permissao = usuario.perfil.permissao;
+
     const token = jwt.sign(
       {
         matricula: usuario.matricula,
         id_perfil: usuario.id_perfil,
         id_loja: usuario.id_loja,
+        permissoes: permissao.map((p) => ({
+          modulo: p.modulo,
+          tipo_permissao: p.tipo_permissao,
+        })),
       },
       jwtSecret,
       { expiresIn: "1h" }

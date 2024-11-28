@@ -35,23 +35,20 @@ const PerfilPermissao = sequelize.define(
   },
   {
     tableName: "perfil_permissao",
-    timestamps: true,
-    createdAt: "created_at",
-    updatedAt: "updated_at",
+    timestamps: false,
   }
 );
 
-// Definindo associações para acesso correto aos métodos mágicos
 Perfil.belongsToMany(Permissao, {
   through: PerfilPermissao,
   foreignKey: "id_perfil",
-  as: "Permissoes",
+  as: "permissao",
 });
 
 Permissao.belongsToMany(Perfil, {
   through: PerfilPermissao,
   foreignKey: "id_permissao",
-  as: "Perfis",
+  as: "perfil",
 });
 
 module.exports = PerfilPermissao;
