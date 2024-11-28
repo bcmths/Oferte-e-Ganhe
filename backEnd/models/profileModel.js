@@ -1,7 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-const Permissao = require("./permissionModel");
-const PerfilPermissao = require("./profilePermissionModel");
 
 const Perfil = sequelize.define(
   "Perfil",

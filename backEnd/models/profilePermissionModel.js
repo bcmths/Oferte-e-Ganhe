@@ -45,10 +45,15 @@ Perfil.belongsToMany(Permissao, {
   as: "permissao",
 });
 
+
 Permissao.belongsToMany(Perfil, {
   through: PerfilPermissao,
   foreignKey: "id_permissao",
   as: "perfil",
 });
+
+PerfilPermissao.belongsTo(Perfil, { foreignKey: "id_perfil", as: "perfil" });
+PerfilPermissao.belongsTo(Permissao, { foreignKey: "id_permissao", as: "permissao" });
+
 
 module.exports = PerfilPermissao;

@@ -24,6 +24,7 @@ async function consultarPerfilPermissao() {
     throw erro;
   }
 }
+
 async function inserirPerfilPermissao(id_perfil, permissoes) {
   try {
     const perfil = await Perfil.findByPk(id_perfil);
@@ -60,7 +61,7 @@ async function editarPerfilPermissao(id_perfil, permissoes) {
       throw new Error("Perfil não encontrado");
     }
 
-    const permissoesExistentes = await perfil.getPermissoes();
+    const permissoesExistentes = await perfil.getPermissao();
 
     const permissoesRemover = permissoesExistentes.filter(
       (p) => !permissoes.includes(p.id_permissao)
@@ -71,7 +72,7 @@ async function editarPerfilPermissao(id_perfil, permissoes) {
     );
 
     for (let permissao of permissoesRemover) {
-      await perfil.removePermissoes(permissao);
+      await perfil.removePermissao(permissao);
     }
 
     for (let id_permissao of permissoesAdicionar) {
@@ -84,7 +85,7 @@ async function editarPerfilPermissao(id_perfil, permissoes) {
         continue;
       }
 
-      await perfil.addPermissoes(permissao);
+      await perfil.addPermissao(permissao);
     }
 
     return { id_perfil, permissoes };
