@@ -3,7 +3,7 @@ const statusSolicitacaoService = require("../services/statusSolicitacaoService")
 exports.getStatusSolicitacao = async (req, res) => {
   try {
     const statusSolicitacao =
-      await statusSolicitacaoService.consultarStatusSolicitacao();
+      await statusSolicitacaoService.consultarStatusSolicitacoes();
     res.status(200).json({
       message: "Consulta de status de solicitação realizada com sucesso!",
       statusSolicitacao,

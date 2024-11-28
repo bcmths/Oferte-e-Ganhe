@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
 router.post("/cadastrar", profilePermissionController.createPerfilPermissao);
 router.get("/all", profilePermissionController.getPerfilPermissao);
 router.put(
-  "/editar/:id_perfil/:id_permissao",
+  "/editar/:id_perfil",
   profilePermissionController.updatePerfilPermissao
 );
 router.delete(

@@ -26,7 +26,10 @@ exports.createStock = async (req, res) => {
       estoque_recomendado,
       id_loja
     );
-    res.status(201).json(novoEstoque);
+    res.status(200).json({
+      message: "Estoque criado com sucesso!",
+      novoEstoque,
+    });
   } catch (erro) {
     console.error("Erro ao inserir estoque:", erro);
     res.status(500).json({ message: "Erro ao inserir estoque" });

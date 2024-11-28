@@ -43,7 +43,64 @@ async function inserirMovimentacao(
   }
 }
 
+async function editarMovimentacao(
+  id_movimentacao,
+  remessa,
+  tipo_movimentacao,
+  data_movimentacao,
+  data_prevista,
+  quantidade,
+  id_status,
+  id_solicitacao
+) {
+  try {
+    const valoresAtualizados = {
+      remessa,
+      tipo_movimentacao,
+      data_movimentacao,
+      data_prevista,
+      quantidade,
+      id_status,
+      id_solicitacao,
+    };
+
+    const [linhasAfetadas, [movimentacaoAtualizada]] =
+      await Movimentacoes.update(valoresAtualizados, {
+        where: { id_movimentacao },
+        returning: true,
+      });
+
+    if (linhasAfetadas === 0) {
+      throw new Error("Movimentação não encontrada para atualização.");
+    }
+
+    return movimentacaoAtualizada;
+  } catch (erro) {
+    console.error("Erro ao editar movimentação:", erro);
+    throw erro;
+  }
+}
+
+async function deletarMovimentacao(id_movimentacao) {
+  try {
+    const movimentacaoDeletada = await Movimentacoes.destroy({
+      where: { id_movimentacao },
+    });
+
+    if (!movimentacaoDeletada) {
+      throw new Error("Movimentação não encontrada para exclusão.");
+    }
+
+    return { mensagem: "Movimentação deletada com sucesso." };
+  } catch (erro) {
+    console.error("Erro ao deletar movimentação:", erro);
+    throw erro;
+  }
+}
+
 module.exports = {
   consultarMovimentacoes,
   inserirMovimentacao,
+  editarMovimentacao,
+  deletarMovimentacao,
 };

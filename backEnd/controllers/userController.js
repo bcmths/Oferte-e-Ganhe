@@ -32,37 +32,51 @@ exports.listUsers = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
-  const { nome, email, senha, id_perfil, id_loja } = req.body;
+  const { nome, email, senha, id_perfil, id_loja, novaMatricula } = req.body;
   const { matricula } = req.params;
 
   try {
+    if (!matricula) {
+      return res
+        .status(400)
+        .json({ message: "Matrícula do usuário é obrigatória." });
+    }
+
+    if (senha && typeof senha !== "string") {
+      return res
+        .status(400)
+        .json({ message: "Senha deve ser uma string válida." });
+    }
+
     const usuarioAtualizado = await userService.editarUsuario(
-      nome,
       matricula,
+      nome,
+      novaMatricula,
       email,
       senha,
       id_perfil,
       id_loja
     );
+
     if (usuarioAtualizado) {
-      res.status(200).json({
+      return res.status(200).json({
         message: "Usuário atualizado com sucesso!",
         usuario: usuarioAtualizado,
       });
     } else {
-      res.status(404).json({ message: "Usuário não encontrado." });
+      return res.status(404).json({ message: "Usuário não encontrado." });
     }
   } catch (erro) {
     console.error("Erro ao editar usuário:", erro);
-    res.status(500).json({ message: "Erro ao editar usuário" });
+    return res.status(500).json({ message: "Erro ao editar usuário" });
   }
 };
 
 exports.deleteUser = async (req, res) => {
-  const { id } = req.params;
+  const { matricula } = req.params;
 
   try {
-    const usuarioDeletado = await userService.deletarUsuario(id);
+    const usuarioDeletado = await userService.deletarUsuario(matricula);
     if (usuarioDeletado) {
       res.status(200).json({
         message: "Usuário deletado com sucesso!",

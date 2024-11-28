@@ -52,24 +52,33 @@ async function inserirUsuario(
 }
 
 async function editarUsuario(
-  id_usuario,
+  matriculaAtual,
   nome,
-  matricula,
+  novaMatricula,
   email,
   senha,
   id_perfil,
   id_loja
 ) {
   try {
-    const valoresAtualizados = { nome, matricula, email, id_perfil, id_loja };
+    const valoresAtualizados = { nome, email, id_perfil, id_loja };
+
+    if (novaMatricula) {
+      valoresAtualizados.matricula = novaMatricula;
+    }
+
     if (senha) {
+      if (typeof senha !== "string") {
+        throw new Error("Senha deve ser uma string válida.");
+      }
+      console.log("Senha recebida para hashing:", senha);
       valoresAtualizados.senha = await bcrypt.hash(senha, 10);
     }
 
     const [linhasAfetadas, [usuarioAtualizado]] = await Usuario.update(
       valoresAtualizados,
       {
-        where: { id_usuario },
+        where: { matricula: matriculaAtual },
         returning: true,
       }
     );
@@ -85,19 +94,26 @@ async function editarUsuario(
   }
 }
 
-async function deletarUsuario(id_usuario) {
+async function deletarUsuario(matricula) {
+  if (!matricula) {
+    throw new Error("Matrícula não fornecida para exclusão.");
+  }
+
   try {
     const usuarioDeletado = await Usuario.destroy({
-      where: { id_usuario },
+      where: { matricula },
     });
 
     if (!usuarioDeletado) {
-      throw new Error("Usuário não encontrado para exclusão.");
+      throw new Error(
+        `Usuário com matrícula ${matricula} não encontrado para exclusão.`
+      );
     }
-
-    return { mensagem: "Usuário deletado com sucesso." };
+    return {
+      mensagem: `Usuário com matrícula ${matricula} deletado com sucesso.`,
+    };
   } catch (erro) {
-    console.error("Erro ao deletar usuário:", erro);
+    console.error(`Erro ao deletar usuário com matrícula ${matricula}:`, erro);
     throw erro;
   }
 }

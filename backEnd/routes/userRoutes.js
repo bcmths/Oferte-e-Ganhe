@@ -12,6 +12,6 @@ router.get("/", (req, res) => {
 router.post("/cadastrar", userController.registerUser);
 router.get("/all", userController.listUsers);
 router.put("/editar/:matricula", userController.updateUser);
-router.delete("/deletar/:id", userController.deleteUser);
+router.delete("/deletar/:matricula", userController.deleteUser);
 
 module.exports = router;

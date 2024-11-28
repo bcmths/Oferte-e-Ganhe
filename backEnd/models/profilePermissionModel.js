@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-const Perfil = require("../models/profileModel");
-const Permissao = require("../models/permissionModel");
+const Perfil = require("./profileModel");
+const Permissao = require("./permissionModel");
 
 const PerfilPermissao = sequelize.define(
   "PerfilPermissao",
@@ -41,14 +41,17 @@ const PerfilPermissao = sequelize.define(
   }
 );
 
+// Definindo associações para acesso correto aos métodos mágicos
 Perfil.belongsToMany(Permissao, {
   through: PerfilPermissao,
   foreignKey: "id_perfil",
+  as: "Permissoes",
 });
 
 Permissao.belongsToMany(Perfil, {
   through: PerfilPermissao,
   foreignKey: "id_permissao",
+  as: "Perfis",
 });
 
 module.exports = PerfilPermissao;

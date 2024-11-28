@@ -1,8 +1,11 @@
 const Estoque = require("../models/stockModel");
+const Loja = require("../models/storeModel");
 
 async function consultarEstoque() {
   try {
-    const estoques = await Estoque.findAll();
+    const estoques = await Estoque.findAll({
+      include: { model: Loja, as: "loja" },
+    });
     return estoques;
   } catch (erro) {
     console.error("Erro ao buscar estoques:", erro);
@@ -17,6 +20,14 @@ async function inserirEstoque(
   id_loja
 ) {
   try {
+    const estoqueExistente = await Estoque.findOne({
+      where: { id_loja },
+    });
+
+    if (estoqueExistente) {
+      throw new Error("Já existe um estoque registrado para essa loja.");
+    }
+
     const novoEstoque = await Estoque.create({
       estoque_atual,
       estoque_minimo,
@@ -25,6 +36,7 @@ async function inserirEstoque(
       created_at: new Date(),
       updated_at: new Date(),
     });
+
     return novoEstoque;
   } catch (erro) {
     console.error("Erro ao inserir estoque:", erro);

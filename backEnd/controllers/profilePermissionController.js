@@ -19,12 +19,12 @@ exports.getPerfilPermissao = async (req, res) => {
 };
 
 exports.createPerfilPermissao = async (req, res) => {
-  const { id_perfil, id_permissao } = req.body;
+  const { id_perfil, permissoes } = req.body;
   try {
     const novaAssociacao =
       await profilePermissionService.inserirPerfilPermissao(
         id_perfil,
-        id_permissao
+        permissoes
       );
     res.status(201).json(novaAssociacao);
   } catch (erro) {
@@ -36,30 +36,28 @@ exports.createPerfilPermissao = async (req, res) => {
 };
 
 exports.updatePerfilPermissao = async (req, res) => {
-  const { id_perfil, id_permissao } = req.params;
-  const { novo_id_permissao } = req.body;
+  const { id_perfil } = req.params;
+  const { permissoes } = req.body;
 
   try {
     const associacaoAtualizada =
       await profilePermissionService.editarPerfilPermissao(
         id_perfil,
-        id_permissao,
-        novo_id_permissao
+        permissoes
       );
+
     if (associacaoAtualizada) {
       res.status(200).json({
-        message: "Associação de perfil e permissão atualizada com sucesso!",
+        message: "Associações de perfil e permissões atualizadas com sucesso!",
         associacao: associacaoAtualizada,
       });
     } else {
-      res
-        .status(404)
-        .json({ message: "Associação de perfil e permissão não encontrada." });
+      res.status(404).json({ message: "Perfil não encontrado." });
     }
   } catch (erro) {
-    console.error("Erro ao editar associação de perfil e permissão:", erro);
+    console.error("Erro ao editar associações de perfil e permissões:", erro);
     res.status(500).json({
-      message: "Erro ao editar associação de perfil e permissão",
+      message: "Erro ao editar associações de perfil e permissões",
       error: erro.message,
     });
   }

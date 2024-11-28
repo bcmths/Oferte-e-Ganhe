@@ -10,7 +10,7 @@ async function consultarLojas() {
   }
 }
 
-async function inserirLoja(nome, cidade) {
+async function inserirLoja(cod_loja, nome, cidade) {
   try {
     const novaLoja = await Loja.create({
       cod_loja,
@@ -33,7 +33,7 @@ async function editarLoja(id_loja, cod_loja, nome, cidade) {
       throw new Error("Loja não encontrada");
     }
 
-    loja.cod_loja = cod_loja
+    loja.cod_loja = cod_loja;
     loja.nome = nome;
     loja.cidade = cidade;
     loja.updated_at = new Date();
