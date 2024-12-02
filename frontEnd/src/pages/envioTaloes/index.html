@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quero-Quero - Envio de Talões</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="../../components/cookie/script.js"></script>
+    <script src="envioTaloes.js" type="module"></script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <a href="/frontEnd/src/pages/dashboard/index.html">Dashboard</a>
+        <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
+        <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
+        <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
+        <a href="/frontEnd/src/pages/envioTaloes/index.html" class="active"
+          >Envio de Talões</a
+        >
+        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html"
+          >Recebimento de Talões</a
+        >
+        <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
+        <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
+        <a href="/frontEnd/src/pages/login/index.html">Logout</a>
+      </div>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header>
+          <div class="logo">
+            <img
+              src="/frontEnd/public/images/logo.png"
+              alt="Quero-Quero Logo"
+            />
+          </div>
+          <div class="user-profile">
+            <img
+              src="/frontEnd/public/images/perfil.png"
+              alt="Ícone de perfil"
+            />
+            <span>Meu perfil</span>
+          </div>
+        </header>
+
+        <div class="table-header">
+          <h2>Envio de Talões</h2>
+          <div class="table-actions">
+            <button
+              class="btn solicitacoes"
+              onclick="window.location.href='solicitacoes.html'"
+            >
+              Solicitações <span class="badge-number">2</span>
+            </button>
+
+            <button class="btn novo-envio">Cadastrar Envio</button>
+            <button class="btn exportar-csv">Exportar CSV</button>
+          </div>
+        </div>
+
+        <div class="filter-container">
+          <label for="rows-per-page">Mostrar</label>
+          <select id="rows-per-page">
+            <option value="10">10 linhas</option>
+            <option value="25">25 linhas</option>
+            <option value="50">50 linhas</option>
+          </select>
+          <input type="text" id="search" placeholder="Pesquisar..." />
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Remessa</th>
+              <th>Data de Movimentação</th>
+              <th>Data Prevista</th>
+              <th>Quantidade</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-envios"></tbody>
+        </table>
+
+        <div class="pagination">
+          <button class="page-btn">Anterior</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">Próxima</button>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

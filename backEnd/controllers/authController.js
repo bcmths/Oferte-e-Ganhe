@@ -74,8 +74,11 @@ const login = async (req, res) => {
     );
 
     res.cookie("authToken", token, {
-      httpOnly: true,
-      maxAge: 3600000,
+      httpOnly: true, // Impede que o cookie seja acessado por JavaScript no cliente
+      secure: false, // Use `true` em produção com HTTPS
+      sameSite: "lax", // Permite envio do cookie entre diferentes origens (usar "strict" para mais segurança)
+      domain: "127.0.0.1", // Define o domínio do cookie
+      maxAge: 3600000, // Tempo de expiração do cookie (1 hora)
     });
 
     res.status(200).json({

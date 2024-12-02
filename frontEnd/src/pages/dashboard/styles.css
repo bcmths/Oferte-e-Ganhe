@@ -1,0 +1,128 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  min-height: 100vh; /* Garante altura mínima igual à da janela */
+  height: auto; /* Permite que cresça se o conteúdo for maior */
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #f3f4f6;
+  padding: 20px 0;
+  border-right: 1px solid #ccc;
+}
+
+.sidebar a {
+  display: block;
+  padding: 15px 20px;
+  text-decoration: none;
+  color: #333;
+  border-left: 5px solid transparent;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background-color: #e5e7eb;
+  border-left-color: #00a859;
+  font-weight: bold;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  height: 50px;
+}
+
+.user-profile {
+  font-size: 16px;
+}
+
+.dashboard-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stat h3 {
+  font-size: 18px;
+  color: #555;
+}
+
+.stat p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.profiles .profile {
+  margin: 10px 0;
+}
+
+.profiles h4 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.bar {
+  height: 10px;
+  background-color: #ddd;
+  border-radius: 5px;
+  position: relative;
+}
+
+.bar.green {
+  width: 70%;
+  background-color: #00a859;
+}
+
+.bar.yellow {
+  width: 50%;
+  background-color: #ffd700;
+}
+
+.bar.red {
+  width: 30%;
+  background-color: #ff4d4d;
+}
+
+.chart {
+  text-align: center;
+}
+
+.circle-chart {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: conic-gradient(#00a859 75%, #ddd 75%);
+  margin: 10px auto;
+}
+
+.sidebar-iframe {
+  width: 250px;
+  height: 100vh;
+  border: none;
+}

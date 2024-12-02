@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quero-Quero - Gerenciamento de Usuários</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="../../components/cookie/script.js"></script>
+    <script src="usuarios.js" type="module"></script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <a href="/frontEnd/src/pages/dashboard/index.html">Dashboard</a>
+        <a href="/frontEnd/src/pages/usuarios/index.html" class="active">
+          Gestão de Usuários
+        </a>
+        <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
+        <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
+        <a href="/frontEnd/src/pages/envioTaloes/index.html">Envio de Talões</a>
+        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html">
+          Recebimento de Talões
+        </a>
+        <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
+        <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
+        <a href="/frontEnd/src/pages/login/index.html">Logout</a>
+      </div>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header>
+          <div class="logo">
+            <img
+              src="/frontEnd/public/images/logo.png"
+              alt="Quero-Quero Logo"
+            />
+          </div>
+          <div class="user-profile">
+            <img
+              src="/frontEnd/public/images/perfil.png"
+              alt="Ícone de perfil"
+            />
+            <span>Meu perfil</span>
+          </div>
+        </header>
+
+        <div class="table-header">
+          <div class="search-container">
+            <label for="search">Mostrar</label>
+            <select id="rows-per-page">
+              <option value="10">10 linhas</option>
+              <option value="25">25 linhas</option>
+              <option value="50">50 linhas</option>
+            </select>
+            <input type="text" id="search" placeholder="Pesquisar..." />
+          </div>
+          <button
+            class="add-user-btn"
+            onclick="window.location.href='novoUsuario.html'"
+          >
+            + Adicionar Usuário
+          </button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Usuário</th>
+              <th>Loja</th>
+              <th>Data de cadastro</th>
+              <th>Perfil</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-usuarios"></tbody>
+        </table>
+
+        <div class="pagination">
+          <button class="page-btn">Anterior</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">Próxima</button>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

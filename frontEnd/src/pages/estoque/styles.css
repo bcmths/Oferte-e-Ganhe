@@ -1,0 +1,235 @@
+/* Reset básico */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: inherit;
+}
+
+.container {
+  display: flex;
+  min-height: 100vh; /* Altura mínima da página */
+  background-color: #f9f9f9;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: #f3f4f6; /* Cor de fundo da sidebar */
+  padding: 20px 0;
+  border-right: 1px solid #ccc;
+}
+
+.sidebar a {
+  display: block;
+  padding: 15px 20px;
+  text-decoration: none;
+  color: #333; /* Cor padrão do texto */
+  border-left: 5px solid transparent;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background-color: #e5e7eb; /* Fundo ao passar o mouse ou ativo */
+  border-left-color: #00a859; /* Barra verde à esquerda */
+  font-weight: bold;
+}
+
+/* Cabeçalho */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid #ddd;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.logo img {
+  height: 50px;
+}
+
+.user-profile {
+  display: flex;
+  flex-direction: column; /* Posiciona o texto abaixo do ícone */
+  align-items: center;
+  justify-content: center;
+  gap: 5px; /* Espaço entre o ícone e o texto */
+  margin-right: 20px; /* Ajuste do espaço à direita */
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.user-profile img {
+  width: 50px; /* Tamanho do ícone de perfil */
+  height: 50px;
+  border-radius: 50%; /* Torna o ícone circular */
+  border: 2px solid #ccc; /* Adiciona uma borda sutil */
+}
+
+/* Conteúdo principal */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.table-header h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.table-header .add-user-btn {
+  background-color: #00a859; /* Botão verde */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.table-header .add-user-btn:hover {
+  opacity: 0.9;
+}
+
+/* Filtros */
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-container label {
+  font-size: 14px;
+  color: #333;
+}
+
+.filter-container select,
+.filter-container input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* Estilo da tabela */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+table th,
+table td {
+  text-align: center; /* Centraliza o conteúdo horizontalmente */
+  padding: 10px;
+  border: 1px solid #ddd;
+  vertical-align: middle; /* Centraliza verticalmente */
+}
+
+table th {
+  background-color: #f2f2f2; /* Fundo cinza claro no cabeçalho */
+  color: #333; /* Cor do texto no cabeçalho */
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #eafaf1; /* Verde clarinho para linhas pares */
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: white; /* Fundo branco para linhas ímpares */
+}
+
+/* Estilo de alerta para estoque */
+.warning {
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+.warning.orange {
+  color: orange;
+  background-color: #fff6e5;
+}
+
+.warning.red {
+  color: red;
+  background-color: #ffe5e5;
+}
+
+/* Botões de ação */
+.edit-btn,
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.edit-btn:hover {
+  color: #00a859; /* Verde ao passar o mouse */
+}
+
+.delete-btn:hover {
+  color: red; /* Vermelho ao passar o mouse */
+}
+
+/* Paginação */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 20px;
+}
+
+.pagination .page-btn {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: pointer;
+}
+
+.pagination .page-btn.active {
+  background-color: #00a859; /* Botão ativo verde */
+  color: white;
+}
+
+/* Ajustes gerais */
+body {
+  background-color: #f9f9f9;
+}
+
+h2 {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  color: #333;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}

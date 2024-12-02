@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const cors = require("cors"); // Importar o middleware CORS
 const userRoutes = require("./routes/userRoutes");
 const storeRoutes = require("./routes/storeRoutes");
 const movementRoutes = require("./routes/movementRoutes");
@@ -17,20 +18,35 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 
+// Configurar o middleware CORS
+app.use(
+  cors({
+    origin: "http://127.0.0.1:5500", // Permitir requisições deste domínio
+    credentials: true, // Permitir envio de cookies
+  })
+);
+
+// Middleware para cookies
 app.use(cookieParser());
 
+// Middleware para servir arquivos estáticos
 app.use(express.static(path.join(__dirname, "../frontend/public")));
 
+// Middleware para interpretar JSON
 app.use(express.json());
 
+// Rota base
 app.get("/", (req, res) => {
   res.send("Servidor rodando!");
 });
 
+// Rotas públicas (não autenticadas)
 app.use("/api/auth", authRoutes);
 
+// Middleware de autenticação
 app.use(authenticateToken);
 
+// Rotas autenticadas
 app.use("/api/users", userRoutes);
 app.use("/api/stores", storeRoutes);
 app.use("/api/talons", movementRoutes);

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <a href="/frontEnd/src/pages/dashboard/index.html" class="active">Dashboard</a>
+        <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
+        <a href="/frontEnd/src/pages/perfis/index.html" 
+          >Gestão de Perfis</a
+        >
+        <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
+        <a href="/frontEnd/src/pages/envioTaloes/index.html">Envio de Talões</a>
+        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html">
+          Recebimento de Talões
+        </a>
+        <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
+        <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
+        <a href="/frontEnd/src/pages/login/index.html">Logout</a>
+      </div>
+          
+
+      <div class="main-content">        
+        <header class="dashboard-header">
+          <img
+            src="/frontEnd/public/images/logo.png"
+            alt="Logo Quero-Quero"
+            class="logo"
+          />
+          <div class="user-profile">
+            <span>Meu Perfil</span>
+          </div>
+        </header>
+
+        <div class="dashboard-content">
+          <div class="stats">
+            <div class="stat">
+              <h3>Total de Usuários</h3>
+              <p>594</p>
+            </div>
+            <div class="stat">
+              <h3>Total de Talões</h3>
+              <p>256</p>
+            </div>
+          </div>
+
+          <div class="profiles">
+            <div class="profile">
+              <h4>Perfis Consultantes</h4>
+              <div class="bar green"></div>
+            </div>
+            <div class="profile">
+              <h4>Perfis Gerenciais</h4>
+              <div class="bar yellow"></div>
+            </div>
+            <div class="profile">
+              <h4>Perfis Administradores</h4>
+              <div class="bar red"></div>
+            </div>
+          </div>
+
+          <div class="chart">
+            <h4>Talões</h4>
+            <p>75% enviados</p>
+            <div class="circle-chart">
+            </div>
+          </div>
+        </div>
+      </div>
+  </body>
+</html>

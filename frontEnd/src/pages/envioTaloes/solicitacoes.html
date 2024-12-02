@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quero-Quero - Solicitações de Talões</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <a href="/frontEnd/src/pages/dashboard/index.html">Dashboard</a>
+        <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
+        <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
+        <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
+        <a href="/frontEnd/src/pages/envioTaloes/index.html" class="active"
+          >Envio de Talões</a
+        >
+        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html"
+          >Recebimento de Talões</a
+        >
+        <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
+        <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
+        <a href="/frontEnd/src/pages/login/index.html">Logout</a>
+      </div>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header>
+          <div class="logo">
+            <img
+              src="/frontEnd/public/images/logo.png"
+              alt="Quero-Quero Logo"
+            />
+          </div>
+          <div class="user-profile">
+            <img
+              src="/frontEnd/public/images/perfil.png"
+              alt="Ícone de perfil"
+            />
+            <span>Meu perfil</span>
+          </div>
+        </header>
+
+        <div class="table-header">
+          <h2>Solicitações de Talões</h2>
+        </div>
+
+        <div class="filter-container">
+          <label for="rows-per-page">Mostrar</label>
+          <select id="rows-per-page">
+            <option value="10">10 linhas</option>
+            <option value="25">25 linhas</option>
+            <option value="50">50 linhas</option>
+          </select>
+          <input type="text" id="search" placeholder="Pesquisar..." />
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Loja</th>
+              <th>Qtd. Talões</th>
+              <th>Data de solicitação</th>
+              <th>Funcionário</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Loja 2</td>
+              <td>12</td>
+              <td>13/05/2022 14:55</td>
+              <td>2</td>
+              <td>
+                <button class="btn-status aceitar">Aceitar</button>
+                <button class="btn-status recusar">Recusar</button>
+              </td>
+              <td>
+                <button class="edit-btn">✏️</button>
+                <button class="delete-btn">🗑️</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Loja 4</td>
+              <td>33</td>
+              <td>15/06/2022 10:12</td>
+              <td>2</td>
+              <td>
+                <span class="badge status-aceita">Solicitação aceita</span>
+              </td>
+              <td>
+                <button class="edit-btn">✏️</button>
+                <button class="delete-btn">🗑️</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Loja 3</td>
+              <td>5</td>
+              <td>06/09/2022 19:00</td>
+              <td>10</td>
+              <td>
+                <span class="badge status-recusada">Solicitação recusada</span>
+              </td>
+              <td>
+                <button class="edit-btn">✏️</button>
+                <button class="delete-btn">🗑️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="pagination">
+          <button class="page-btn">Anterior</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">Próxima</button>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
