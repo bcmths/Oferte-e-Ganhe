@@ -12,25 +12,25 @@ router.get("/", verificaPermissoes("Usuário", "Leitura"), (req, res) => {
 
 router.post(
   "/cadastrar",
-  verificaPermissoes("Usuário", "Edição"),
+  verificaPermissoes("Usuários", "Edição"),
   userController.registerUser
 );
 
 router.get(
   "/all",
-  verificaPermissoes("Usuário", "Leitura"),
+  verificaPermissoes("Usuários", "Leitura"),
   userController.listUsers
 );
 
 router.put(
   "/editar/:matricula",
-  verificaPermissoes("Usuário", "Edição"),
+  verificaPermissoes("Usuários", "Edição"),
   userController.updateUser
 );
 
 router.delete(
   "/deletar/:matricula",
-  verificaPermissoes("Usuário", "Edição"),
+  verificaPermissoes("Usuários", "Edição"),
   userController.deleteUser
 );
 

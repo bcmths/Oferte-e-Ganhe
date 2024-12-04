@@ -5,20 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quero-Quero - Editar Usuário</title>
     <link rel="stylesheet" href="styles.css" />
+    <script defer src="editarUsuario.js"></script>
   </head>
   <body>
     <div class="container">
       <!-- Sidebar -->
       <div class="sidebar">
         <a href="/frontEnd/src/pages/dashboard/index.html">Dashboard</a>
-        <a href="/frontEnd/src/pages/usuarios/index.html" class="active">
-          Gestão de Usuários
-        </a>
+        <a href="/frontEnd/src/pages/usuarios/index.html" class="active"
+          >Gestão de Usuários</a
+        >
         <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
         <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
-        <a href="/frontEnd/src/pages/envioDeTaloes/index.html">Envio de Talões</a>
-        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html">
-          Recebimento de Talões
+        <a href="/frontEnd/src/pages/envioDeTaloes/index.html"
+          >Envio de Talões</a
+        >
+        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html"
+          >Recebimento de Talões</a
+        >
+        <a href="/frontEnd/src/pages/solicitacoes/index.html">
+          Solicitações
         </a>
         <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
         <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
@@ -45,14 +51,22 @@
 
         <!-- Formulário de edição de usuário -->
         <div class="form-container">
-          <form>
+          <form id="editar-usuario-form">
             <h2>Editar Usuário</h2>
+            <div class="form-group">
+              <label for="matricula">Matrícula *</label>
+              <input
+                type="text"
+                id="matricula"
+                placeholder="Matrícula do usuário"
+                required
+              />
+            </div>
             <div class="form-group">
               <label for="nome">Nome *</label>
               <input
                 type="text"
                 id="nome"
-                value="João Paulo"
                 placeholder="Nome do usuário"
                 required
               />
@@ -62,27 +76,21 @@
               <input
                 type="email"
                 id="email"
-                value="joao@qgtech.com"
                 placeholder="E-mail do usuário"
                 required
               />
             </div>
             <div class="form-group">
               <label for="loja">Loja *</label>
-              <input
-                type="text"
-                id="loja"
-                value="Loja 5"
-                placeholder="Loja de origem do usuário"
-                required
-              />
+              <select id="loja" name="loja" required>
+                <option value="" disabled selected>Selecione a loja</option>
+              </select>
             </div>
             <div class="form-group">
               <label for="senha">Senha *</label>
               <input
                 type="password"
                 id="senha"
-                value="********"
                 placeholder="Senha do usuário"
                 required
               />
@@ -92,7 +100,6 @@
               <input
                 type="password"
                 id="confirmar-senha"
-                value="********"
                 placeholder="Confirmar senha"
                 required
               />
@@ -100,11 +107,10 @@
             <div class="form-group">
               <label for="perfil">Perfil:</label>
               <select id="perfil" name="perfil" required>
-                <option value="matriz">Matriz</option>
-                <option value="gerente" selected>Gerente</option>
-                <option value="consulta">Consulta</option>
+                <option value="" disabled selected>Selecione o perfil</option>
               </select>
             </div>
+
             <button type="submit" class="btn-submit">Atualizar Usuário</button>
           </form>
         </div>

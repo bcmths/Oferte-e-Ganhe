@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quero-Quero - Cadastrar Envio</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="../../components/cookie/script.js"></script>
+    <script src="cadastrarEnvio.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <a href="/frontEnd/src/pages/dashboard/index.html">Dashboard</a>
+        <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
+        <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
+        <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
+        <a href="/frontEnd/src/pages/envioTaloes/index.html" class="active"
+          >Envio de Talões</a
+        >
+        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html"
+          >Recebimento de Talões</a
+        >
+        <a href="/frontEnd/src/pages/solicitacoes/index.html"> Solicitações </a>
+        <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
+        <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
+        <a href="/frontEnd/src/pages/login/index.html">Logout</a>
+      </div>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header>
+          <div class="logo">
+            <img
+              src="/frontEnd/public/images/logo.png"
+              alt="Quero-Quero Logo"
+            />
+          </div>
+          <div class="user-profile">
+            <img
+              src="/frontEnd/public/images/perfil.png"
+              alt="Ícone de perfil"
+            />
+            <span>Meu perfil</span>
+          </div>
+        </header>
+
+        <div class="form-container">
+          <form id="form-cadastrar-envio">
+            <h2>Cadastrar Envio</h2>
+            <div class="form-group">
+              <label for="remessa">Remessa:</label>
+              <input
+                type="text"
+                id="remessa"
+                name="remessa"
+                placeholder="Digite a remessa"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="solicitacao">Solicitação:</label>
+              <select id="solicitacao" name="solicitacao" required>
+                <option value="" disabled selected>
+                  Selecione uma solicitação
+                </option>
+                <!-- As opções serão carregadas dinamicamente -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="data-prevista">Previsão de entrega:</label>
+              <input
+                type="datetime-local"
+                id="data-prevista"
+                name="data-prevista"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="quantidade">Quantidade:</label>
+              <input
+                type="number"
+                id="quantidade"
+                name="quantidade"
+                placeholder="Digite a quantidade"
+                required
+              />
+            </div>
+            <button type="submit" class="btn green">Cadastrar</button>
+            <button
+              type="button"
+              class="btn cancel"
+              onclick="window.location.href='/frontEnd/src/pages/envioTaloes/index.html'"
+            >
+              Cancelar
+            </button>
+          </form>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

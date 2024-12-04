@@ -69,8 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
             <td>${envio.quantidade}</td>
             <td>
               <span class="badge ${getBadgeClass(envio.status.status)}">${
-                envio.status.status
-              }</span>
+          envio.status.status
+        }</span>
             </td>
 
             <td>

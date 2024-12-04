@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quero-Quero - Gestão de Lojas</title>
+    <title>Quero-Quero - Cadastrar Solicitação</title>
     <link rel="stylesheet" href="styles.css" />
-    <script src="../../components/cookie/script.js"></script>
-    <script src="lojas.js" type="module"></script>
+    <script src="../../../components/cookie/script.js"></script>
+    <script src="cadastrarSolicitacao.js" defer></script>
   </head>
   <body>
     <div class="container">
@@ -15,14 +15,12 @@
         <a href="/frontEnd/src/pages/dashboard/index.html">Dashboard</a>
         <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
         <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
-        <a href="/frontEnd/src/pages/lojas/index.html" class="active"
-          >Gestão de Lojas</a
-        >
+        <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
         <a href="/frontEnd/src/pages/envioTaloes/index.html">Envio de Talões</a>
         <a href="/frontEnd/src/pages/recebimentoTaloes/index.html"
           >Recebimento de Talões</a
         >
-        <a href="/frontEnd/src/pages/solicitacoes/index.html">
+        <a href="/frontEnd/src/pages/solicitacoes/index.html" class="active">
           Solicitações
         </a>
         <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
@@ -48,29 +46,34 @@
           </div>
         </header>
 
-        <div class="table-header">
-          <h2>Gestão de Lojas</h2>
-          <button class="add-user-btn">+ Adicionar Loja</button>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Loja</th>
-              <th>Cidade</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody id="tabela-lojas"></tbody>
-        </table>
-
-        <div class="pagination">
-          <button class="page-btn">Anterior</button>
-          <button class="page-btn active">1</button>
-          <button class="page-btn">2</button>
-          <button class="page-btn">3</button>
-          <button class="page-btn">Próxima</button>
+        <div class="form-container">
+          <form id="form-cadastrar-solicitacao">
+            <h2>Cadastrar Solicitação</h2>
+            <div class="form-group">
+              <label for="loja">Loja:</label>
+              <select id="loja" name="loja" required>
+                <option value="" disabled selected>Selecione a loja</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="quantidade">Quantidade de Talões:</label>
+              <input
+                type="number"
+                id="quantidade"
+                name="quantidade"
+                placeholder="Digite a quantidade de talões"
+                required
+              />
+            </div>
+            <button type="submit" class="btn green">Cadastrar</button>
+            <button
+              type="button"
+              class="btn cancel"
+              onclick="window.location.href='/frontEnd/src/pages/envioTaloes/index.html'"
+            >
+              Cancelar
+            </button>
+          </form>
         </div>
       </main>
     </div>

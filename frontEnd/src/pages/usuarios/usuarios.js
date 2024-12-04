@@ -55,13 +55,13 @@ document.addEventListener("DOMContentLoaded", () => {
               <button
                 class="edit-btn"
                 onclick="window.location.href='editarUsuario.html?id=${
-                  usuario.id
+                  usuario.matricula
                 }'">
                 ✏️
               </button>
               <button
                 class="delete-btn"
-                onclick="deletarUsuario('${usuario.id}')">
+                onclick="deletarUsuario('${usuario.matricula}')">
                 🗑️
               </button>
             </td>
@@ -74,17 +74,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function deletarUsuario(id) {
+  async function deletarUsuario(matricula) {
+    const token = getToken();
+
     const confirmacao = confirm("Tem certeza que deseja deletar este usuário?");
     if (!confirmacao) return;
 
     try {
       const response = await fetch(
-        `http://localhost:3000/usuarios/deletar/${id}`,
+        `http://localhost:3000/api/users/deletar/${matricula}`,
         {
           method: "DELETE",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -102,4 +105,5 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   carregarUsuarios();
+  window.deletarUsuario = deletarUsuario;
 });

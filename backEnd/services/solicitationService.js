@@ -1,13 +1,18 @@
 const Solicitacao = require("../models/solicitacionModel");
 const StatusSolicitacao = require("../models/statusSolicitacaoModel");
 const Usuario = require("../models/userModel");
+const Loja = require("../models/storeModel");
 
 async function consultarSolicitacoes() {
   try {
     const solicitacoes = await Solicitacao.findAll({
       include: [
         { model: StatusSolicitacao, as: "status" },
-        { model: Usuario, as: "usuario" },
+        {
+          model: Usuario,
+          as: "usuario",
+          include: { model: Loja, as: "loja" },
+        },
       ],
     });
     return solicitacoes;

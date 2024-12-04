@@ -10,7 +10,6 @@
   </head>
   <body>
     <div class="container">
-      <!-- Sidebar -->
       <div class="sidebar">
         <a href="/frontEnd/src/pages/dashboard/index.html">Dashboard</a>
         <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
@@ -22,12 +21,14 @@
         <a href="/frontEnd/src/pages/recebimentoTaloes/index.html">
           Recebimento de Talões
         </a>
+        <a href="/frontEnd/src/pages/solicitacoes/index.html">
+          Solicitações
+        </a>
         <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
         <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
         <a href="/frontEnd/src/pages/login/index.html">Logout</a>
       </div>
 
-      <!-- Main Content -->
       <main class="main-content">
         <header>
           <div class="logo">
@@ -47,14 +48,19 @@
 
         <div class="table-header">
           <h2>Gestão de Perfis</h2>
-          <button class="add-user-btn">+ Criar Perfil</button>
+          <button
+            class="add-user-btn"
+            onclick="window.location.href='novoPerfil.html'"
+          >
+            + Criar Perfil
+          </button>
         </div>
 
         <table>
           <thead>
             <tr>
               <th>Perfis</th>
-              <th>Permissões</th>
+              <th>Última Modificação</th>
               <th>Ações</th>
             </tr>
           </thead>

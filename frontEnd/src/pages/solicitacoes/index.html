@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quero-Quero - Solicitações de Talões</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="solicitacoes.js" defer></script>
   </head>
   <body>
     <div class="container">
@@ -14,12 +15,15 @@
         <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
         <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
         <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
-        <a href="/frontEnd/src/pages/envioTaloes/index.html" class="active"
+        <a href="/frontEnd/src/pages/envioTaloes/index.html"
           >Envio de Talões</a
         >
         <a href="/frontEnd/src/pages/recebimentoTaloes/index.html"
           >Recebimento de Talões</a
         >
+        <a href="/frontEnd/src/pages/solicitacoes/index.html" class="active">
+          Solicitações
+        </a>
         <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
         <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
         <a href="/frontEnd/src/pages/login/index.html">Logout</a>
@@ -45,6 +49,14 @@
 
         <div class="table-header">
           <h2>Solicitações de Talões</h2>
+          <div class="table-actions">
+            <button
+              class="btn novo-envio"
+              onclick="window.location.href='cadastrarSolicitacao.html'"
+            >
+              Criar Solicitação
+            </button>
+          </div>
         </div>
 
         <div class="filter-container">
@@ -69,46 +81,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Loja 2</td>
-              <td>12</td>
-              <td>13/05/2022 14:55</td>
-              <td>2</td>
-              <td>
-                <button class="btn-status aceitar">Aceitar</button>
-                <button class="btn-status recusar">Recusar</button>
-              </td>
-              <td>
-                <button class="edit-btn">✏️</button>
-                <button class="delete-btn">🗑️</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Loja 4</td>
-              <td>33</td>
-              <td>15/06/2022 10:12</td>
-              <td>2</td>
-              <td>
-                <span class="badge status-aceita">Solicitação aceita</span>
-              </td>
-              <td>
-                <button class="edit-btn">✏️</button>
-                <button class="delete-btn">🗑️</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Loja 3</td>
-              <td>5</td>
-              <td>06/09/2022 19:00</td>
-              <td>10</td>
-              <td>
-                <span class="badge status-recusada">Solicitação recusada</span>
-              </td>
-              <td>
-                <button class="edit-btn">✏️</button>
-                <button class="delete-btn">🗑️</button>
-              </td>
-            </tr>
+            <!-- Conteúdo carregado dinamicamente por solicitacoes.js -->
           </tbody>
         </table>
 

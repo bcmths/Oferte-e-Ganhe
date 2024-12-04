@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quero-Quero - Envio de Talões</title>
+    <title>Quero-Quero - Recebimento de Talões</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -14,14 +14,13 @@
         <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
         <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
         <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
-        <a href="/frontEnd/src/pages/envioTaloes/index.html"
-          >Envio de Talões</a
-        >
+        <a href="/frontEnd/src/pages/envioTaloes/index.html">Envio de Talões</a>
         <a
           href="/frontEnd/src/pages/recebimentoTaloes/index.html"
           class="active"
           >Recebimento de Talões</a
         >
+        <a href="/frontEnd/src/pages/solicitacoes/index.html"> Solicitações </a>
         <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
         <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
         <a href="/frontEnd/src/pages/login/index.html">Logout</a>
@@ -46,7 +45,7 @@
         </header>
 
         <div class="table-header">
-          <h2>Envio de Talões</h2>
+          <h2>Recebimento de Talões</h2>
           <div class="table-actions">
             <button class="btn novo-envio">Cadastrar Recebimento</button>
             <button class="btn exportar-csv">Exportar CSV</button>
@@ -76,47 +75,7 @@
               <th>Ações</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>#20462</td>
-              <td>12</td>
-              <td>Loja 2</td>
-              <td>13/05/2022 14:55</td>
-              <td>13/05/2022 14:55</td>
-              <td>2</td>
-              <td><span class="badge recebido">Recebido</span></td>
-              <td>
-                <button class="edit-btn">✏️</button>
-                <button class="delete-btn">🗑️</button>
-              </td>
-            </tr>
-            <tr>
-              <td>#17188</td>
-              <td>7</td>
-              <td>Matriz</td>
-              <td>25/09/2022 09:13</td>
-              <td>25/09/2022 09:13</td>
-              <td>10</td>
-              <td><span class="badge atrasado">Atrasado</span></td>
-              <td>
-                <button class="edit-btn">✏️</button>
-                <button class="delete-btn">🗑️</button>
-              </td>
-            </tr>
-            <tr>
-              <td>#44122</td>
-              <td>33</td>
-              <td>Loja 4</td>
-              <td>24/10/2022 20:21</td>
-              <td>24/10/2022 20:21</td>
-              <td>1</td>
-              <td><span class="badge recebido">Recebido</span></td>
-              <td>
-                <button class="edit-btn">✏️</button>
-                <button class="delete-btn">🗑️</button>
-              </td>
-            </tr>
-          </tbody>
+          <tbody id="tabela-recebimentos"></tbody>
         </table>
 
         <div class="pagination">
@@ -128,5 +87,6 @@
         </div>
       </main>
     </div>
+    <script src="recebimentoTaloes.js"></script>
   </body>
 </html>
