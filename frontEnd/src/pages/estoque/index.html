@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quero-Quero - Estoque</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="estoque.js" defer></script>
   </head>
   <body>
     <div class="container">
@@ -14,15 +15,11 @@
         <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
         <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
         <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
-        <a href="/frontEnd/src/pages/envioTaloes/index.html"
-          >Envio de Talões</a
-        >
+        <a href="/frontEnd/src/pages/envioTaloes/index.html">Envio de Talões</a>
         <a href="/frontEnd/src/pages/recebimentoTaloes/index.html"
           >Recebimento de Talões</a
         >
-        <a href="/frontEnd/src/pages/solicitacoes/index.html">
-          Solicitações
-        </a>
+        <a href="/frontEnd/src/pages/solicitacoes/index.html"> Solicitações </a>
         <a href="/frontEnd/src/pages/estoque/index.html" class="active"
           >Estoque</a
         >
@@ -50,7 +47,12 @@
 
         <div class="table-header">
           <h2>Estoque</h2>
-          <button class="add-user-btn">+ Adicionar Estoque</button>
+          <button
+            class="add-user-btn"
+            onclick="window.location.href='/frontEnd/src/pages/estoque/cadastrarEstoque.html'"
+          >
+            + Adicionar Estoque
+          </button>
         </div>
 
         <div class="filter-container">
@@ -74,46 +76,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Loja 32</td>
-              <td><span class="warning red">21 ⚠️</span></td>
-              <td>25</td>
-              <td>30</td>
-              <td>
-                <button class="edit-btn">✏️</button>
-                <button class="delete-btn">🗑️</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Loja 12</td>
-              <td>59</td>
-              <td>35</td>
-              <td>53</td>
-              <td>
-                <button class="edit-btn">✏️</button>
-                <button class="delete-btn">🗑️</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Loja 16</td>
-              <td><span class="warning">30 ⚠️</span></td>
-              <td>40</td>
-              <td>50</td>
-              <td>
-                <button class="edit-btn">✏️</button>
-                <button class="delete-btn">🗑️</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Loja 31</td>
-              <td><span class="warning">22 ⚠️</span></td>
-              <td>20</td>
-              <td>30</td>
-              <td>
-                <button class="edit-btn">✏️</button>
-                <button class="delete-btn">🗑️</button>
-              </td>
-            </tr>
+            <!-- As linhas da tabela serão preenchidas dinamicamente -->
           </tbody>
         </table>
 

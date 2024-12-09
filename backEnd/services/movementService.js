@@ -1,13 +1,23 @@
 const Movimentacoes = require("../models/movementModel");
 const StatusMovimentacao = require("../models/statusMovimentacaoModel");
 const Solicitacao = require("../models/solicitacionModel");
+const Usuario = require("../models/userModel");
+const Loja = require("../models/storeModel");
 
 async function consultarMovimentacoes() {
   try {
     const movimentacoes = await Movimentacoes.findAll({
       include: [
         { model: StatusMovimentacao, as: "status" },
-        { model: Solicitacao, as: "solicitacao" },
+        {
+          model: Solicitacao,
+          as: "solicitacao",
+          include: {
+            model: Usuario,
+            as: "usuario",
+            include: { model: Loja, as: "loja" },
+          },
+        },
       ],
     });
     return movimentacoes;

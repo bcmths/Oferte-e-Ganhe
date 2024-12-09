@@ -310,3 +310,78 @@ button:hover {
 .badge.status-recusada {
   background-color: red;
 }
+
+.form-container {
+  border: 2px dashed #00a859;
+  padding: 30px;
+  border-radius: 15px;
+  background-color: #fff;
+  margin: 20px auto;
+  max-width: 700px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="datetime-local"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+button.btn.green {
+  background-color: #00a859;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+}
+
+button.btn.green:hover {
+  background-color: #007b47;
+}
+
+button.cancel {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button.cancel:hover {
+  background-color: #ddd;
+}
+

@@ -62,8 +62,11 @@ const login = async (req, res) => {
     const token = jwt.sign(
       {
         matricula: usuario.matricula,
+        id_usuario: usuario.id_usuario,
+        nome: usuario.nome,
         id_perfil: usuario.id_perfil,
         id_loja: usuario.id_loja,
+        loja: usuario.loja.nome,
         permissoes: permissao.map((p) => ({
           modulo: p.modulo,
           tipo_permissao: p.tipo_permissao,

@@ -1,4 +1,3 @@
-/* Reset básico */
 body,
 html {
   margin: 0;
@@ -13,14 +12,13 @@ html {
 
 .container {
   display: flex;
-  min-height: 100vh; /* Altura mínima da página */
+  min-height: 100vh;
   background-color: #f9f9f9;
 }
 
-/* Sidebar */
 .sidebar {
   width: 250px;
-  background-color: #f3f4f6; /* Cor de fundo da sidebar */
+  background-color: #f3f4f6;
   padding: 20px 0;
   border-right: 1px solid #ccc;
 }
@@ -29,18 +27,17 @@ html {
   display: block;
   padding: 15px 20px;
   text-decoration: none;
-  color: #333; /* Cor padrão do texto */
+  color: #333;
   border-left: 5px solid transparent;
 }
 
 .sidebar a:hover,
 .sidebar a.active {
-  background-color: #e5e7eb; /* Fundo ao passar o mouse ou ativo */
-  border-left-color: #00a859; /* Barra verde à esquerda */
+  background-color: #e5e7eb;
+  border-left-color: #00a859;
   font-weight: bold;
 }
 
-/* Cabeçalho */
 header {
   display: flex;
   justify-content: space-between;
@@ -59,23 +56,22 @@ header {
 
 .user-profile {
   display: flex;
-  flex-direction: column; /* Posiciona o texto abaixo do ícone */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5px; /* Espaço entre o ícone e o texto */
-  margin-right: 20px; /* Ajuste do espaço à direita */
+  gap: 5px;
+  margin-right: 20px;
   font-size: 14px;
   font-weight: bold;
 }
 
 .user-profile img {
-  width: 50px; /* Tamanho do ícone de perfil */
+  width: 50px;
   height: 50px;
-  border-radius: 50%; /* Torna o ícone circular */
-  border: 2px solid #ccc; /* Adiciona uma borda sutil */
+  border-radius: 50%;
+  border: 2px solid #ccc;
 }
 
-/* Conteúdo principal */
 .main-content {
   flex: 1;
   padding: 20px;
@@ -135,7 +131,6 @@ header {
   background-color: #007bff;
 }
 
-/* Filtros */
 .filter-container {
   display: flex;
   align-items: center;
@@ -156,7 +151,6 @@ header {
   font-size: 14px;
 }
 
-/* Estilo da tabela */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -165,26 +159,25 @@ table {
 
 table th,
 table td {
-  text-align: center; /* Centraliza o conteúdo horizontalmente */
+  text-align: center;
   padding: 10px;
   border: 1px solid #ddd;
-  vertical-align: middle; /* Centraliza verticalmente */
+  vertical-align: middle;
 }
 
 table th {
-  background-color: #f2f2f2; /* Fundo cinza claro no cabeçalho */
-  color: #333; /* Cor do texto no cabeçalho */
+  background-color: #f2f2f2;
+  color: #333;
 }
 
 table tbody tr:nth-child(even) {
-  background-color: #eafaf1; /* Verde clarinho para linhas pares */
+  background-color: #eafaf1;
 }
 
 table tbody tr:nth-child(odd) {
-  background-color: white; /* Fundo branco para linhas ímpares */
+  background-color: white;
 }
 
-/* Badges para status */
 .badge {
   display: inline-block;
   padding: 5px 10px;
@@ -206,7 +199,6 @@ table tbody tr:nth-child(odd) {
   background-color: red;
 }
 
-/* Botões de ação */
 .edit-btn,
 .delete-btn {
   background: none;
@@ -216,14 +208,13 @@ table tbody tr:nth-child(odd) {
 }
 
 .edit-btn:hover {
-  color: #00a859; /* Verde ao passar o mouse */
+  color: #00a859;
 }
 
 .delete-btn:hover {
-  color: red; /* Vermelho ao passar o mouse */
+  color: red;
 }
 
-/* Paginação */
 .pagination {
   display: flex;
   justify-content: center;
@@ -239,11 +230,10 @@ table tbody tr:nth-child(odd) {
 }
 
 .pagination .page-btn.active {
-  background-color: #00a859; /* Botão ativo verde */
+  background-color: #00a859;
   color: white;
 }
 
-/* Ajustes gerais */
 body {
   background-color: #f9f9f9;
 }
@@ -264,7 +254,6 @@ button:hover {
   opacity: 0.8;
 }
 
-/* Botões de status */
 .btn-status {
   padding: 5px 10px;
   border-radius: 5px;
@@ -292,7 +281,6 @@ button:hover {
   background-color: #8b0000;
 }
 
-/* Badges de status */
 .badge {
   display: inline-block;
   padding: 5px 10px;

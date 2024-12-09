@@ -3,10 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quero-Quero - Gestão de Lojas</title>
+    <title>Quero-Quero - Editar Loja</title>
     <link rel="stylesheet" href="styles.css" />
-    <script src="../../components/cookie/script.js"></script>
-    <script src="lojas.js" type="module"></script>
+    <script defer src="editarLoja.js"></script>
   </head>
   <body>
     <div class="container">
@@ -19,9 +18,9 @@
           >Gestão de Lojas</a
         >
         <a href="/frontEnd/src/pages/envioTaloes/index.html">Envio de Talões</a>
-        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html"
-          >Recebimento de Talões</a
-        >
+        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html">
+          Recebimento de Talões
+        </a>
         <a href="/frontEnd/src/pages/solicitacoes/index.html"> Solicitações </a>
         <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
         <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
@@ -46,34 +45,40 @@
           </div>
         </header>
 
-        <div class="table-header">
-          <h2>Gestão de Lojas</h2>
-          <button
-            class="add-user-btn"
-            onclick="window.location.href='cadastrarLoja.html'"
-          >
-            + Adicionar Loja
-          </button>
-        </div>
+        <!-- Formulário de edição de loja -->
+        <div class="form-container">
+          <form id="form-editar-loja">
+            <h2>Editar Loja</h2>
+            <div class="form-group">
+              <label for="codigo">Código da Loja *</label>
+              <input
+                type="text"
+                id="codigo"
+                placeholder="Digite o código da loja"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="nome">Nome da Loja *</label>
+              <input
+                type="text"
+                id="nome"
+                placeholder="Digite o nome da loja"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="cidade">Cidade *</label>
+              <input
+                type="text"
+                id="cidade"
+                placeholder="Digite a cidade da loja"
+                required
+              />
+            </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Loja</th>
-              <th>Cidade</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody id="tabela-lojas"></tbody>
-        </table>
-
-        <div class="pagination">
-          <button class="page-btn">Anterior</button>
-          <button class="page-btn active">1</button>
-          <button class="page-btn">2</button>
-          <button class="page-btn">3</button>
-          <button class="page-btn">Próxima</button>
+            <button type="submit" class="btn-submit">Salvar Alterações</button>
+          </form>
         </div>
       </main>
     </div>

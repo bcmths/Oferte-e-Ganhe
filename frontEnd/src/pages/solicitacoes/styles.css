@@ -194,18 +194,6 @@ table tbody tr:nth-child(odd) {
   text-align: center;
 }
 
-.badge.entregue {
-  background-color: green;
-}
-
-.badge.enviado {
-  background-color: orange;
-}
-
-.badge.atrasado {
-  background-color: red;
-}
-
 /* Botões de ação */
 .edit-btn,
 .delete-btn {

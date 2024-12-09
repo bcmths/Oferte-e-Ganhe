@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const token = window.getToken();
     try {
       const response = await fetch(
-        `http://localhost:3000/api/stores/${id_loja}`,
+        `http://localhost:3000/api/stores/deletar/${id_loja}`,
         {
           method: "DELETE",
           headers: {
@@ -83,6 +83,6 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Erro ao deletar a loja.");
     }
   }
-
+  window.deletarLoja = deletarLoja;
   carregarLojas();
 });

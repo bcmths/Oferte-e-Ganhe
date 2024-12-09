@@ -24,8 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function getBadgeClass(status) {
     switch (status.toLowerCase()) {
-      case "pendente":
-        return "badge pendente";
+      case "atrasado":
+        return "badge atrasado";
       case "enviado":
         return "badge enviado";
       case "entregue":
@@ -61,6 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
       tabelaEnvios.innerHTML = "";
 
       envios.forEach((envio) => {
+        console.log(envio.status.status);
+        
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td>${envio.remessa}</td>
@@ -76,14 +78,14 @@ document.addEventListener("DOMContentLoaded", () => {
             <td>
               <button
                 class="edit-btn"
-                onclick="window.location.href='editarMovimentacao.html?id=${
+                onclick="window.location.href='editarEnvio.html?id=${
                   envio.id_movimentacao
                 }'">
                 ✏️
               </button>
               <button
                 class="delete-btn"
-                onclick="deletarMovimentacao('${envio.id_movimentacao}')">
+                onclick="deletarEnvio('${envio.id_movimentacao}')">
                 🗑️
               </button>
             </td>
@@ -97,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function deletarMovimentacao(id_movimentacao) {
+  async function deletarEnvio(id_movimentacao) {
     const confirmacao = confirm(
       "Tem certeza que deseja deletar esta movimentação?"
     );
@@ -106,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const token = getToken();
     try {
       const response = await fetch(
-        `http://localhost:3000/api/movements/${id_movimentacao}`,
+        `http://localhost:3000/api/talons/deletar/${id_movimentacao}`,
         {
           method: "DELETE",
           headers: {
@@ -129,4 +131,5 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   carregarEnvios();
+  window.deletarEnvio = deletarEnvio;
 });

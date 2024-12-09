@@ -47,7 +47,7 @@ async function editarSolicitacao(
   id_usuario
 ) {
   try {
-    const solicitacao = await Solicitacao.update(
+    const [rowsUpdated] = await Solicitacao.update(
       {
         quantidade_taloes,
         id_status_solicitacao,
@@ -55,15 +55,18 @@ async function editarSolicitacao(
       },
       {
         where: { id_solicitacao },
-        returning: true,
       }
     );
 
-    if (solicitacao[0] === 0) {
+    if (rowsUpdated === 0) {
       throw new Error("Solicitação não encontrada ou não foi atualizada");
     }
 
-    return solicitacao[1][0];
+    const updatedSolicitacao = await Solicitacao.findOne({
+      where: { id_solicitacao },
+    });
+
+    return updatedSolicitacao;
   } catch (erro) {
     console.error("Erro ao editar solicitação:", erro);
     throw erro;

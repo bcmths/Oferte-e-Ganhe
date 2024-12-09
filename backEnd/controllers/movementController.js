@@ -8,8 +8,7 @@ exports.createMovimentacao = async (req, res) => {
     data_prevista,
     quantidade,
     id_status,
-    id_solicitacao,
-    id_usuario,
+    id_solicitacao
   } = req.body;
 
   try {
@@ -20,8 +19,7 @@ exports.createMovimentacao = async (req, res) => {
       data_prevista,
       quantidade,
       id_status,
-      id_solicitacao,
-      id_usuario
+      id_solicitacao
     );
     res.status(201).json(novaMovimentacao);
   } catch (erro) {
@@ -52,7 +50,7 @@ exports.updateMovimentacao = async (req, res) => {
     data_prevista,
     quantidade,
     id_status,
-    id_usuario,
+    id_solicitacao
   } = req.body;
 
   try {
@@ -64,7 +62,7 @@ exports.updateMovimentacao = async (req, res) => {
       data_prevista,
       quantidade,
       id_status,
-      id_usuario
+      id_solicitacao
     );
     if (movimentacaoAtualizada) {
       res.status(200).json({

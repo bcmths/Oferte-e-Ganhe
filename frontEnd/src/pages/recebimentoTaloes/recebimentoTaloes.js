@@ -14,10 +14,17 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${dia}/${mes}/${ano} ${hora}:${minutos}`;
   }
 
+  function getToken() {
+    return document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("authToken="))
+      ?.split("=")[1];
+  }
+
   async function carregarRecebimentos() {
-    const token = window.getToken();
+    const token = getToken();
     try {
-      const response = await fetch("http://localhost:3000/api/movements", {
+      const response = await fetch("http://localhost:3000/api/talons/all", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -36,6 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const recebimentos = movimentacoes.filter(
         (mov) => mov.tipo_movimentacao === "Recebimento"
       );
+      console.log(recebimentos);
+      
 
       tabelaRecebimentos.innerHTML = "";
 
@@ -50,10 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
         tr.innerHTML = `
             <td>${recebimento.remessa}</td>
             <td>${recebimento.quantidade}</td>
-            <td>${recebimento.solicitacao.loja.nome}</td>
+            <td>${recebimento.solicitacao.usuario.loja.nome}</td>
             <td>${formatarDataHora(recebimento.data_movimentacao)}</td>
             <td>${formatarDataHora(recebimento.data_prevista)}</td>
-            <td>${recebimento.usuario.nome}</td>
+            <td>${recebimento.solicitacao.usuario.nome}</td>
             <td>
               <span class="badge ${statusClass}">
                 ${recebimento.status.status}
@@ -88,10 +97,10 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     if (!confirmacao) return;
 
-    const token = window.getToken();
+    const token = getToken();
     try {
       const response = await fetch(
-        `http://localhost:3000/api/movements/${id_movimentacao}`,
+        `http://localhost:3000/api/talons/deletar/${id_movimentacao}`,
         {
           method: "DELETE",
           headers: {
@@ -114,4 +123,5 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   carregarRecebimentos();
+  window.deletarRecebimento = deletarRecebimento
 });

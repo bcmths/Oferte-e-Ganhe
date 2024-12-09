@@ -1,5 +1,6 @@
 const Permissao = require("../models/permissionModel");
 const Perfil = require("../models/profileModel");
+const Loja = require("../models/storeModel");
 const Usuario = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 
@@ -9,16 +10,17 @@ async function consultarUsuarioPorEmail(email) {
       where: { email },
       include: [
         {
-          model: Perfil, // Relacionamento com Perfil
-          as: "perfil", // Alias para o relacionamento de Perfil
+          model: Perfil,
+          as: "perfil",
           include: [
             {
-              model: Permissao, // Relacionamento com Permissão
-              as: "permissao", // Alias para as permissões associadas ao perfil
-              through: { attributes: [] }, // Ignora atributos da tabela associativa
+              model: Permissao,
+              as: "permissao",
+              through: { attributes: [] },
             },
           ],
         },
+        { model: Loja, as: "loja" },
       ],
     });
 

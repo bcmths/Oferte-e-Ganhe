@@ -17,11 +17,11 @@ exports.getSolicitacoes = async (req, res) => {
 };
 
 exports.createSolicitacao = async (req, res) => {
-  const { quantidade_taloes, id_status, id_usuario } = req.body;
+  const { quantidade_taloes, id_status_solicitacao, id_usuario } = req.body;
   try {
     const novaSolicitacao = await solicitationService.inserirSolicitacao(
       quantidade_taloes,
-      id_status,
+      id_status_solicitacao,
       id_usuario
     );
     res.status(201).json(novaSolicitacao);
@@ -33,15 +33,14 @@ exports.createSolicitacao = async (req, res) => {
 
 exports.updateSolicitacao = async (req, res) => {
   const { id_solicitacao } = req.params;
-  const { data_solicitacao, quantidade_taloes, id_status, id_usuario } =
+  const { quantidade_taloes, id_status_solicitacao, id_usuario } =
     req.body;
 
   try {
     const solicitacaoAtualizada = await solicitationService.editarSolicitacao(
       id_solicitacao,
-      data_solicitacao,
       quantidade_taloes,
-      id_status,
+      id_status_solicitacao,
       id_usuario
     );
     if (solicitacaoAtualizada) {

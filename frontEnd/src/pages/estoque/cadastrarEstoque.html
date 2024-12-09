@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quero-Quero - Cadastrar Solicitação</title>
+    <title>Quero-Quero - Cadastrar Estoque</title>
     <link rel="stylesheet" href="styles.css" />
-    <script src="../../components/cookie/script.js"></script>
-    <script src="./cadastrarSolicitacao.js" defer></script>
+    <script src="cadastrarEstoque.js" defer></script>
   </head>
   <body>
     <div class="container">
+      <!-- Sidebar -->
       <div class="sidebar">
         <a href="/frontEnd/src/pages/dashboard/index.html">Dashboard</a>
         <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
@@ -19,14 +19,15 @@
         <a href="/frontEnd/src/pages/recebimentoTaloes/index.html"
           >Recebimento de Talões</a
         >
-        <a href="/frontEnd/src/pages/solicitacoes/index.html" class="active">
-          Solicitações
-        </a>
-        <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
+        <a href="/frontEnd/src/pages/solicitacoes/index.html"> Solicitações </a>
+        <a href="/frontEnd/src/pages/estoque/index.html" class="active"
+          >Estoque</a
+        >
         <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
         <a href="/frontEnd/src/pages/login/index.html">Logout</a>
       </div>
 
+      <!-- Main Content -->
       <main class="main-content">
         <header>
           <div class="logo">
@@ -45,28 +46,53 @@
         </header>
 
         <div class="form-container">
-          <form id="form-cadastrar-solicitacao">
-            <h2>Cadastrar Solicitação</h2>
-            <br />
+          <form id="form-cadastrar-estoque">
+            <h2>Cadastrar Estoque</h2>
             <div class="form-group">
-              <label>Nome do Usuário:</label>
-              <span id="user-name" class="user-info">Carregando...</span>
+              <label for="loja">Loja:</label>
+              <select id="loja" name="loja" required>
+                <option value="" disabled selected>Selecione uma loja</option>
+                <!-- Opções serão carregadas dinamicamente -->
+              </select>
             </div>
             <div class="form-group">
-              <label>Loja:</label>
-              <span id="user-store" class="user-info">Carregando...</span>
-            </div>
-            <div class="form-group">
-              <label for="quantidade">Quantidade de Talões:</label>
+              <label for="estoque-atual">Estoque Atual:</label>
               <input
                 type="number"
-                id="quantidade"
-                name="quantidade"
-                placeholder="Digite a quantidade de talões"
+                id="estoque-atual"
+                name="estoque-atual"
+                placeholder="Digite a quantidade atual"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="estoque-minimo">Estoque Mínimo:</label>
+              <input
+                type="number"
+                id="estoque-minimo"
+                name="estoque-minimo"
+                placeholder="Digite a quantidade mínima"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="estoque-recomendado">Estoque Recomendado:</label>
+              <input
+                type="number"
+                id="estoque-recomendado"
+                name="estoque-recomendado"
+                placeholder="Digite a quantidade recomendada"
                 required
               />
             </div>
             <button type="submit" class="btn green">Cadastrar</button>
+            <button
+              type="button"
+              class="btn cancel"
+              onclick="window.location.href='/frontEnd/src/pages/estoque/index.html'"
+            >
+              Cancelar
+            </button>
           </form>
         </div>
       </main>

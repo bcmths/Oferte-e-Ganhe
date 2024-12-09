@@ -22,13 +22,52 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getBadgeClass(status) {
+    console.log(status.toLowerCase());
+    
     switch (status.toLowerCase()) {
-      case "aceita":
+      case "solicitação aceita":
         return "badge status-aceita";
-      case "recusada":
+      case "solicitação recusada":
         return "badge status-recusada";
       default:
         return "badge";
+    }
+  }
+
+  async function atualizarStatusSolicitacao(solicitacao, novoStatus) {
+    const token = getToken();
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/solicitations/editar/${solicitacao.id_solicitacao}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            data_solicitacao: solicitacao.data_solicitacao,
+            quantidade_taloes: solicitacao.quantidade_taloes,
+            id_status_solicitacao: novoStatus,
+            id_usuario: solicitacao.usuario.id_usuario,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar o status da solicitação.");
+      }
+
+      alert(
+        novoStatus === 2
+          ? "Solicitação aceita com sucesso!"
+          : "Solicitação recusada com sucesso!"
+      );
+      carregarSolicitacoes();
+    } catch (error) {
+      console.error("Erro ao atualizar o status da solicitação:", error);
+      alert("Erro ao atualizar o status da solicitação.");
     }
   }
 
@@ -52,7 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const solicitacoesData = await response.json();
       const solicitacoes = solicitacoesData.solicitacoes;
-      console.log(solicitacoes);
 
       tabelaSolicitacoes.innerHTML = "";
 
@@ -85,6 +123,17 @@ document.addEventListener("DOMContentLoaded", () => {
               </td>
             `;
         tabelaSolicitacoes.appendChild(tr);
+
+        if (solicitacao.status.status === "Pendente") {
+          tr.querySelector(".btn-status.aceitar").addEventListener(
+            "click",
+            () => atualizarStatusSolicitacao(solicitacao, 2)
+          );
+          tr.querySelector(".btn-status.recusar").addEventListener(
+            "click",
+            () => atualizarStatusSolicitacao(solicitacao, 3)
+          );
+        }
       });
     } catch (error) {
       console.error("Erro ao carregar as solicitações:", error);
@@ -92,5 +141,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function editarSolicitacao(id_solicitacao) {
+    window.location.href = `/frontEnd/src/pages/solicitacoes/editarSolicitacao.html?id=${id_solicitacao}`;
+  }
+
+  async function deletarSolicitacao(id_solicitacao) {
+    const confirmacao = confirm(
+      "Tem certeza que deseja deletar esta solicitação?"
+    );
+    if (!confirmacao) return;
+
+    const token = getToken();
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/solicitations/deletar/${id_solicitacao}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao deletar a solicitação.");
+      }
+
+      alert("Solicitação deletada com sucesso!");
+      carregarSolicitacoes();
+    } catch (error) {
+      console.error("Erro ao deletar a solicitação:", error);
+      alert("Erro ao deletar a solicitação.");
+    }
+  }
+
   carregarSolicitacoes();
+  window.editarSolicitacao = editarSolicitacao;
+  window.deletarSolicitacao = deletarSolicitacao;
 });
