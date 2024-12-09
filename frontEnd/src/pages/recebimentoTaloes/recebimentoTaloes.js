@@ -43,8 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const recebimentos = movimentacoes.filter(
         (mov) => mov.tipo_movimentacao === "Recebimento"
       );
-      console.log(recebimentos);
-      
 
       tabelaRecebimentos.innerHTML = "";
 
@@ -123,5 +121,5 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   carregarRecebimentos();
-  window.deletarRecebimento = deletarRecebimento
+  window.deletarRecebimento = deletarRecebimento;
 });

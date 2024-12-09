@@ -8,7 +8,7 @@ exports.createMovimentacao = async (req, res) => {
     data_prevista,
     quantidade,
     id_status,
-    id_solicitacao
+    id_solicitacao,
   } = req.body;
 
   try {
@@ -20,7 +20,7 @@ exports.createMovimentacao = async (req, res) => {
       quantidade,
       id_status,
       id_solicitacao
-    );
+    );    
     res.status(201).json(novaMovimentacao);
   } catch (erro) {
     console.error("Erro ao inserir movimentação:", erro);
@@ -50,7 +50,7 @@ exports.updateMovimentacao = async (req, res) => {
     data_prevista,
     quantidade,
     id_status,
-    id_solicitacao
+    id_solicitacao,
   } = req.body;
 
   try {

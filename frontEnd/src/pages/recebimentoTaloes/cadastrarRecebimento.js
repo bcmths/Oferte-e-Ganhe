@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       const enviosDisponiveis = envios.filter(
-        (envio) => !recebidosIds.includes(envio.id_movimentacao)
+        (envio) => !recebidosIds.includes(envio.id_solicitacao)
       );
 
       enviosDisponiveis.forEach((envio) => {
@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
           id_movimentacao: envio.id_movimentacao,
           data_prevista: envio.data_prevista,
           quantidade: envio.quantidade,
+          id_solicitacao: envio.id_solicitacao,
         });
         option.textContent = `Remessa: ${envio.remessa}, Quantidade: ${
           envio.quantidade
@@ -69,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
 
     const envioData = JSON.parse(selectEnvio.value);
+
     const dataMovimentacao = new Date().toISOString();
     const token = getToken();
 
@@ -88,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
             data_prevista: envioData.data_prevista,
             quantidade: envioData.quantidade,
             id_status: 7,
-            id_solicitacao: envioData.id_movimentacao,
+            id_solicitacao: envioData.id_solicitacao,
           }),
         }
       );
