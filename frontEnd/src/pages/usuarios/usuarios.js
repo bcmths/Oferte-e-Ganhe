@@ -107,3 +107,21 @@ document.addEventListener("DOMContentLoaded", () => {
   carregarUsuarios();
   window.deletarUsuario = deletarUsuario;
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const sidebar = document.querySelector(".sidebar");
+  const toggleButton = document.getElementById("sidebar-toggle");
+
+  toggleButton.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+  });
+
+  document.addEventListener("click", (event) => {
+    if (
+      !sidebar.contains(event.target) &&
+      !toggleButton.contains(event.target)
+    ) {
+      sidebar.classList.remove("active");
+    }
+  });
+});

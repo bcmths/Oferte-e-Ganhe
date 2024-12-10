@@ -60,9 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       tabelaEnvios.innerHTML = "";
 
-      envios.forEach((envio) => {
-        console.log(envio.status.status);
-        
+      envios.forEach((envio) => {        
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td>${envio.remessa}</td>

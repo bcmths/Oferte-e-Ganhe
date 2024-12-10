@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Criar Novo Usuário</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Link para Font Awesome (opcional, se usar ícones) -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script defer src="cadastrar.js"></script>
+  </head>
+  <body>
+    <!-- Conteúdo Principal -->
+    <div class="container">
+      <div class="logo">
+        <img src="../../../public/images/logo.png" alt="Logo Quero-Quero" />
+      </div>
+      <h1 class="subtitle">Oferte e Ganhe</h1>
+
+      <!-- Formulário de Criação de Novo Usuário -->
+      <div class="create-user-box">
+        <h2>👤 Criar Novo Usuário</h2>
+        <form id="novo-usuario-form">
+          <div class="input-group">
+            <label for="nome">Nome</label>
+            <input
+              type="text"
+              id="nome"
+              name="nome"
+              placeholder="Insira o nome completo"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <label for="matricula">Matrícula</label>
+            <input
+              type="text"
+              id="matricula"
+              name="matricula"
+              placeholder="Insira a matrícula"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <label for="email">E-mail</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Insira o e-mail"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <label for="senha">Senha</label>
+            <input
+              type="password"
+              id="senha"
+              name="senha"
+              placeholder="Insira a senha"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <label for="confirmar-senha">Confirmar Senha</label>
+            <input
+              type="password"
+              id="confirmar-senha"
+              name="confirmar-senha"
+              placeholder="Confirme a senha"
+              required
+            />
+          </div>
+          <button type="submit" class="btn green">Criar Usuário</button>
+          <button
+            type="button"
+            class="btn yellow"
+            onclick="window.location.href='../login/index.html'"
+          >
+            Voltar para login
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

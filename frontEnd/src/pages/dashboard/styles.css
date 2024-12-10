@@ -1,128 +1,308 @@
 body,
-html {
+html,
+div,
+h1,
+h2,
+h3,
+h4,
+p,
+a,
+ul,
+li,
+button {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
   box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  display: flex;
+  min-height: 100vh;
 }
 
 .container {
   display: flex;
-  min-height: 100vh; /* Garante altura mínima igual à da janela */
-  height: auto; /* Permite que cresça se o conteúdo for maior */
+  width: 100%;
+  position: relative;
 }
 
 .sidebar {
-  width: 250px;
-  background-color: #f3f4f6;
-  padding: 20px 0;
-  border-right: 1px solid #ccc;
+  width: 20%;
+  background-color: #ffffff;
+  color: #2b9348;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: transform 0.3s ease;
 }
 
 .sidebar a {
   display: block;
-  padding: 15px 20px;
+  color: #2b9348;
   text-decoration: none;
-  color: #333;
-  border-left: 5px solid transparent;
-}
-
-.sidebar a:hover,
-.sidebar a.active {
-  background-color: #e5e7eb;
-  border-left-color: #00a859;
+  padding: 12px 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
   font-weight: bold;
 }
 
+.sidebar a.active,
+.sidebar a:hover {
+  background-color: #2b9348;
+  color: #ffffff;
+}
+
 .main-content {
-  flex: 1;
+  width: 80%;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
+  overflow-y: auto;
 }
 
 .dashboard-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between; /* Alinha os elementos nas extremidades */
+  padding: 10px 20px;
   margin-bottom: 20px;
+  background-color: #ffffff;
+  color: #2b9348;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
-.logo {
-  height: 50px;
+.dashboard-header .logo {
+  max-height: 50px;
+  margin-left: auto; /* Centraliza a logo após o botão */
+  margin-right: auto; /* Centraliza a logo antes do perfil */
 }
 
-.user-profile {
+.dashboard-header .user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #2b9348;
   font-size: 16px;
+  font-weight: bold;
 }
 
 .dashboard-content {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
 .stats {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  flex: 1;
+  min-width: 200px;
+  text-align: center;
+  border: 2px solid #2b9348;
 }
 
 .stat h3 {
-  font-size: 18px;
-  color: #555;
-}
-
-.stat p {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
   color: #333;
 }
 
-.profiles .profile {
-  margin: 10px 0;
+.stat p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2b9348;
 }
 
-.profiles h4 {
-  font-size: 16px;
-  margin-bottom: 5px;
-}
-
-.bar {
-  height: 10px;
-  background-color: #ddd;
-  border-radius: 5px;
-  position: relative;
-}
-
-.bar.green {
-  width: 70%;
-  background-color: #00a859;
-}
-
-.bar.yellow {
-  width: 50%;
-  background-color: #ffd700;
-}
-
-.bar.red {
-  width: 30%;
-  background-color: #ff4d4d;
-}
-
-.chart {
+.chart-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
+  border: 2px solid #2b9348;
+  margin-bottom: 20px;
 }
 
-.circle-chart {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: conic-gradient(#00a859 75%, #ddd 75%);
-  margin: 10px auto;
+.chart-container h4 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 18px;
+  font-weight: bold;
 }
 
-.sidebar-iframe {
-  width: 250px;
-  height: 100vh;
+.chart-container canvas {
+  width: 100% !important;
+  max-width: 600px;
+  height: auto !important;
+  margin: 0 auto;
+}
+
+.usuarios-por-perfil-loja-chart {
+  background-color: #f9f9f9;
+  border: 2px solid #4caf50;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.usuarios-por-perfil-geral-chart {
+  background-color: #eafaf1;
+  border: 2px dashed #2b9348;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.taloesChart {
+  background-color: #fffdf5;
+  border: 2px solid #ff9800;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#loja-info {
+  background-color: #ffffff;
+  border: 2px solid #2b9348;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+#loja-info p {
+  margin: 10px 0;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+#loja-info p:first-child {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2b9348;
+}
+
+#loja-info p span {
+  font-weight: bold;
+  color: #1f7a39;
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 25%;
+  }
+
+  .main-content {
+    width: 75%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 75%;
+    transform: translateX(-100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 10;
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    width: 100%;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .stats {
+    flex-direction: column;
+  }
+
+  .chart-container canvas {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    padding: 15px;
+  }
+
+  .stat {
+    min-width: 100%;
+  }
+
+  .chart-container canvas {
+    max-width: 100%;
+  }
+}
+
+#sidebar-toggle {
+  background-color: #2b9348;
+  color: white;
   border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  display: none; /* Oculto por padrão */
+}
+
+#sidebar-toggle:hover {
+  background-color: #1f7a39;
+}
+
+@media (min-width: 768px) {
+  #sidebar-toggle {
+    display: none; /* Não exibe o botão em telas maiores */
+  }
+}
+
+/* Mostra o botão de menu em telas menores */
+@media (max-width: 768px) {
+  #sidebar-toggle {
+    display: block; /* Exibe o botão */
+  }
+
+
+  .sidebar {
+    transform: translateX(-100%); /* Esconde a sidebar por padrão */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 10;
+  }
+
+  .sidebar.active {
+    transform: translateX(0); /* Mostra a sidebar */
+  }
 }

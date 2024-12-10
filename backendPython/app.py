@@ -12,12 +12,15 @@ from models.solicitacao import Solicitacao
 from models.movimentacoes import Movimentacoes
 from models.status_solicitacao import StatusSolicitacao
 from models.status_movimentacao import StatusMovimentacao
+from routes.csv_routes import router as csv_router
+from sqlalchemy.orm import joinedload
 
 # Criar as tabelas no banco de dados
 Base.metadata.create_all(bind=engine)
 
 # Instância da aplicação
 app = FastAPI()
+app.include_router(csv_router, prefix="/api")
 
 # Configuração de CORS
 app.add_middleware(
@@ -44,7 +47,7 @@ def read_root():
 # Rota para obter todos os usuários
 @app.get("/usuarios")
 def get_usuarios(db: Session = Depends(get_db)):
-    usuarios = db.query(Usuario).all()
+    usuarios = db.query(Usuario).options(joinedload(Usuario.perfil)).all()
     return usuarios
 
 # Rota para obter todas as lojas
@@ -74,7 +77,10 @@ def get_permissoes(db: Session = Depends(get_db)):
 # Rota para obter todas as solicitações
 @app.get("/solicitacoes")
 def get_solicitacoes(db: Session = Depends(get_db)):
-    solicitacoes = db.query(Solicitacao).all()
+    solicitacoes = db.query(Solicitacao).options(
+        joinedload(Solicitacao.status),
+        joinedload(Solicitacao.usuario)
+    ).all()
     return solicitacoes
 
 # Rota para obter todas as movimentações

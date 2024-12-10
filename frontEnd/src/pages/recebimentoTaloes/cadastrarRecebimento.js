@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const formCadastrarRecebimento = document.getElementById(
     "form-cadastrar-recebimento"
   );
-  const selectEnvio = document.getElementById("envio");
+  const selectEnvio = document.getElementById("envio");  
 
   function getToken() {
     return document.cookie
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
       enviosDisponiveis.forEach((envio) => {
         const option = document.createElement("option");
         option.value = JSON.stringify({
-          id_movimentacao: envio.id_movimentacao,
+          remessa: envio.remessa,
           data_prevista: envio.data_prevista,
           quantidade: envio.quantidade,
           id_solicitacao: envio.id_solicitacao,
@@ -70,6 +70,8 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
 
     const envioData = JSON.parse(selectEnvio.value);
+    console.log(envioData);
+    
 
     const dataMovimentacao = new Date().toISOString();
     const token = getToken();
@@ -84,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            remessa: `Recebimento-${envioData.id_movimentacao}`,
+            remessa: envioData.remessa,
             tipo_movimentacao: "Recebimento",
             data_movimentacao: dataMovimentacao,
             data_prevista: envioData.data_prevista,

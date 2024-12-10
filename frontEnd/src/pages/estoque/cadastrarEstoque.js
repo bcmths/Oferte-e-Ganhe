@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const token = getToken();
 
     try {
-      // Fetch para obter todas as lojas
       const lojasResponse = await fetch(
         "http://localhost:3000/api/stores/all",
         {
@@ -34,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const lojasData = await lojasResponse.json();
       const lojas = lojasData.lojas;
 
-      // Fetch para obter todos os estoques
       const estoquesResponse = await fetch(
         "http://localhost:3000/api/stocks/all",
         {
@@ -52,15 +50,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const estoquesData = await estoquesResponse.json();
       const estoques = estoquesData.estoques;
-      console.log(estoques);
-      
 
-      // Filtrar lojas que não possuem estoque cadastrado
       const lojasSemEstoque = lojas.filter(
         (loja) => !estoques.some((estoque) => estoque.id_loja === loja.id_loja)
       );
 
-      // Adicionar as lojas ao select
       lojasSemEstoque.forEach((loja) => {
         const option = document.createElement("option");
         option.value = loja.id_loja;

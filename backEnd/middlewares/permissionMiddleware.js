@@ -12,7 +12,7 @@ const verificaPermissoes = (modulo, tipoPermissao) => {
         permissao.tipo_permissao === tipoPermissao
     );
 
-    if (req.user.permissoes.includes("ADMIN") || temPermissao) {
+    if (temPermissao) {
       return next();
     }
 

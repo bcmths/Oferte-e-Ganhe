@@ -17,29 +17,30 @@ html {
   background-color: #f9f9f9;
 }
 
-/* Sidebar */
 .sidebar {
-  width: 250px;
-  background-color: #f3f4f6; /* Cor de fundo da sidebar */
-  padding: 20px 0;
-  border-right: 1px solid #ccc;
+  width: 20%;
+  background-color: #ffffff;
+  color: #2b9348;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar a {
   display: block;
-  padding: 15px 20px;
+  color: #2b9348;
   text-decoration: none;
-  color: #333; /* Cor padrão do texto */
-  border-left: 5px solid transparent;
-}
-
-.sidebar a:hover,
-.sidebar a.active {
-  background-color: #e5e7eb; /* Fundo ao passar o mouse ou ativo */
-  border-left-color: #00a859; /* Barra verde à esquerda */
+  padding: 12px 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
   font-weight: bold;
 }
 
+.sidebar a.active,
+.sidebar a:hover {
+  background-color: #2b9348;
+  color: #ffffff;
+}
 /* Cabeçalho */
 header {
   display: flex;

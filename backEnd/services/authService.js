@@ -70,8 +70,28 @@ async function inserirUsuario(
   }
 }
 
+async function atualizarSenha(id_usuario, novaSenha) {
+  const senhaHash = await bcrypt.hash(novaSenha, 10);
+
+  try {
+    const usuario = await Usuario.findByPk(id_usuario);
+    if (!usuario) {
+      throw new Error("Usuário não encontrado.");
+    }
+
+    usuario.senha = senhaHash;
+    await usuario.save();
+
+    return usuario;
+  } catch (erro) {
+    console.error("Erro ao atualizar senha:", erro);
+    throw erro;
+  }
+}
+
 module.exports = {
   consultarUsuarioPorEmail,
   consultarUsuarioPorMatricula,
   inserirUsuario,
+  atualizarSenha,
 };

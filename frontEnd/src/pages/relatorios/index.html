@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quero-Quero - Relatórios</title>
     <link rel="stylesheet" href="styles.css" />
+    <script>
+      function gerarRelatorio(endpoint) {
+        const url = `http://localhost:8000/api/generate_csv/${endpoint}`;
+        window.open(url, "_blank");
+      }
+    </script>
   </head>
   <body>
     <div class="container">
@@ -59,37 +65,78 @@
             <tr>
               <td>Usuários</td>
               <td>
-                <button class="btn-gerar-relatorio">Gerar Relatório</button>
+                <button
+                  class="btn-gerar-relatorio"
+                  onclick="gerarRelatorio('usuarios')"
+                >
+                  Gerar Relatório
+                </button>
               </td>
             </tr>
             <tr>
               <td>Perfis</td>
               <td>
-                <button class="btn-gerar-relatorio">Gerar Relatório</button>
+                <button
+                  class="btn-gerar-relatorio"
+                  onclick="gerarRelatorio('perfis')"
+                >
+                  Gerar Relatório
+                </button>
               </td>
             </tr>
             <tr>
               <td>Lojas</td>
               <td>
-                <button class="btn-gerar-relatorio">Gerar Relatório</button>
+                <button
+                  class="btn-gerar-relatorio"
+                  onclick="gerarRelatorio('lojas')"
+                >
+                  Gerar Relatório
+                </button>
               </td>
             </tr>
             <tr>
               <td>Envio de Talões</td>
               <td>
-                <button class="btn-gerar-relatorio">Gerar Relatório</button>
+                <button
+                  class="btn-gerar-relatorio"
+                  onclick="gerarRelatorio('envio_taloes')"
+                >
+                  Gerar Relatório
+                </button>
               </td>
             </tr>
             <tr>
               <td>Recebimento de Talões</td>
               <td>
-                <button class="btn-gerar-relatorio">Gerar Relatório</button>
+                <button
+                  class="btn-gerar-relatorio"
+                  onclick="gerarRelatorio('recebimento_taloes')"
+                >
+                  Gerar Relatório
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>Solicitação de Talões</td>
+              <td>
+                <button
+                  class="btn-gerar-relatorio"
+                  onclick="gerarRelatorio('solicitacoes')"
+                >
+                  Gerar Relatório
+                </button>
               </td>
             </tr>
             <tr>
               <td>Estoque</td>
               <td>
-                <button class="btn-gerar-relatorio">Gerar Relatório</button>
+                <button
+                  class="btn-gerar-relatorio"
+                  onclick="gerarRelatorio('estoques')"
+                >
+                  Gerar Relatório
+                </button>
               </td>
             </tr>
           </tbody>

@@ -96,4 +96,24 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const resetPassword = async (req, res) => {
+  const { email, senha } = req.body;
+
+  try {
+    const usuario = await authService.consultarUsuarioPorEmail(email);
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuário não encontrado." });
+    }
+
+    await authService.atualizarSenha(usuario.id_usuario, senha);
+
+    res.status(200).json({ message: "Senha redefinida com sucesso!" });
+  } catch (err) {
+    console.error("Erro ao redefinir senha:", err);
+    res
+      .status(500)
+      .json({ message: "Erro ao redefinir senha", error: err.message });
+  }
+};
+
+module.exports = { register, login, resetPassword };

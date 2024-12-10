@@ -65,9 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
           throw new Error("Erro ao carregar status de movimentação.");
         }
   
-        const data = await response.json();
-        console.log(data);
-        
+        const data = await response.json();        
         const statusMovimentacao = data.statusMovimentacao;
   
         statusMovimentacao.forEach((status) => {
