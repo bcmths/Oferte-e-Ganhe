@@ -1,3 +1,4 @@
+/* Reset e configuração de padrão */
 body,
 html,
 div,
@@ -37,6 +38,18 @@ body {
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   position: relative;
   transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sidebar .logout {
+  margin-top: auto;
+  color: #2b9348;
+  text-decoration: none;
+  padding: 12px 15px;
+  border-radius: 5px;
+  font-weight: bold;
 }
 
 .sidebar a {
@@ -50,12 +63,24 @@ body {
   font-weight: bold;
 }
 
+.green {
+  background-color: #2b9348;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
 .sidebar a.active,
 .sidebar a:hover {
   background-color: #2b9348;
   color: #ffffff;
 }
 
+/* Conteúdo principal */
 .main-content {
   width: 80%;
   padding: 20px;
@@ -65,7 +90,7 @@ body {
 .dashboard-header {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Alinha os elementos nas extremidades */
+  justify-content: center;
   padding: 10px 20px;
   margin-bottom: 20px;
   background-color: #ffffff;
@@ -76,9 +101,9 @@ body {
 }
 
 .dashboard-header .logo {
-  max-height: 50px;
-  margin-left: auto; /* Centraliza a logo após o botão */
-  margin-right: auto; /* Centraliza a logo antes do perfil */
+  height: 50px;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .dashboard-header .user-profile {
@@ -96,36 +121,7 @@ body {
   gap: 20px;
 }
 
-.stats {
-  display: flex;
-  justify-content: space-around;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.stat {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  flex: 1;
-  min-width: 200px;
-  text-align: center;
-  border: 2px solid #2b9348;
-}
-
-.stat h3 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.stat p {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #2b9348;
-}
-
+/* Gráficos */
 .chart-container {
   background-color: #ffffff;
   border-radius: 8px;
@@ -175,6 +171,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Caixa de informações */
 #loja-info {
   background-color: #ffffff;
   border: 2px solid #2b9348;
@@ -202,6 +199,7 @@ body {
   color: #1f7a39;
 }
 
+/* Responsividade */
 @media (max-width: 1024px) {
   .sidebar {
     width: 25%;
@@ -238,8 +236,10 @@ body {
   }
 
   .dashboard-header {
-    flex-direction: column;
+    flex-direction: row;
     gap: 15px;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .stats {
@@ -248,6 +248,10 @@ body {
 
   .chart-container canvas {
     max-width: 100%;
+  }
+
+  #sidebar-toggle {
+    display: block;
   }
 }
 
@@ -263,6 +267,11 @@ body {
   .chart-container canvas {
     max-width: 100%;
   }
+
+  .dashboard-header .logo {
+    max-width: 80%;
+    height: auto;
+  }
 }
 
 #sidebar-toggle {
@@ -273,7 +282,7 @@ body {
   padding: 10px 15px;
   font-size: 16px;
   cursor: pointer;
-  display: none; /* Oculto por padrão */
+  display: none;
 }
 
 #sidebar-toggle:hover {
@@ -282,19 +291,17 @@ body {
 
 @media (min-width: 768px) {
   #sidebar-toggle {
-    display: none; /* Não exibe o botão em telas maiores */
+    display: none;
   }
 }
 
-/* Mostra o botão de menu em telas menores */
 @media (max-width: 768px) {
   #sidebar-toggle {
-    display: block; /* Exibe o botão */
+    display: block;
   }
 
-
   .sidebar {
-    transform: translateX(-100%); /* Esconde a sidebar por padrão */
+    transform: translateX(-100%);
     position: absolute;
     top: 0;
     left: 0;
@@ -303,6 +310,6 @@ body {
   }
 
   .sidebar.active {
-    transform: translateX(0); /* Mostra a sidebar */
+    transform: translateX(0);
   }
 }

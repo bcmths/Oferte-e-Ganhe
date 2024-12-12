@@ -1,100 +1,102 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const formEditarEstoque = document.getElementById("form-editar-estoque");
-  const selectLoja = document.getElementById("loja");
-  const queryParams = new URLSearchParams(window.location.search);
-  const idEstoque = queryParams.get("id");
+function getToken() {
+  return document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("authToken="))
+    ?.split("=")[1];
+}
 
-  function getToken() {
-    return document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("authToken="))
-      ?.split("=")[1];
-  }
+async function abrirModalEdicao(idEstoque) {
+  const token = getToken();
 
-  async function carregarLojasEEstoque() {
-    const token = getToken();
+  try {
+    const response = await fetch("http://localhost:3000/api/stocks/all", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    try {
-      // Fetch para obter todos os estoques
-      const estoquesResponse = await fetch(
-        "http://localhost:3000/api/stocks/all",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!estoquesResponse.ok) {
-        throw new Error("Erro ao carregar os estoques.");
-      }
-
-      const estoquesData = await estoquesResponse.json();
-      const estoques = estoquesData.estoques;
-
-      // Filtrar o estoque pelo ID
-      const estoque = estoques.find(
-        (estoque) => estoque.id_estoque === parseInt(idEstoque)
-      );
-
-      if (!estoque) {
-        throw new Error("Estoque não encontrado.");
-      }
-
-      // Fetch para obter todas as lojas
-      const lojasResponse = await fetch(
-        "http://localhost:3000/api/stores/all",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!lojasResponse.ok) {
-        throw new Error("Erro ao carregar as lojas.");
-      }
-
-      const lojasData = await lojasResponse.json();
-      const lojas = lojasData.lojas;
-
-      // Preencher o select com as lojas
-      lojas.forEach((loja) => {
-        const option = document.createElement("option");
-        option.value = loja.id_loja;
-        option.textContent = loja.nome;
-        if (loja.id_loja === estoque.id_loja) {
-          option.selected = true;
-        }
-        selectLoja.appendChild(option);
-      });
-
-      // Preencher os campos do formulário
-      document.getElementById("estoque-atual").value = estoque.estoque_atual;
-      document.getElementById("estoque-minimo").value = estoque.estoque_minimo;
-      document.getElementById("estoque-recomendado").value =
-        estoque.estoque_recomendado;
-    } catch (error) {
-      console.error("Erro ao carregar os dados:", error);
-      alert("Erro ao carregar os dados.");
+    if (!response.ok) {
+      throw new Error("Erro ao carregar a lista de estoques.");
     }
+
+    const { estoques } = await response.json();
+
+    const estoque = estoques.find((e) => e.id_estoque === idEstoque);
+    if (!estoque) {
+      throw new Error("Estoque não encontrado.");
+    }
+
+    document.getElementById("id-estoque-editar").value = estoque.id_estoque;
+    document.getElementById("estoque-atual-editar").value =
+      estoque.estoque_atual;
+    document.getElementById("estoque-minimo-editar").value =
+      estoque.estoque_minimo;
+    document.getElementById("estoque-recomendado-editar").value =
+      estoque.estoque_recomendado;
+    carregarLojasEdicao(estoque.loja.id_loja);
+
+    abrirModal("modal-editar-estoque");
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao carregar os dados do estoque.");
   }
+}
 
-  formEditarEstoque.addEventListener("submit", async (event) => {
-    event.preventDefault();
+async function carregarLojasEdicao(idLojaAtual) {
+  const token = getToken();
+  const lojaSelect = document.getElementById("loja-editar");
+  lojaSelect.innerHTML = "";
 
-    const lojaId = selectLoja.value;
-    const estoqueAtual = document.getElementById("estoque-atual").value;
-    const estoqueMinimo = document.getElementById("estoque-minimo").value;
-    const estoqueRecomendado = document.getElementById(
-      "estoque-recomendado"
-    ).value;
+  try {
+    const response = await fetch("http://localhost:3000/api/stores/all", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const { lojas } = await response.json();
+    lojas.forEach((loja) => {
+      const option = document.createElement("option");
+      option.value = loja.id_loja;
+      option.textContent = loja.nome;
+      if (loja.id_loja === idLojaAtual) option.selected = true;
+      lojaSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Erro ao carregar lojas:", error);
+  }
+}
+
+function abrirModal(modalId, idEstoque) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    document.getElementById(modalId).style.display = "block";
+    modal.setAttribute("id-estoque-editar", idEstoque);
+  }
+}
+
+function fecharModal(modalId) {
+  document.getElementById(modalId).style.display = "none";
+}
+
+document
+  .getElementById("editar-estoque-form")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
 
     const token = getToken();
+
+    const idEstoque = document.getElementById("id-estoque-editar").value;
+    const estoqueAtual = document.getElementById("estoque-atual-editar").value;
+    const estoqueRecomendado = document.getElementById(
+      "estoque-recomendado-editar"
+    ).value;
+    const estoqueMinimo = document.getElementById(
+      "estoque-minimo-editar"
+    ).value;
+    const loja = document.getElementById("loja-editar").value;
 
     try {
       const response = await fetch(
@@ -109,22 +111,23 @@ document.addEventListener("DOMContentLoaded", () => {
             estoque_atual: estoqueAtual,
             estoque_minimo: estoqueMinimo,
             estoque_recomendado: estoqueRecomendado,
-            id_loja: lojaId,
+            id_loja: loja,
           }),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Erro ao editar o estoque.");
+        throw new Error("Erro ao atualizar o usuário.");
       }
 
       alert("Estoque atualizado com sucesso!");
-      window.location.href = "/frontEnd/src/pages/estoque/index.html";
+      fecharModal("modal-editar-estoque");
+      carregarEstoques();
     } catch (error) {
-      console.error("Erro ao editar o estoque:", error);
-      alert("Erro ao editar o estoque.");
+      console.error(error);
+      alert("Erro ao atualizar o estoque.");
     }
   });
 
-  carregarLojasEEstoque();
-});
+window.abrirModalEdicao = abrirModalEdicao;
+window.fecharModal = fecharModal;

@@ -18,10 +18,17 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 
-// Configurar o middleware CORS
+const allowedOrigins = ['http://127.0.0.1:5500', 'http://localhost:5500'];
+
 app.use(
   cors({
-    origin: "http://127.0.0.1:5500", // Permitir requisições deste domínio
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true); // Origem permitida
+      } else {
+        callback(new Error('Not allowed by CORS')); // Origem não permitida
+      }
+    },
     credentials: true, // Permitir envio de cookies
   })
 );

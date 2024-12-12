@@ -1,5 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   const tabelaUsuarios = document.getElementById("tabela-usuarios");
+  const searchInput = document.getElementById("search");
+  const rowsPerPageSelect = document.getElementById("rows-per-page");
+  const paginationContainer = document.querySelector(".pagination");
+
+  let usuarios = [];
+  let paginaAtual = 1;
+  let rowsPerPage = 5;
 
   function getToken() {
     return document.cookie
@@ -10,17 +17,87 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function formatarDataHora(dataISO) {
     const data = new Date(dataISO);
-
     const dia = String(data.getDate()).padStart(2, "0");
     const mes = String(data.getMonth() + 1).padStart(2, "0");
     const ano = data.getFullYear();
-
-    const hora = String(data.getHours()).padStart(2, "0");
-    const minutos = String(data.getMinutes()).padStart(2, "0");
-    const segundos = String(data.getSeconds()).padStart(2, "0");
-
-    return `${dia}/${mes}/${ano} ${hora}:${minutos}:${segundos}`;
+    return `${dia}/${mes}/${ano}`;
   }
+
+  function renderizarTabela(usuariosFiltrados) {
+    tabelaUsuarios.innerHTML = "";
+
+    const inicio = (paginaAtual - 1) * rowsPerPage;
+    const fim = inicio + rowsPerPage;
+
+    const usuariosPaginados = usuariosFiltrados.slice(inicio, fim);
+
+    usuariosPaginados.forEach((usuario) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${usuario.matricula}</td>
+        <td>${usuario.nome}</td>
+        <td>${usuario.loja.nome}</td>
+        <td>${formatarDataHora(usuario.created_at)}</td>
+        <td>${usuario.perfil.nome}</td>
+        <td>
+          <button class="edit-btn" onclick="abrirModalEdicao('${
+            usuario.matricula
+          }')">✏️</button>
+          <button class="delete-btn" onclick="deletarUsuario('${
+            usuario.matricula
+          }')">🗑️</button>
+        </td>
+      `;
+      tabelaUsuarios.appendChild(tr);
+    });
+
+    renderizarPaginacao(usuariosFiltrados.length);
+  }
+
+  function renderizarPaginacao(totalUsuarios) {
+    const totalPaginas = Math.ceil(totalUsuarios / rowsPerPage);
+    paginationContainer.innerHTML = "";
+
+    for (let i = 1; i <= totalPaginas; i++) {
+      const button = document.createElement("button");
+      button.classList.add("page-btn");
+      if (i === paginaAtual) {
+        button.classList.add("active");
+      }
+      button.textContent = i;
+      button.addEventListener("click", () => {
+        paginaAtual = i;
+        filtrarUsuarios();
+      });
+      paginationContainer.appendChild(button);
+    }
+  }
+
+  function filtrarUsuarios() {
+    const termoPesquisa = searchInput.value.toLowerCase();
+
+    const usuariosFiltrados = usuarios.filter((usuario) => {
+      return (
+        usuario.nome.toLowerCase().includes(termoPesquisa) ||
+        usuario.matricula.toLowerCase().includes(termoPesquisa) ||
+        usuario.loja.nome.toLowerCase().includes(termoPesquisa) ||
+        usuario.perfil.nome.toLowerCase().includes(termoPesquisa)
+      );
+    });
+
+    renderizarTabela(usuariosFiltrados);
+  }
+
+  rowsPerPageSelect.addEventListener("change", () => {
+    rowsPerPage = parseInt(rowsPerPageSelect.value);
+    paginaAtual = 1;
+    filtrarUsuarios();
+  });
+
+  searchInput.addEventListener("input", () => {
+    paginaAtual = 1;
+    filtrarUsuarios();
+  });
 
   async function carregarUsuarios() {
     const token = getToken();
@@ -32,42 +109,18 @@ document.addEventListener("DOMContentLoaded", () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        credentials: "include",
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao carregar os usuários");
+        throw new Error("Erro ao carregar os usuários.");
       }
 
-      const usuarios = await response.json();
-      const listaUsuarios = usuarios.usuarios;
-
-      tabelaUsuarios.innerHTML = "";
-      listaUsuarios.forEach((usuario) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>#${usuario.matricula}</td>
-            <td>${usuario.nome}</td>
-            <td>${usuario.loja.nome}</td>
-            <td>${formatarDataHora(usuario.created_at)}</td>
-            <td>${usuario.perfil.nome}</td>
-            <td>
-              <button
-                class="edit-btn"
-                onclick="window.location.href='editarUsuario.html?id=${
-                  usuario.matricula
-                }'">
-                ✏️
-              </button>
-              <button
-                class="delete-btn"
-                onclick="deletarUsuario('${usuario.matricula}')">
-                🗑️
-              </button>
-            </td>
-          `;
-        tabelaUsuarios.appendChild(tr);
+      const data = await response.json();
+      usuarios = data.usuarios;
+      usuarios = data.usuarios.sort((a, b) => {
+        return new Date(b.created_at) - new Date(a.created_at);
       });
+      filtrarUsuarios();
     } catch (error) {
       console.error(error);
       alert("Erro ao carregar os usuários.");
@@ -76,7 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function deletarUsuario(matricula) {
     const token = getToken();
-
     const confirmacao = confirm("Tem certeza que deseja deletar este usuário?");
     if (!confirmacao) return;
 
@@ -86,14 +138,13 @@ document.addEventListener("DOMContentLoaded", () => {
         {
           method: "DELETE",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
       if (!response.ok) {
-        throw new Error("Erro ao deletar o usuário");
+        throw new Error("Erro ao deletar o usuário.");
       }
 
       alert("Usuário deletado com sucesso!");
@@ -112,7 +163,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const sidebar = document.querySelector(".sidebar");
   const toggleButton = document.getElementById("sidebar-toggle");
 
-  toggleButton.addEventListener("click", () => {
+  toggleButton.addEventListener("click", (event) => {
+    event.stopPropagation();
     sidebar.classList.toggle("active");
   });
 

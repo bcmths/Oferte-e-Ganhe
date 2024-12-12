@@ -1,82 +1,33 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const formCadastrarRecebimento = document.getElementById(
-    "form-cadastrar-recebimento"
-  );
-  const selectEnvio = document.getElementById("envio");  
+function getToken() {
+  return document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("authToken="))
+    ?.split("=")[1];
+}
 
-  function getToken() {
-    return document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("authToken="))
-      ?.split("=")[1];
-  }
+function formatarDataHora(dataISO) {
+  const data = new Date(dataISO);
+  const dia = String(data.getDate()).padStart(2, "0");
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
+  const ano = data.getFullYear();
+  const horas = String(data.getHours()).padStart(2, "0");
+  const minutos = String(data.getMinutes()).padStart(2, "0");
+  return `${dia}/${mes}/${ano} ${horas}:${minutos}`;
+}
 
-  async function carregarEnvios() {
-    const token = getToken();
+document
+  .getElementById("novo-recebimento-form")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:3000/api/talons/all", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Erro ao carregar envios.");
-      }
-
-      const data = await response.json();
-      const movimentacoes = data.movimentacoes;
-
-      const envios = movimentacoes.filter(
-        (mov) => mov.tipo_movimentacao === "Envio"
-      );
-      const recebimentos = movimentacoes.filter(
-        (mov) => mov.tipo_movimentacao === "Recebimento"
-      );
-
-      const recebidosIds = recebimentos.map(
-        (recebimento) => recebimento.id_solicitacao
-      );
-
-      const enviosDisponiveis = envios.filter(
-        (envio) => !recebidosIds.includes(envio.id_solicitacao)
-      );
-
-      enviosDisponiveis.forEach((envio) => {
-        const option = document.createElement("option");
-        option.value = JSON.stringify({
-          remessa: envio.remessa,
-          data_prevista: envio.data_prevista,
-          quantidade: envio.quantidade,
-          id_solicitacao: envio.id_solicitacao,
-        });
-        option.textContent = `Remessa: ${envio.remessa}, Quantidade: ${
-          envio.quantidade
-        }, Data de envio: ${new Date(
-          envio.data_movimentacao
-        ).toLocaleDateString()}`;
-        selectEnvio.appendChild(option);
-      });
-    } catch (error) {
-      console.error("Erro ao carregar envios:", error);
-      alert("Erro ao carregar envios.");
-    }
-  }
-
-  formCadastrarRecebimento.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const envioData = JSON.parse(selectEnvio.value);
-    console.log(envioData);
-    
-
-    const dataMovimentacao = new Date().toISOString();
-    const token = getToken();
+    const remessa = document.getElementById("remessa").value;
+    const solicitacao = document.getElementById("solicitacao").value;
+    const data = document.getElementById("data-prevista").value;
+    const quantidade = document.getElementById("quantidade").value;
 
     try {
+      const token = getToken();
+
       const response = await fetch(
         "http://localhost:3000/api/talons/cadastrar",
         {
@@ -86,28 +37,66 @@ document.addEventListener("DOMContentLoaded", () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            remessa: envioData.remessa,
+            remessa,
             tipo_movimentacao: "Recebimento",
-            data_movimentacao: dataMovimentacao,
-            data_prevista: envioData.data_prevista,
-            quantidade: envioData.quantidade,
+            id_solicitacao: solicitacao,
+            data_movimentacao: Date.now(),
+            data_prevista: data,
+            quantidade: quantidade,
             id_status: 7,
-            id_solicitacao: envioData.id_solicitacao,
           }),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Erro ao cadastrar o recebimento.");
+        throw new Error("Erro ao cadastrar envio.");
       }
 
       alert("Recebimento cadastrado com sucesso!");
-      window.location.href = "/frontEnd/src/pages/recebimentoTaloes/index.html";
+      fecharModal("modal-novo-recebimento");
+      document.getElementById("novo-recebimento-form").reset();
+      location.reload();
     } catch (error) {
-      console.error("Erro ao cadastrar o recebimento:", error);
-      alert("Erro ao cadastrar o recebimento.");
+      console.error("Erro ao cadastrar recebimento:", error);
+      alert("Erro ao cadastrar recebimento.");
     }
   });
 
-  carregarEnvios();
+async function carregarSolicitacao() {
+  const token = getToken();
+  const solicitacaoSelect = document.getElementById("solicitacao");
+  solicitacaoSelect.innerHTML =
+    '<option value="" disabled selected>Selecione uma solicitação</option>';
+
+  try {
+    const response = await fetch(
+      "http://localhost:3000/api/solicitations/all",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const { solicitacoes } = await response.json();
+    console.log(solicitacoes);
+
+    solicitacoes.forEach((solicitacao) => {
+      const option = document.createElement("option");
+      option.value = solicitacao.id_solicitacao;
+      option.textContent = `ID: ${solicitacao.id_solicitacao} - ${solicitacao.usuario.nome} - ${solicitacao.quantidade_taloes} talões`;
+      solicitacaoSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Erro ao carregar solicitações:", error);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  carregarSolicitacao();
 });
+
+function fecharModal(modalId) {
+  document.getElementById(modalId).style.display = "none";
+}

@@ -5,69 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quero-Quero - Recebimento de Talões</title>
     <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
   </head>
   <body>
     <div class="container">
       <!-- Sidebar -->
       <div class="sidebar">
-        <a href="/frontEnd/src/pages/dashboard/index.html">Dashboard</a>
-        <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
-        <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
-        <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
-        <a href="/frontEnd/src/pages/envioTaloes/index.html">Envio de Talões</a>
+        <a href="/frontEnd/src/pages/dashboard/index.html">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        <a href="/frontEnd/src/pages/usuarios/index.html">
+          <i class="fas fa-users"></i> Gestão de Usuários
+        </a>
+        <a href="/frontEnd/src/pages/perfis/index.html">
+          <i class="fas fa-user-tag"></i> Gestão de Perfis
+        </a>
+        <a href="/frontEnd/src/pages/lojas/index.html">
+          <i class="fas fa-store"></i> Gestão de Lojas
+        </a>
+        <a href="/frontEnd/src/pages/envioTaloes/index.html">
+          <i class="fas fa-paper-plane"></i> Envio de Talões
+        </a>
         <a
           href="/frontEnd/src/pages/recebimentoTaloes/index.html"
           class="active"
-          >Recebimento de Talões</a
         >
-        <a href="/frontEnd/src/pages/solicitacoes/index.html"> Solicitações </a>
-        <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
-        <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
-        <a href="/frontEnd/src/pages/login/index.html">Logout</a>
+          <i class="fas fa-inbox"></i> Recebimento de Talões
+        </a>
+        <a href="/frontEnd/src/pages/solicitacoes/index.html">
+          <i class="fas fa-file-alt"></i> Solicitações
+        </a>
+        <a href="/frontEnd/src/pages/estoque/index.html">
+          <i class="fas fa-boxes"></i> Estoque
+        </a>
+        <a href="/frontEnd/src/pages/relatorios/index.html">
+          <i class="fas fa-chart-line"></i> Relatórios
+        </a>
+        <a href="/frontEnd/src/pages/login/index.html" class="logout">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
       </div>
 
       <!-- Main Content -->
       <main class="main-content">
-        <header>
-          <div class="logo">
-            <img
-              src="/frontEnd/public/images/logo.png"
-              alt="Quero-Quero Logo"
-            />
-          </div>
-          <div class="user-profile">
-            <img
-              src="/frontEnd/public/images/perfil.png"
-              alt="Ícone de perfil"
-            />
-            <span>Meu perfil</span>
-          </div>
+        <header class="recebimentos-header">
+          <button id="sidebar-toggle" class="btn green">☰</button>
+          <img
+            src="/frontEnd/public/images/logo.png"
+            alt="Logo Quero-Quero"
+            class="logo"
+          />
         </header>
 
         <div class="table-header">
-          <h2>Recebimento de Talões</h2>
-          <div class="table-actions">
-            <button
-              class="btn novo-envio"
-              onclick="window.location.href='cadastrarRecebimento.html'"
-            >
-              + Cadastrar Recebimento
-            </button>
-            <button class="btn exportar-csv">Exportar CSV</button>
+          <div class="search-container">
+            <select id="rows-per-page">
+              <option value="5">5 linhas</option>
+              <option value="10">25 linhas</option>
+              <option value="25">50 linhas</option>
+            </select>
+            <input type="text" id="search" placeholder="Pesquisar..." />
           </div>
+          <button
+            class="add-recebimento-taloes-btn"
+            onclick="abrirModal('modal-novo-recebimento')"
+          >
+            + Cadastrar Recebimento
+          </button>
         </div>
 
-        <div class="filter-container">
-          <label for="rows-per-page">Mostrar</label>
-          <select id="rows-per-page">
-            <option value="10">10 linhas</option>
-            <option value="25">25 linhas</option>
-            <option value="50">50 linhas</option>
-          </select>
-          <input type="text" id="search" placeholder="Pesquisar..." />
-        </div>
-
-        <table>
+        <table class="table-container">
           <thead>
             <tr>
               <th>Remessa</th>
@@ -82,7 +92,6 @@
           </thead>
           <tbody id="tabela-recebimentos"></tbody>
         </table>
-
         <div class="pagination">
           <button class="page-btn">Anterior</button>
           <button class="page-btn active">1</button>
@@ -92,6 +101,109 @@
         </div>
       </main>
     </div>
+
+    <div id="modal-novo-recebimento" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="fecharModal('modal-novo-recebimento')"
+          >&times;</span
+        >
+        <form id="novo-recebimento-form">
+          <h2>Cadastro de Novo recebimento</h2>
+          <div class="form-group">
+            <label for="remessa">Remessa</label>
+            <input
+              type="text"
+              id="remessa"
+              placeholder="Número da remessa"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="solicitacao">Solicitações</label>
+            <select id="solicitacao" name="solicitacao" required>
+              <option value="" disabled selected>
+                Selecione a solicitação
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="quantidade">Quantidade</label>
+            <input
+              type="text"
+              id="quantidade"
+              placeholder="Quantidade de talões"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="data-prevista">Data Prevista</label>
+            <input
+              type="date"
+              id="data-prevista"
+              placeholder="Previsão de entrega"
+              required
+            />
+          </div>
+          <button type="submit" class="btn-submit">
+            Cadastrar Recebimento
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div id="modal-editar-recebimento" class="modal">
+      <div class="modal-content">
+        <span
+          class="close-btn"
+          onclick="fecharModal('modal-editar-recebimento')"
+          >&times;</span
+        >
+        <form id="editar-recebimento-form">
+          <h2>Editar recebimento</h2>
+          <div class="form-group">
+            <input type="hidden" id="id-recebimento-editar" />
+            <label for="remessa">Remessa</label>
+            <input
+              type="text"
+              id="remessa-editar"
+              placeholder="Número da remessa"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="solicitacao">Solicitação</label>
+            <select id="solicitacao-editar" name="solicitacao" required>
+              <option value="" disabled selected>
+                Selecione a solicitação
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="quantidade">Quantidade</label>
+            <input
+              type="text"
+              id="quantidade-editar"
+              placeholder="Quantidade de talões"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="data-prevista">Data Prevista</label>
+            <input
+              type="date"
+              id="data-editar"
+              placeholder="Previsão de entrega"
+              required
+            />
+          </div>          
+          <button type="submit" class="btn-submit">
+            Atualizar recebimento
+          </button>
+        </form>
+      </div>
+    </div>
     <script src="recebimentoTaloes.js"></script>
+    <script src="editarRecebimento.js"></script>
+    <script src="cadastrarRecebimento.js"></script>
   </body>
 </html>

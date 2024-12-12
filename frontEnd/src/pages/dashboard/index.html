@@ -5,34 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
     <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script defer src="dashboard.js"></script>
+    <script src="../../components/logout/script.js"></script>
+    <script src="/frontEnd/src/components/auth/script.js" defer></script>
   </head>
   <body>
     <div class="container">
       <div class="sidebar">
-        <a href="/frontEnd/src/pages/dashboard/index.html" class="active"
-          >Dashboard</a
-        >
-        <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
-        <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
-        <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
-        <a href="/frontEnd/src/pages/envioTaloes/index.html">Envio de Talões</a>
-        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html"
-          >Recebimento de Talões</a
-        >
-        <a href="/frontEnd/src/pages/solicitacoes/index.html">Solicitações</a>
-        <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
-        <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
-        <a href="/frontEnd/src/pages/login/index.html">Logout</a>
+        <a href="/frontEnd/src/pages/dashboard/index.html" class="active">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        <a href="/frontEnd/src/pages/usuarios/index.html">
+          <i class="fas fa-users"></i> Gestão de Usuários
+        </a>
+        <a href="/frontEnd/src/pages/perfis/index.html">
+          <i class="fas fa-user-tag"></i> Gestão de Perfis
+        </a>
+        <a href="/frontEnd/src/pages/lojas/index.html">
+          <i class="fas fa-store"></i> Gestão de Lojas
+        </a>
+        <a href="/frontEnd/src/pages/envioTaloes/index.html">
+          <i class="fas fa-paper-plane"></i> Envio de Talões
+        </a>
+        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html">
+          <i class="fas fa-inbox"></i> Recebimento de Talões
+        </a>
+        <a href="/frontEnd/src/pages/solicitacoes/index.html">
+          <i class="fas fa-file-alt"></i> Solicitações
+        </a>
+        <a href="/frontEnd/src/pages/estoque/index.html">
+          <i class="fas fa-boxes"></i> Estoque
+        </a>
+        <a href="/frontEnd/src/pages/relatorios/index.html">
+          <i class="fas fa-chart-line"></i> Relatórios
+        </a>
+        <a href="/frontEnd/src/pages/login/index.html" class="logout">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
       </div>
 
       <div class="main-content">
         <header class="dashboard-header">
-          <button id="sidebar-toggle" class="btn green">☰ Menu</button>
-          <img src="/frontEnd/public/images/logo.png" alt="Logo Quero-Quero" class="logo" />
-        </header>       
-        
+          <button id="sidebar-toggle" class="btn green">☰</button>
+          <img
+            src="/frontEnd/public/images/logo.png"
+            alt="Logo Quero-Quero"
+            class="logo"
+          />
+        </header>
 
         <div class="dashboard-content">
           <div id="loja-info" class="info-box"></div>
@@ -52,7 +77,7 @@
             <div class="chart-container usuarios-por-perfil-geral-chart">
               <h4>Usuários por Perfil Geral</h4>
               <canvas id="usuarios-por-perfil-geral-chart"></canvas>
-            </div>            
+            </div>
           </div>
         </div>
       </div>

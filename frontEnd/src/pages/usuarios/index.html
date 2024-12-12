@@ -5,56 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quero-Quero - Gerenciamento de Usuários</title>
     <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <script src="../../components/cookie/script.js"></script>
-    <script src="usuarios.js" type="module"></script>
+    <script src="usuarios.js" defer></script>
+    <script src="./criarUsuario.js" defer></script>
+    <script src="./editarUsuario.js" defer></script>
   </head>
   <body>
     <div class="container">
-      <!-- Sidebar -->
       <div class="sidebar">
-        <a href="/frontEnd/src/pages/dashboard/index.html">Dashboard</a>
-        <a href="/frontEnd/src/pages/usuarios/index.html" class="active">
-          Gestão de Usuários
+        <a href="/frontEnd/src/pages/dashboard/index.html">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
         </a>
-        <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
-        <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
-        <a href="/frontEnd/src/pages/envioTaloes/index.html">Envio de Talões</a>
+        <a href="/frontEnd/src/pages/usuarios/index.html" class="active">
+          <i class="fas fa-users"></i> Gestão de Usuários
+        </a>
+        <a href="/frontEnd/src/pages/perfis/index.html">
+          <i class="fas fa-user-tag"></i> Gestão de Perfis
+        </a>
+        <a href="/frontEnd/src/pages/lojas/index.html">
+          <i class="fas fa-store"></i> Gestão de Lojas
+        </a>
+        <a href="/frontEnd/src/pages/envioTaloes/index.html">
+          <i class="fas fa-paper-plane"></i> Envio de Talões
+        </a>
         <a href="/frontEnd/src/pages/recebimentoTaloes/index.html">
-          Recebimento de Talões
+          <i class="fas fa-inbox"></i> Recebimento de Talões
         </a>
         <a href="/frontEnd/src/pages/solicitacoes/index.html">
-          Solicitações
+          <i class="fas fa-file-alt"></i> Solicitações
         </a>
-        <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
-        <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
-        <a href="/frontEnd/src/pages/login/index.html">Logout</a>
+        <a href="/frontEnd/src/pages/estoque/index.html">
+          <i class="fas fa-boxes"></i> Estoque
+        </a>
+        <a href="/frontEnd/src/pages/relatorios/index.html">
+          <i class="fas fa-chart-line"></i> Relatórios
+        </a>
+        <a href="/frontEnd/src/pages/login/index.html" class="logout">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
       </div>
 
       <!-- Main Content -->
       <main class="main-content">
-        <header>
-          <button id="sidebar-toggle">☰ Menu</button>
-          <div class="logo">
-            <img
-              src="/frontEnd/public/images/logo.png"
-              alt="Quero-Quero Logo"
-            />
-          </div>         
+        <header class="usuarios-header">
+          <button id="sidebar-toggle" class="btn green">☰</button>
+          <img
+            src="/frontEnd/public/images/logo.png"
+            alt="Logo Quero-Quero"
+            class="logo"
+          />
         </header>
 
         <div class="table-header">
           <div class="search-container">
-            <label for="search">Mostrar</label>
             <select id="rows-per-page">
-              <option value="10">10 linhas</option>
-              <option value="25">25 linhas</option>
-              <option value="50">50 linhas</option>
+              <option value="5">5 linhas</option>
+              <option value="10">25 linhas</option>
+              <option value="25">50 linhas</option>
             </select>
             <input type="text" id="search" placeholder="Pesquisar..." />
           </div>
           <button
             class="add-user-btn"
-            onclick="window.location.href='novoUsuario.html'"
+            onclick="abrirModal('modal-novo-usuario')"
           >
             + Adicionar Usuário
           </button>
@@ -82,6 +99,113 @@
           <button class="page-btn">Próxima</button>
         </div>
       </main>
+    </div>
+
+    <!-- Modal para Novo Usuário -->
+    <div id="modal-novo-usuario" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="fecharModal('modal-novo-usuario')"
+          >&times;</span
+        >
+        <form id="novo-usuario-form">
+          <h2>Cadastro de Novo Usuário</h2>
+          <div class="form-group">
+            <label for="nome">Nome *</label>
+            <input
+              type="text"
+              id="nome"
+              placeholder="Nome do usuário"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">E-mail *</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="E-mail do usuário"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="loja">Loja *</label>
+            <select id="loja" name="loja" required>
+              <option value="" disabled selected>Selecione a loja</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="matricula">Matrícula *</label>
+            <input
+              type="text"
+              id="matricula"
+              placeholder="Matrícula do usuário"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="senha">Senha *</label>
+            <input
+              type="password"
+              id="senha"
+              placeholder="Senha do usuário"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="confirmar-senha">Confirmar senha *</label>
+            <input
+              type="password"
+              id="confirmar-senha"
+              placeholder="Confirmar senha"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="perfil">Perfil *</label>
+            <select id="perfil" name="perfil" required>
+              <option value="" disabled selected>Selecione o perfil</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-submit">Criar Usuário</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal para Editar Usuário -->
+    <div id="modal-editar-usuario" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="fecharModal('modal-editar-usuario')"
+          >&times;</span
+        >
+        <form id="editar-usuario-form">
+          <h2>Editar Usuário</h2>
+          <div class="form-group">
+            <label for="matricula-editar">Matrícula *</label>
+            <input type="text" id="matricula-editar" readonly />
+          </div>
+          <div class="form-group">
+            <label for="nome-editar">Nome *</label>
+            <input type="text" id="nome-editar" required />
+          </div>
+          <div class="form-group">
+            <label for="email-editar">E-mail *</label>
+            <input type="email" id="email-editar" required />
+          </div>
+          <div class="form-group">
+            <label for="loja-editar">Loja *</label>
+            <select id="loja-editar" name="loja-editar" required>
+              <option value="" disabled selected>Selecione a loja</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="perfil-editar">Perfil *</label>
+            <select id="perfil-editar" name="perfil-editar" required>
+              <option value="" disabled selected>Selecione o perfil</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-submit">Atualizar Usuário</button>
+        </form>
+      </div>
     </div>
   </body>
 </html>

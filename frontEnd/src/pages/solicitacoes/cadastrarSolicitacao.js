@@ -51,12 +51,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
       const solicitacoes = data.solicitacoes;
 
-      // Verifica se já existe uma solicitação para a loja
-      return solicitacoes.some(
+      const solicitacaoExistente = solicitacoes.find(
         (solicitacao) =>
           solicitacao.usuario.id_loja === lojaID &&
-          solicitacao.id_status_solicitacao === 1 // Pendente
+          solicitacao.id_status_solicitacao === 1
       );
+
+      if (solicitacaoExistente) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
       console.error("Erro ao verificar solicitações:", error);
       return false;
@@ -72,18 +77,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const lojaID = decodedToken.id_loja;
-
-    // Preencher as informações do usuário
     userNameDisplay.textContent = decodedToken.nome || "N/A";
     userStoreDisplay.textContent = decodedToken.loja || "N/A";
-
-    const existeSolicitacao = await verificarSolicitacaoExistente(lojaID);
-
-    if (existeSolicitacao) {
-      alert("Já existe uma solicitação pendente para esta loja.");
-      window.location.href = "/frontEnd/src/pages/solicitacoes/index.html";
-    }
   }
 
   formCadastrarSolicitacao.addEventListener("submit", async (event) => {
@@ -94,6 +89,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!decodedToken || !decodedToken.id_usuario) {
       alert("Erro ao identificar o usuário. Faça login novamente.");
+      return;
+    }
+    const lojaID = decodedToken.id_loja;
+    const existeSolicitacao = await verificarSolicitacaoExistente(lojaID);
+    if (existeSolicitacao) {
+      alert("Já existe uma solicitação pendente para esta loja.");
+      fecharModal("modal-nova-solicitacao");
       return;
     }
 
@@ -122,7 +124,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       alert("Solicitação cadastrada com sucesso!");
-      window.location.href = "/frontEnd/src/pages/solicitacoes/index.html";
+      fecharModal("modal-nova-solicitacao");
+      formCadastrarSolicitacao.reset();
+      location.reload();
     } catch (error) {
       console.error("Erro ao cadastrar a solicitação:", error);
       alert("Erro ao cadastrar a solicitação.");
@@ -131,3 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   preencherInformacoesUsuario();
 });
+
+function fecharModal(modalId) {
+  document.getElementById(modalId).style.display = "none";
+}

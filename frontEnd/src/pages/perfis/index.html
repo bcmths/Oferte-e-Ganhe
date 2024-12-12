@@ -3,78 +3,151 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quero-Quero - Gestão de Perfis</title>
+    <title>Quero-Quero - Gerenciamento de Perfis</title>
     <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <script src="../../components/cookie/script.js"></script>
-    <script src="perfis.js" type="module"></script>
+    <script src="perfis.js" defer></script>
+    <script src="./criarPerfil.js" defer></script>
+    <script src="./editarPerfil.js" defer></script>
   </head>
   <body>
     <div class="container">
+      <!-- Sidebar -->
       <div class="sidebar">
-        <a href="/frontEnd/src/pages/dashboard/index.html">Dashboard</a>
-        <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
-        <a href="/frontEnd/src/pages/perfis/index.html" class="active"
-          >Gestão de Perfis</a
-        >
-        <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
-        <a href="/frontEnd/src/pages/envioTaloes/index.html">Envio de Talões</a>
+        <a href="/frontEnd/src/pages/dashboard/index.html">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        <a href="/frontEnd/src/pages/usuarios/index.html">
+          <i class="fas fa-users"></i> Gestão de Usuários
+        </a>
+        <a href="/frontEnd/src/pages/perfis/index.html" class="active">
+          <i class="fas fa-user-tag"></i> Gestão de Perfis
+        </a>
+        <a href="/frontEnd/src/pages/lojas/index.html">
+          <i class="fas fa-store"></i> Gestão de Lojas
+        </a>
+        <a href="/frontEnd/src/pages/envioTaloes/index.html">
+          <i class="fas fa-paper-plane"></i> Envio de Talões
+        </a>
         <a href="/frontEnd/src/pages/recebimentoTaloes/index.html">
-          Recebimento de Talões
+          <i class="fas fa-inbox"></i> Recebimento de Talões
         </a>
         <a href="/frontEnd/src/pages/solicitacoes/index.html">
-          Solicitações
+          <i class="fas fa-file-alt"></i> Solicitações
         </a>
-        <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
-        <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
-        <a href="/frontEnd/src/pages/login/index.html">Logout</a>
+        <a href="/frontEnd/src/pages/estoque/index.html">
+          <i class="fas fa-boxes"></i> Estoque
+        </a>
+        <a href="/frontEnd/src/pages/relatorios/index.html">
+          <i class="fas fa-chart-line"></i> Relatórios
+        </a>
+        <a href="/frontEnd/src/pages/login/index.html" class="logout">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
       </div>
 
+      <!-- Main Content -->
       <main class="main-content">
-        <header>
-          <div class="logo">
-            <img
-              src="/frontEnd/public/images/logo.png"
-              alt="Quero-Quero Logo"
-            />
-          </div>
-          <div class="user-profile">
-            <img
-              src="/frontEnd/public/images/perfil.png"
-              alt="Ícone de perfil"
-            />
-            <span>Meu perfil</span>
-          </div>
+        <header class="perfis-header">
+          <button id="sidebar-toggle" class="btn green">☰</button>
+          <img
+            src="/frontEnd/public/images/logo.png"
+            alt="Logo Quero-Quero"
+            class="logo"
+          />
         </header>
 
         <div class="table-header">
-          <h2>Gestão de Perfis</h2>
+          <div class="search-container">
+            <select id="rows-per-page">
+              <option value="5">5 linhas</option>
+              <option value="10">10 linhas</option>
+              <option value="25">25 linhas</option>
+            </select>
+            <input type="text" id="search" placeholder="Pesquisar..." />
+          </div>
           <button
-            class="add-user-btn"
-            onclick="window.location.href='novoPerfil.html'"
+            class="add-profile-btn"
+            onclick="abrirModal('modal-cadastrar-perfil')"
           >
-            + Criar Perfil
+            + Adicionar Perfil
           </button>
         </div>
 
-        <table>
+        <table class="table-container">
           <thead>
             <tr>
-              <th>Perfis</th>
-              <th>Última Modificação</th>
+              <th>Nome do Perfil</th>
+              <th>Última Atualização</th>
               <th>Ações</th>
             </tr>
           </thead>
           <tbody id="tabela-perfis"></tbody>
         </table>
 
-        <div class="pagination">
-          <button class="page-btn">Anterior</button>
-          <button class="page-btn active">1</button>
-          <button class="page-btn">2</button>
-          <button class="page-btn">3</button>
-          <button class="page-btn">Próxima</button>
-        </div>
+        <div class="pagination"></div>
       </main>
     </div>
+
+    <!-- Modal Cadastrar -->
+    <div id="modal-cadastrar-perfil" class="modal modal-cadastrar">
+      <div class="modal-content">
+        <span class="close-btn" onclick="fecharModal('modal-cadastrar-perfil')"
+          >&times;</span
+        >
+        <h2>Cadastrar Novo Perfil</h2>
+        <form id="novo-perfil-form">
+          <div class="form-group">
+            <label for="nome-perfil">Nome do Perfil *</label>
+            <input
+              type="text"
+              id="nome-perfil"
+              placeholder="Digite o nome do perfil"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Permissões:</label>
+            <div
+              id="permissoes-cadastrar-container"
+              class="permissions-grid"
+            ></div>
+          </div>
+          <button type="submit" class="btn-submit">Criar Perfil</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Editar -->
+    <div id="modal-editar-perfil" class="modal modal-editar">
+      <div class="modal-content">
+        <span class="close-btn" onclick="fecharModal('modal-editar-perfil')">&times;</span>
+        <h2>Editar Perfil</h2>
+        <form id="editar-perfil-form">
+          <input type="hidden" id="id-perfil-editar" />
+          <div class="form-group">
+            <label for="nome-editar">Nome do Perfil *</label>
+            <input
+              type="text"
+              id="nome-editar"
+              placeholder="Digite o nome do perfil"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Permissões:</label>
+            <div
+              id="permissoes-editar-container"
+              class="permissions-grid"
+            ></div>
+          </div>
+          <button type="submit" class="btn-submit">Salvar</button>
+        </form>
+      </div>
+    </div>    
   </body>
 </html>

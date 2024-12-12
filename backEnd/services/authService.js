@@ -1,7 +1,7 @@
-const Permissao = require("../models/permissionModel");
-const Perfil = require("../models/profileModel");
-const Loja = require("../models/storeModel");
 const Usuario = require("../models/userModel");
+const Perfil = require("../models/profileModel");
+const Permissao = require("../models/permissionModel");
+const Loja = require("../models/storeModel");
 const bcrypt = require("bcryptjs");
 
 async function consultarUsuarioPorEmail(email) {
@@ -31,67 +31,44 @@ async function consultarUsuarioPorEmail(email) {
   }
 }
 
-async function consultarUsuarioPorMatricula(matricula) {
-  try {
-    const usuario = await Usuario.findOne({
-      where: { matricula },
-    });
-    return usuario;
-  } catch (erro) {
-    console.error("Erro ao consultar usuário por matrícula:", erro);
-    throw erro;
-  }
-}
+const salvarTokenDeRedefinicao = async (id_usuario, token) => {
+  await Usuario.update(
+    {
+      reset_password_token: token,
+      reset_password_expires: new Date(Date.now() + 10 * 60 * 1000),
+    },
+    { where: { id_usuario } }
+  );
+};
 
-async function inserirUsuario(
-  nome,
-  matricula,
-  email,
-  senha,
-  id_loja,
-  id_perfil
-) {
-  const senhaHash = await bcrypt.hash(senha, 10);
+const consultarUsuarioPorToken = async (token) => {
+  return await Usuario.findOne({
+    where: {
+      reset_password_token: token,
+      reset_password_expires: { [Sequelize.Op.gt]: new Date() },
+    },
+  });
+};
 
-  try {
-    const novoUsuario = await Usuario.create({
-      nome,
-      matricula,
-      email,
-      senha: senhaHash,
-      id_loja,
-      id_perfil,
-    });
+const removerTokenDeRedefinicao = async (id_usuario) => {
+  await Usuario.update(
+    {
+      reset_password_token: null,
+      reset_password_expires: null,
+    },
+    { where: { id_usuario } }
+  );
+};
 
-    return novoUsuario;
-  } catch (erro) {
-    console.error("Erro ao cadastrar usuário:", erro);
-    throw erro;
-  }
-}
-
-async function atualizarSenha(id_usuario, novaSenha) {
-  const senhaHash = await bcrypt.hash(novaSenha, 10);
-
-  try {
-    const usuario = await Usuario.findByPk(id_usuario);
-    if (!usuario) {
-      throw new Error("Usuário não encontrado.");
-    }
-
-    usuario.senha = senhaHash;
-    await usuario.save();
-
-    return usuario;
-  } catch (erro) {
-    console.error("Erro ao atualizar senha:", erro);
-    throw erro;
-  }
-}
+const atualizarSenha = async (id_usuario, senha) => {
+  const senhaHashed = await bcrypt.hash(senha, 10);
+  await Usuario.update({ senha: senhaHashed }, { where: { id_usuario } });
+};
 
 module.exports = {
   consultarUsuarioPorEmail,
-  consultarUsuarioPorMatricula,
-  inserirUsuario,
+  salvarTokenDeRedefinicao,
+  consultarUsuarioPorToken,
+  removerTokenDeRedefinicao,
   atualizarSenha,
 };

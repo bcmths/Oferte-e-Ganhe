@@ -1,22 +1,98 @@
 document.addEventListener("DOMContentLoaded", () => {
   const tabelaPerfis = document.getElementById("tabela-perfis");
+  const searchInput = document.getElementById("search");
+  const rowsPerPageSelect = document.getElementById("rows-per-page");
+  const paginationContainer = document.querySelector(".pagination");
+
+  let perfis = [];
+  let paginaAtual = 1;
+  let rowsPerPage = 5;
+
+  function getToken() {
+    return document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("authToken="))
+      ?.split("=")[1];
+  }
 
   function formatarDataHora(dataISO) {
     const data = new Date(dataISO);
-
     const dia = String(data.getDate()).padStart(2, "0");
     const mes = String(data.getMonth() + 1).padStart(2, "0");
     const ano = data.getFullYear();
-
-    const hora = String(data.getHours()).padStart(2, "0");
-    const minutos = String(data.getMinutes()).padStart(2, "0");
-    const segundos = String(data.getSeconds()).padStart(2, "0");
-
-    return `${dia}/${mes}/${ano} ${hora}:${minutos}:${segundos}`;
+    return `${dia}/${mes}/${ano}`;
   }
 
+  function renderizarTabela(perfisFiltrados) {
+    tabelaPerfis.innerHTML = "";
+
+    const inicio = (paginaAtual - 1) * rowsPerPage;
+    const fim = inicio + rowsPerPage;
+
+    const perfisPaginados = perfisFiltrados.slice(inicio, fim);
+
+    perfisPaginados.forEach((perfil) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${perfil.nome}</td>
+        <td>${formatarDataHora(perfil.created_at)}</td>
+        <td>
+          <button class="edit-btn" onclick="carregarPerfilParaEdicao('${
+            perfil.id_perfil
+          }')">✏️</button>
+          <button class="delete-btn" onclick="deletarPerfil('${
+            perfil.id_perfil
+          }')">🗑️</button>
+        </td>
+      `;
+      tabelaPerfis.appendChild(tr);
+    });
+
+    renderizarPaginacao(perfisFiltrados.length);
+  }
+
+  function renderizarPaginacao(totalPerfis) {
+    const totalPaginas = Math.ceil(totalPerfis / rowsPerPage);
+    paginationContainer.innerHTML = "";
+
+    for (let i = 1; i <= totalPaginas; i++) {
+      const button = document.createElement("button");
+      button.classList.add("page-btn");
+      if (i === paginaAtual) {
+        button.classList.add("active");
+      }
+      button.textContent = i;
+      button.addEventListener("click", () => {
+        paginaAtual = i;
+        filtrarPerfis();
+      });
+      paginationContainer.appendChild(button);
+    }
+  }
+
+  function filtrarPerfis() {
+    const termoPesquisa = searchInput.value.toLowerCase();
+
+    const perfisFiltrados = perfis.filter((perfil) => {
+      return perfil.nome.toLowerCase().includes(termoPesquisa);
+    });
+
+    renderizarTabela(perfisFiltrados);
+  }
+
+  rowsPerPageSelect.addEventListener("change", () => {
+    rowsPerPage = parseInt(rowsPerPageSelect.value);
+    paginaAtual = 1;
+    filtrarPerfis();
+  });
+
+  searchInput.addEventListener("input", () => {
+    paginaAtual = 1;
+    filtrarPerfis();
+  });
+
   async function carregarPerfis() {
-    const token = window.getToken();
+    const token = getToken();
 
     try {
       const response = await fetch("http://localhost:3000/api/profiles/all", {
@@ -25,48 +101,27 @@ document.addEventListener("DOMContentLoaded", () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        credentials: "include",
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao carregar os perfis");
+        throw new Error("Erro ao carregar os perfis.");
       }
 
       const data = await response.json();
-      const perfis = data.perfis;
-
-      tabelaPerfis.innerHTML = "";
-      perfis.forEach((perfil) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${perfil.nome}</td>
-          <td>${formatarDataHora(perfil.updated_at)}</td>
-          <td>
-            <button
-              class="edit-btn"
-              onclick="window.location.href='editarPerfil.html?id=${perfil.id_perfil}'">
-              ✏️
-            </button>
-            <button
-              class="delete-btn"
-              onclick="deletarPerfil('${perfil.id_perfil}')">
-              🗑️
-            </button>
-          </td>
-        `;
-        tabelaPerfis.appendChild(tr);
-      });
+      perfis = data.perfis;
+      perfis.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      filtrarPerfis();
     } catch (error) {
-      console.error(error);
+      console.error("Erro ao carregar os perfis:", error);
       alert("Erro ao carregar os perfis.");
     }
   }
 
   async function deletarPerfil(id_perfil) {
-    const confirmacao = confirm("Tem certeza que deseja deletar este perfil?");
+    const token = getToken();
+    const confirmacao = confirm("Tem certeza que deseja excluir este perfil?");
     if (!confirmacao) return;
 
-    const token = window.getToken();
     try {
       const response = await fetch(
         `http://localhost:3000/api/profiles/deletar/${id_perfil}`,
@@ -75,26 +130,42 @@ document.addEventListener("DOMContentLoaded", () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          credentials: "include",
         }
       );
 
       if (!response.ok) {
-        throw new Error("Erro ao deletar o perfil");
+        throw new Error("Erro ao excluir o perfil.");
       }
 
-      alert("Perfil deletado com sucesso!");
+      alert("Perfil excluído com sucesso!");
       carregarPerfis();
     } catch (error) {
-      console.error(error);
-      alert("Erro ao deletar o perfil.");
+      console.error("Erro ao excluir o perfil:", error);
+      alert("Erro ao excluir o perfil.");
     }
   }
-
-  function gerenciarPermissoes(id_perfil) {
-    window.location.href = `gerenciarPermissoes.html?id=${id_perfil}`;
-  }
-
   carregarPerfis();
+
+  window.carregarPerfis = carregarPerfis;
   window.deletarPerfil = deletarPerfil;
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const sidebar = document.querySelector(".sidebar");
+  const toggleButton = document.getElementById("sidebar-toggle");
+
+  toggleButton.addEventListener("click", (event) => {
+    event.stopPropagation();
+    sidebar.classList.toggle("active");
+  });
+
+  document.addEventListener("click", (event) => {
+    if (
+      !sidebar.contains(event.target) &&
+      !toggleButton.contains(event.target)
+    ) {
+      sidebar.classList.remove("active");
+    }
+  });
+});
+

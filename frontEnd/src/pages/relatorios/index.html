@@ -5,55 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quero-Quero - Relatórios</title>
     <link rel="stylesheet" href="styles.css" />
-    <script>
-      function gerarRelatorio(endpoint) {
-        const url = `http://localhost:8000/api/generate_csv/${endpoint}`;
-        window.open(url, "_blank");
-      }
-    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script src="relatorios.js"></script>
   </head>
   <body>
     <div class="container">
       <!-- Sidebar -->
       <div class="sidebar">
-        <a href="/frontEnd/src/pages/dashboard/index.html">Dashboard</a>
-        <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
-        <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
-        <a href="/frontEnd/src/pages/lojas/index.html">Gestão de Lojas</a>
-        <a href="/frontEnd/src/pages/envioTaloes/index.html">Envio de Talões</a>
-        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html"
-          >Recebimento de Talões</a
-        >
-        <a href="/frontEnd/src/pages/solicitacoes/index.html"> Solicitações </a>
-        <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
-        <a href="/frontEnd/src/pages/relatorios/index.html" class="active"
-          >Relatórios</a
-        >
-        <a href="/frontEnd/src/pages/login/index.html">Logout</a>
+        <a href="/frontEnd/src/pages/dashboard/index.html">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        <a href="/frontEnd/src/pages/usuarios/index.html">
+          <i class="fas fa-users"></i> Gestão de Usuários
+        </a>
+        <a href="/frontEnd/src/pages/perfis/index.html">
+          <i class="fas fa-user-tag"></i> Gestão de Perfis
+        </a>
+        <a href="/frontEnd/src/pages/lojas/index.html">
+          <i class="fas fa-store"></i> Gestão de Lojas
+        </a>
+        <a href="/frontEnd/src/pages/envioTaloes/index.html">
+          <i class="fas fa-paper-plane"></i> Envio de Talões
+        </a>
+        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html">
+          <i class="fas fa-inbox"></i> Recebimento de Talões
+        </a>
+        <a href="/frontEnd/src/pages/solicitacoes/index.html">
+          <i class="fas fa-file-alt"></i> Solicitações
+        </a>
+        <a href="/frontEnd/src/pages/estoque/index.html">
+          <i class="fas fa-boxes"></i> Estoque
+        </a>
+        <a href="/frontEnd/src/pages/relatorios/index.html" class="active">
+          <i class="fas fa-chart-line"></i> Relatórios
+        </a>
+        <a href="/frontEnd/src/pages/login/index.html" class="logout">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
       </div>
 
       <!-- Main Content -->
       <main class="main-content">
-        <header>
-          <div class="logo">
-            <img
-              src="/frontEnd/public/images/logo.png"
-              alt="Quero-Quero Logo"
-            />
-          </div>
-          <div class="user-profile">
-            <img
-              src="/frontEnd/public/images/perfil.png"
-              alt="Ícone de perfil"
-            />
-            <span>Meu perfil</span>
-          </div>
+        <header class="relatorios-header">
+          <button id="sidebar-toggle" class="btn green">☰</button>
+          <img
+            src="/frontEnd/public/images/logo.png"
+            alt="Logo Quero-Quero"
+            class="logo"
+          />
         </header>
-
-        <div class="table-header">
-          <h2>Relatórios</h2>
-        </div>
-
         <table>
           <thead>
             <tr>

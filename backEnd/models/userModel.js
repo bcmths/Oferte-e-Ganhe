@@ -48,6 +48,14 @@ const Usuario = sequelize.define(
         key: "id_loja",
       },
     },
+    reset_password_token: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    reset_password_expires: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,

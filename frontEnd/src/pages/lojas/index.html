@@ -5,54 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quero-Quero - Gestão de Lojas</title>
     <link rel="stylesheet" href="styles.css" />
-    <script src="../../components/cookie/script.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <script src="lojas.js" type="module"></script>
   </head>
   <body>
     <div class="container">
       <!-- Sidebar -->
       <div class="sidebar">
-        <a href="/frontEnd/src/pages/dashboard/index.html">Dashboard</a>
-        <a href="/frontEnd/src/pages/usuarios/index.html">Gestão de Usuários</a>
-        <a href="/frontEnd/src/pages/perfis/index.html">Gestão de Perfis</a>
-        <a href="/frontEnd/src/pages/lojas/index.html" class="active"
-          >Gestão de Lojas</a
-        >
-        <a href="/frontEnd/src/pages/envioTaloes/index.html">Envio de Talões</a>
-        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html"
-          >Recebimento de Talões</a
-        >
-        <a href="/frontEnd/src/pages/solicitacoes/index.html"> Solicitações </a>
-        <a href="/frontEnd/src/pages/estoque/index.html">Estoque</a>
-        <a href="/frontEnd/src/pages/relatorios/index.html">Relatórios</a>
-        <a href="/frontEnd/src/pages/login/index.html">Logout</a>
+        <a href="/frontEnd/src/pages/dashboard/index.html">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        <a href="/frontEnd/src/pages/usuarios/index.html">
+          <i class="fas fa-users"></i> Gestão de Usuários
+        </a>
+        <a href="/frontEnd/src/pages/perfis/index.html">
+          <i class="fas fa-user-tag"></i> Gestão de Perfis
+        </a>
+        <a href="/frontEnd/src/pages/lojas/index.html" class="active">
+          <i class="fas fa-store"></i> Gestão de Lojas
+        </a>
+        <a href="/frontEnd/src/pages/envioTaloes/index.html">
+          <i class="fas fa-paper-plane"></i> Envio de Talões
+        </a>
+        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html">
+          <i class="fas fa-inbox"></i> Recebimento de Talões
+        </a>
+        <a href="/frontEnd/src/pages/solicitacoes/index.html">
+          <i class="fas fa-file-alt"></i> Solicitações
+        </a>
+        <a href="/frontEnd/src/pages/estoque/index.html">
+          <i class="fas fa-boxes"></i> Estoque
+        </a>
+        <a href="/frontEnd/src/pages/relatorios/index.html">
+          <i class="fas fa-chart-line"></i> Relatórios
+        </a>
+        <a href="/frontEnd/src/pages/login/index.html" class="logout">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
       </div>
 
       <!-- Main Content -->
       <main class="main-content">
-        <header>
-          <div class="logo">
-            <img
-              src="/frontEnd/public/images/logo.png"
-              alt="Quero-Quero Logo"
-            />
-          </div>
-          <div class="user-profile">
-            <img
-              src="/frontEnd/public/images/perfil.png"
-              alt="Ícone de perfil"
-            />
-            <span>Meu perfil</span>
-          </div>
+        <header class="lojas-header">
+          <button id="sidebar-toggle" class="btn green">☰</button>
+          <img
+            src="/frontEnd/public/images/logo.png"
+            alt="Logo Quero-Quero"
+            class="logo"
+          />
         </header>
 
         <div class="table-header">
-          <h2>Gestão de Lojas</h2>
+          <div class="search-container">
+            <select id="rows-per-page">
+              <option value="5">5 linhas</option>
+              <option value="10">25 linhas</option>
+              <option value="25">50 linhas</option>
+            </select>
+            <input type="text" id="search" placeholder="Pesquisar..." />
+          </div>
           <button
-            class="add-user-btn"
-            onclick="window.location.href='cadastrarLoja.html'"
+            class="add-loja-btn"
+            onclick="abrirModal('modal-cadastrar-loja')"
           >
-            + Adicionar Loja
+           + Adicionar Loja
           </button>
         </div>
 
@@ -76,6 +95,59 @@
           <button class="page-btn">Próxima</button>
         </div>
       </main>
+    </div>
+
+    <div id="modal-cadastrar-loja" class="modal">
+      <div class="modal-content">
+        <span
+          class="close-btn"
+          onclick="fecharModal('modal-cadastrar-loja')"
+          >&times;</span
+        >
+        <h2>Cadastrar Loja</h2>
+        <form id="cadastrar-loja-form">
+          <div class="form-group">
+            <label for="codigo-cadastrar">Código</label>
+            <input type="text" id="codigo-cadastrar" required />
+          </div>
+          <div class="form-group">
+            <label for="nome-cadastrar">Nome</label>
+            <input type="text" id="nome-cadastrar" required />
+          </div>
+          <div class="form-group">
+            <label for="cidade-cadastrar">Cidade</label>
+            <input type="text" id="cidade-cadastrar" required />
+          </div>
+          <button type="submit" class="btn-submit">Cadastrar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Editar Loja -->
+    <div id="modal-editar-loja" class="modal">
+      <div class="modal-content">
+        <span
+          class="close-btn"
+          onclick="fecharModal('modal-editar-loja')"
+          >&times;</span
+        >
+        <h2>Editar Loja</h2>
+        <form id="editar-loja-form">
+          <div class="form-group">
+            <label for="codigo-editar">Código</label>
+            <input type="text" id="codigo-editar" required />
+          </div>
+          <div class="form-group">
+            <label for="nome-editar">Nome</label>
+            <input type="text" id="nome-editar" required />
+          </div>
+          <div class="form-group">
+            <label for="cidade-editar">Cidade</label>
+            <input type="text" id="cidade-editar" required />
+          </div>
+          <button type="submit" class="btn-submit">Salvar</button>
+        </form>
+      </div>
     </div>
   </body>
 </html>

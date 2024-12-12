@@ -1,5 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   const tabelaSolicitacoes = document.querySelector("tbody");
+  const searchInput = document.getElementById("search");
+  const rowsPerPageSelect = document.getElementById("rows-per-page");
+  const paginationContainer = document.querySelector(".pagination");
+
+  let solicitacoes = [];
+  let paginaAtual = 1;
+  let rowsPerPage = 5;
 
   function getToken() {
     return document.cookie
@@ -22,8 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getBadgeClass(status) {
-    console.log(status.toLowerCase());
-    
     switch (status.toLowerCase()) {
       case "solicitação aceita":
         return "badge status-aceita";
@@ -31,6 +36,135 @@ document.addEventListener("DOMContentLoaded", () => {
         return "badge status-recusada";
       default:
         return "badge";
+    }
+  }
+
+  function renderizarTabela(solicitacoesFiltradas) {
+    tabelaSolicitacoes.innerHTML = "";
+
+    const inicio = (paginaAtual - 1) * rowsPerPage;
+    const fim = inicio + rowsPerPage;
+
+    const solicitacoesPaginadas = solicitacoesFiltradas.slice(inicio, fim);
+
+    solicitacoesPaginadas.forEach((solicitacao) => {
+      const statusClass = solicitacao.status.status
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, "")
+        .toLowerCase();
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+              <td>${solicitacao.usuario.loja.nome}</td>
+              <td>${solicitacao.quantidade_taloes}</td>
+              <td>${formatarDataHora(solicitacao.updated_at)}</td>
+              <td>${solicitacao.usuario.nome || "N/A"}</td>
+              <td>
+                ${
+                  solicitacao.status.status === "Pendente"
+                    ? `
+                  <button class="btn-status aceitar" data-id="${solicitacao.id_solicitacao}">Aceitar</button>
+                  <button class="btn-status recusar" data-id="${solicitacao.id_solicitacao}">Recusar</button>
+                `
+                    : `<span class="${getBadgeClass(
+                        solicitacao.status?.status || ""
+                      )}">${solicitacao.status?.status || "N/A"}</span>`
+                }
+              </td>
+              <td>
+                <button class="edit-btn" onclick="abrirModalEdicaoSolicitacao(${
+                  solicitacao.id_solicitacao
+                })">✏️</button>
+                <button class="delete-btn" onclick="deletarSolicitacao(${
+                  solicitacao.id_solicitacao
+                })">🗑️</button>
+              </td>
+            `;
+      tabelaSolicitacoes.appendChild(tr);
+
+      if (solicitacao.status.status === "Pendente") {
+        tr.querySelector(".btn-status.aceitar").addEventListener("click", () =>
+          atualizarStatusSolicitacao(solicitacao, 2)
+        );
+        tr.querySelector(".btn-status.recusar").addEventListener("click", () =>
+          atualizarStatusSolicitacao(solicitacao, 3)
+        );
+      }
+    });
+
+    renderizarPaginacao(solicitacoesFiltradas.length);
+  }
+
+  function renderizarPaginacao(totalSolicitacoes) {
+    const totalPaginas = Math.ceil(totalSolicitacoes / rowsPerPage);
+    paginationContainer.innerHTML = "";
+
+    for (let i = 1; i <= totalPaginas; i++) {
+      const button = document.createElement("button");
+      button.classList.add("page-btn");
+      if (i === paginaAtual) {
+        button.classList.add("active");
+      }
+      button.textContent = i;
+      button.addEventListener("click", () => {
+        paginaAtual = i;
+        filtrarSolicitacoes();
+      });
+      paginationContainer.appendChild(button);
+    }
+  }
+
+  function filtrarSolicitacoes() {
+    const termoPesquisa = searchInput.value.toLowerCase();
+    const solicitacoesFiltradas = solicitacoes.filter((solicitacao) => {
+      return (
+        solicitacao.usuario.nome?.toLowerCase().includes(termoPesquisa) ||
+        solicitacao.usuario?.loja?.nome.toLowerCase().includes(termoPesquisa) ||
+        solicitacao.status?.status?.toLowerCase().includes(termoPesquisa)
+      );
+    });
+
+    renderizarTabela(solicitacoesFiltradas);
+  }
+
+  rowsPerPageSelect.addEventListener("change", () => {
+    rowsPerPage = parseInt(rowsPerPageSelect.value);
+    paginaAtual = 1;
+    filtrarSolicitacoes();
+  });
+
+  searchInput.addEventListener("input", () => {
+    paginaAtual = 1;
+    filtrarSolicitacoes();
+  });
+
+  async function carregarSolicitacoes() {
+    const token = getToken();
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/solicitations/all",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao carregar as solicitações.");
+      }
+
+      const solicitacoesData = await response.json();
+      solicitacoes = solicitacoesData.solicitacoes.sort((a, b) => {
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+      filtrarSolicitacoes();
+    } catch (error) {
+      console.error("Erro ao carregar as solicitações:", error);
+      alert("Erro ao carregar as solicitações.");
     }
   }
 
@@ -71,81 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function carregarSolicitacoes() {
-    const token = getToken();
-    try {
-      const response = await fetch(
-        "http://localhost:3000/api/solicitations/all",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao carregar as solicitações.");
-      }
-
-      const solicitacoesData = await response.json();
-      const solicitacoes = solicitacoesData.solicitacoes;
-
-      tabelaSolicitacoes.innerHTML = "";
-
-      solicitacoes.forEach((solicitacao) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-              <td>${solicitacao.usuario.loja.nome}</td>
-              <td>${solicitacao.quantidade_taloes}</td>
-              <td>${formatarDataHora(solicitacao.created_at)}</td>
-              <td>${solicitacao.usuario.nome || "N/A"}</td>
-              <td>
-                ${
-                  solicitacao.status.status === "Pendente"
-                    ? `
-                  <button class="btn-status aceitar" data-id="${solicitacao.id_solicitacao}">Aceitar</button>
-                  <button class="btn-status recusar" data-id="${solicitacao.id_solicitacao}">Recusar</button>
-                `
-                    : `<span class="${getBadgeClass(
-                        solicitacao.status?.status || ""
-                      )}">${solicitacao.status?.status || "N/A"}</span>`
-                }
-              </td>
-              <td>
-                <button class="edit-btn" onclick="editarSolicitacao(${
-                  solicitacao.id_solicitacao
-                })">✏️</button>
-                <button class="delete-btn" onclick="deletarSolicitacao(${
-                  solicitacao.id_solicitacao
-                })">🗑️</button>
-              </td>
-            `;
-        tabelaSolicitacoes.appendChild(tr);
-
-        if (solicitacao.status.status === "Pendente") {
-          tr.querySelector(".btn-status.aceitar").addEventListener(
-            "click",
-            () => atualizarStatusSolicitacao(solicitacao, 2)
-          );
-          tr.querySelector(".btn-status.recusar").addEventListener(
-            "click",
-            () => atualizarStatusSolicitacao(solicitacao, 3)
-          );
-        }
-      });
-    } catch (error) {
-      console.error("Erro ao carregar as solicitações:", error);
-      alert("Erro ao carregar as solicitações.");
-    }
-  }
-
-  function editarSolicitacao(id_solicitacao) {
-    window.location.href = `/frontEnd/src/pages/solicitacoes/editarSolicitacao.html?id=${id_solicitacao}`;
-  }
-
-  async function deletarSolicitacao(id_solicitacao) {
+  async function deletarSolicitacao(idSolicitacao) {
     const confirmacao = confirm(
       "Tem certeza que deseja deletar esta solicitação?"
     );
@@ -155,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/solicitations/deletar/${id_solicitacao}`,
+        `http://localhost:3000/api/solicitations/deletar/${idSolicitacao}`,
         {
           method: "DELETE",
           headers: {
@@ -178,6 +238,24 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   carregarSolicitacoes();
-  window.editarSolicitacao = editarSolicitacao;
   window.deletarSolicitacao = deletarSolicitacao;
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const sidebar = document.querySelector(".sidebar");
+  const toggleButton = document.getElementById("sidebar-toggle");
+
+  toggleButton.addEventListener("click", (event) => {
+    event.stopPropagation();
+    sidebar.classList.toggle("active");
+  });
+
+  document.addEventListener("click", (event) => {
+    if (
+      !sidebar.contains(event.target) &&
+      !toggleButton.contains(event.target)
+    ) {
+      sidebar.classList.remove("active");
+    }
+  });
 });

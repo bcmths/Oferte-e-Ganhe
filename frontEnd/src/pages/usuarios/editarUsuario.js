@@ -5,19 +5,11 @@ function getToken() {
     ?.split("=")[1];
 }
 
-document.addEventListener("DOMContentLoaded", carregarUsuario);
-
-async function carregarUsuario() {
+async function abrirModalEdicao(matricula) {
   const token = getToken();
-  const matricula = new URLSearchParams(window.location.search).get("id");
-
-  if (!matricula) {
-    alert("Matrícula de usuário não fornecida.");
-    return;
-  }
 
   try {
-    const response = await fetch(`http://localhost:3000/api/users/all`, {
+    const response = await fetch("http://localhost:3000/api/users/all", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -25,99 +17,88 @@ async function carregarUsuario() {
     });
 
     if (!response.ok) {
-      throw new Error("Erro ao carregar dados do usuário.");
+      throw new Error("Erro ao carregar a lista de usuários.");
     }
 
-    const usuariosData = await response.json();
-    const usuarios = usuariosData.usuarios;
-    const usuario = usuarios.find((user) => user.matricula === matricula);
+    const { usuarios } = await response.json();
 
+    const usuario = usuarios.find((u) => u.matricula === matricula);
     if (!usuario) {
       throw new Error("Usuário não encontrado.");
     }
 
-    document.getElementById("matricula").value = usuario.matricula;
-    document.getElementById("nome").value = usuario.nome;
-    document.getElementById("email").value = usuario.email;
+    document.getElementById("matricula-editar").value = usuario.matricula;
+    document.getElementById("nome-editar").value = usuario.nome;
+    document.getElementById("email-editar").value = usuario.email;
 
-    await carregarLojas(usuario.id_loja);
+    carregarLojasEdicao(usuario.loja.id_loja);
+    carregarPerfisEdicao(usuario.perfil.id_perfil);
 
-    await carregarPerfis(usuario.id_perfil);
+    abrirModal("modal-editar-usuario");
   } catch (error) {
     console.error(error);
-    alert("Erro ao carregar dados do usuário.");
+    alert("Erro ao carregar os dados do usuário.");
   }
 }
 
-async function carregarLojas(selectedLojaId) {
+async function carregarLojasEdicao(idLojaAtual) {
   const token = getToken();
+  const lojaSelect = document.getElementById("loja-editar");
+  lojaSelect.innerHTML = "";
 
   try {
-    const lojasResponse = await fetch("http://localhost:3000/api/stores/all", {
+    const response = await fetch("http://localhost:3000/api/stores/all", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    if (!lojasResponse.ok) {
-      throw new Error("Erro ao carregar lojas.");
-    }
-
-    const lojasData = await lojasResponse.json();
-    const lojas = lojasData.lojas;
-
-    const lojaSelect = document.getElementById("loja");
+    const { lojas } = await response.json();
     lojas.forEach((loja) => {
       const option = document.createElement("option");
       option.value = loja.id_loja;
       option.textContent = loja.nome;
-      if (loja.id === selectedLojaId) {
-        option.selected = true;
-      }
+      if (loja.id_loja === idLojaAtual) option.selected = true;
       lojaSelect.appendChild(option);
     });
   } catch (error) {
-    console.error(error);
-    alert("Erro ao carregar lojas.");
+    console.error("Erro ao carregar lojas:", error);
   }
 }
 
-async function carregarPerfis(selectedPerfilId) {
+async function carregarPerfisEdicao(idPerfilAtual) {
   const token = getToken();
+  const perfilSelect = document.getElementById("perfil-editar");
+  perfilSelect.innerHTML = "";
 
   try {
-    const perfisResponse = await fetch(
-      "http://localhost:3000/api/profiles/all",
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch("http://localhost:3000/api/profiles/all", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    if (!perfisResponse.ok) {
-      throw new Error("Erro ao carregar perfis.");
-    }
-
-    const perfisData = await perfisResponse.json();
-    const perfis = perfisData.perfis;
-
-    const perfilSelect = document.getElementById("perfil");
+    const { perfis } = await response.json();
     perfis.forEach((perfil) => {
       const option = document.createElement("option");
       option.value = perfil.id_perfil;
       option.textContent = perfil.nome;
-      if (perfil.id === selectedPerfilId) {
-        option.selected = true;
-      }
+      if (perfil.id_perfil === idPerfilAtual) option.selected = true;
       perfilSelect.appendChild(option);
     });
   } catch (error) {
-    console.error(error);
-    alert("Erro ao carregar perfis.");
+    console.error("Erro ao carregar perfis:", error);
   }
+}
+
+function abrirModal(modalId) {
+  document.getElementById(modalId).style.display = "block";
+}
+
+function fecharModal(modalId) {
+  document.getElementById(modalId).style.display = "none";
 }
 
 document
@@ -125,22 +106,15 @@ document
   .addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const matricula = new URLSearchParams(window.location.search).get("id");
-    const novaMatricula = document.getElementById("matricula").value;
-    const nome = document.getElementById("nome").value;
-    const email = document.getElementById("email").value;
-    const loja = document.getElementById("loja").value;
-    const senha = document.getElementById("senha").value;
-    const confirmarSenha = document.getElementById("confirmar-senha").value;
-    const perfil = document.getElementById("perfil").value;
+    const token = getToken();
 
-    if (senha !== confirmarSenha) {
-      alert("As senhas não coincidem. Por favor, verifique.");
-      return;
-    }
+    const matricula = document.getElementById("matricula-editar").value;
+    const nome = document.getElementById("nome-editar").value;
+    const email = document.getElementById("email-editar").value;
+    const loja = document.getElementById("loja-editar").value;
+    const perfil = document.getElementById("perfil-editar").value;
 
     try {
-      const token = getToken();
       const response = await fetch(
         `http://localhost:3000/api/users/editar/${matricula}`,
         {
@@ -151,23 +125,25 @@ document
           },
           body: JSON.stringify({
             nome,
-            novaMatricula,
             email,
-            senha,
-            id_perfil: perfil,
             id_loja: loja,
+            id_perfil: perfil,
           }),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Erro ao atualizar usuário.");
+        throw new Error("Erro ao atualizar o usuário.");
       }
 
       alert("Usuário atualizado com sucesso!");
-      window.location.href = "/frontEnd/src/pages/usuarios/index.html";
+      fecharModal("modal-editar-usuario");
+      carregarUsuarios();
     } catch (error) {
       console.error(error);
       alert("Erro ao atualizar o usuário.");
     }
   });
+
+window.abrirModalEdicao = abrirModalEdicao;
+window.fecharModal = fecharModal;
