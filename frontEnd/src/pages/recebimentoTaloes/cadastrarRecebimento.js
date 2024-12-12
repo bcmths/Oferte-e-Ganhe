@@ -21,6 +21,8 @@ document
     e.preventDefault();
 
     const remessa = document.getElementById("remessa").value;
+    console.log(remessa);
+
     const solicitacao = document.getElementById("solicitacao").value;
     const data = document.getElementById("data-prevista").value;
     const quantidade = document.getElementById("quantidade").value;
@@ -69,22 +71,38 @@ async function carregarSolicitacao() {
     '<option value="" disabled selected>Selecione uma solicitação</option>';
 
   try {
-    const response = await fetch(
-      "http://localhost:3000/api/solicitations/all",
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch("http://localhost:3000/api/talons/all", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    const { solicitacoes } = await response.json();
-    solicitacoes.forEach((solicitacao) => {
+    const { movimentacoes } = await response.json();
+
+    const envioSemRecebimento = movimentacoes.filter((movimentacao) => {
+      const remessaMovimentacoes = movimentacoes.filter(
+        (m) => m.remessa === movimentacao.remessa
+      );
+
+      return (
+        remessaMovimentacoes.some((m) => m.tipo_movimentacao === "Envio") &&
+        !remessaMovimentacoes.some((m) => m.tipo_movimentacao === "Recebimento")
+      );
+    });
+
+    envioSemRecebimento.forEach((envio) => {
       const option = document.createElement("option");
-      option.value = solicitacao.id_solicitacao;
-      option.textContent = `ID: ${solicitacao.id_solicitacao} - ${solicitacao.usuario.nome} - ${solicitacao.quantidade_taloes} talões`;
+      option.value = envio.id_solicitacao;
+      option.setAttribute("data-remessa", envio.remessa);
+      option.textContent = `Remessa: ${envio.remessa} - ${envio.solicitacao.usuario.nome} - ${envio.quantidade} talões`;
       solicitacaoSelect.appendChild(option);
+    });
+
+    solicitacaoSelect.addEventListener("change", (e) => {
+      const selectedOption = e.target.selectedOptions[0];
+      const remessaValue = selectedOption.getAttribute("data-remessa");
+      document.getElementById("remessa").value = remessaValue;
     });
   } catch (error) {
     console.error("Erro ao carregar solicitações:", error);

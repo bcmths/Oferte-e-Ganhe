@@ -1,5 +1,5 @@
 const movementService = require("../services/movementService");
-const movimentacaoSchema = require("../utils/movementSchema")
+const { movimentacaoSchema } = require("../utils/movementSchema");
 
 exports.createMovimentacao = async (req, res) => {
   const { error } = movimentacaoSchema.validate(req.body, {

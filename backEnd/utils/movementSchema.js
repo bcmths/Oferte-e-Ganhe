@@ -9,7 +9,7 @@ const movimentacaoSchema = Joi.object({
     "any.required": "O campo 'remessa' é obrigatório.",
   }),
   tipo_movimentacao: Joi.string()
-    .valid("entrada", "saida")
+    .valid("Envio", "Recebimento")
     .required()
     .messages({
       "string.base": "O campo 'tipo_movimentacao' deve ser um texto.",
