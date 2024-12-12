@@ -1,13 +1,13 @@
 const storeService = require("../services/storeService");
-const { storeSchema } = require("../utils/storeSchema");
+const {
+  createStoreSchema,
+  updateStoreSchema,
+} = require("../utils/storeSchema");
 
 exports.createStore = async (req, res) => {
-  const { error } = storeSchema.validate(req.body, { abortEarly: false });
+  const { error } = createStoreSchema.validate(req.body, { abortEarly: false });
   if (error) {
-    return res.status(400).json({
-      message: "Erro de validação.",
-      errors: error.details.map((err) => err.message),
-    });
+    return res.status(400).json({ error: error.details[0].message });
   }
   const { cod_loja, nome, cidade } = req.body;
   try {
@@ -36,12 +36,9 @@ exports.getAllStores = async (req, res) => {
 };
 
 exports.updateStore = async (req, res) => {
-  const { error } = storeSchema.validate(req.body, { abortEarly: false });
+  const { error } = updateStoreSchema.validate(req.body, { abortEarly: false });
   if (error) {
-    return res.status(400).json({
-      message: "Erro de validação.",
-      errors: error.details.map((err) => err.message),
-    });
+    return res.status(400).json({ error: error.details[0].message });
   }
   const { id_loja } = req.params;
   const { cod_loja, nome, cidade } = req.body;

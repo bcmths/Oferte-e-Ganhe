@@ -117,12 +117,12 @@ document
       );
 
       if (!response.ok) {
-        throw new Error("Erro ao atualizar o usuário.");
+        throw new Error("Erro ao atualizar o estoque.");
       }
 
       alert("Estoque atualizado com sucesso!");
       fecharModal("modal-editar-estoque");
-      carregarEstoques();
+      location.reload()
     } catch (error) {
       console.error(error);
       alert("Erro ao atualizar o estoque.");

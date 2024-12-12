@@ -93,12 +93,12 @@ document.addEventListener("DOMContentLoaded", () => {
   rowsPerPageSelect.addEventListener("change", () => {
     rowsPerPage = parseInt(rowsPerPageSelect.value);
     paginaAtual = 1;
-    filtrarUsuarios();
+    filtrarEstoques();
   });
 
   searchInput.addEventListener("input", () => {
     paginaAtual = 1;
-    filtrarUsuarios();
+    filtrarEstoques();
   });
 
   async function carregarEstoques() {

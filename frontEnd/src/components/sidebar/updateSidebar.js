@@ -8,23 +8,19 @@ export function atualizarSidebar() {
     console.error("Token não encontrado.");
     return;
   }
-  
+
   function deleteToken() {
     document.cookie =
       "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   }
-  function logout() {    
+  function logout() {
     if (token) {
+      const confirmacao = confirm("Tem certeza que deseja sair?");
+      if (!confirmacao) return;
       deleteToken();
-      console.log("Token excluído com sucesso.");
-      alert("Token excluído com sucesso.");
-    } else {
-      console.log("Nenhum token encontrado.");
     }
-  
     window.location.href = "/frontEnd/src/pages/login/index.html";
   }
-  
 
   function parseJwt(token) {
     try {
@@ -109,7 +105,7 @@ export function atualizarSidebar() {
         sidebar.appendChild(link);
       }
     });
-    
+
     const logoutLink = document.createElement("a");
     logoutLink.href = "#";
     logoutLink.className = "logout";

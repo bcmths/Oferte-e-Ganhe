@@ -1,5 +1,8 @@
 const profileService = require("../services/profileService");
-const perfilSchema = require("../utils/profileSchema");
+const {
+  createProfileSchema,
+  updateProfileSchema,
+} = require("../utils/profileSchema");
 
 exports.getPerfis = async (req, res) => {
   try {
@@ -18,7 +21,9 @@ exports.getPerfis = async (req, res) => {
 };
 
 exports.createPerfil = async (req, res) => {
-  const { error } = perfilSchema.validate(req.body, { abortEarly: false });
+  const { error } = createProfileSchema.validate(req.body, {
+    abortEarly: false,
+  });
   if (error) {
     return res.status(400).json({
       message: "Erro de validação.",
@@ -36,7 +41,9 @@ exports.createPerfil = async (req, res) => {
 };
 
 exports.updatePerfil = async (req, res) => {
-  const { error } = perfilSchema.validate(req.body, { abortEarly: false });
+  const { error } = updateProfileSchema.validate(req.body, {
+    abortEarly: false,
+  });
   if (error) {
     return res.status(400).json({
       message: "Erro de validação.",

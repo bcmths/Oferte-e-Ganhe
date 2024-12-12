@@ -10,7 +10,9 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
     <script src="/frontEnd/src/components/auth/script.js"></script>
-
+    <script src="lojas.js" type="module"></script>
+    <script src="editarLoja.js" type="module"></script>
+    <script src="cadastrarLoja.js" type="module"></script>
     <script type="module">
       import { atualizarSidebar } from "/frontEnd/src/components/sidebar/updateSidebar.js";
 
@@ -85,15 +87,19 @@
         <form id="cadastrar-loja-form">
           <div class="form-group">
             <label for="codigo-cadastrar">Código</label>
-            <input type="text" id="codigo-cadastrar" required />
+            <input
+              type="text"
+              id="codigo-cadastrar"
+              placeholder="Insira o código da loja"
+            />
           </div>
           <div class="form-group">
             <label for="nome-cadastrar">Nome</label>
-            <input type="text" id="nome-cadastrar" required />
+            <input type="text" id="nome-cadastrar" placeholder="Insira o nome da loja" required />
           </div>
           <div class="form-group">
             <label for="cidade-cadastrar">Cidade</label>
-            <input type="text" id="cidade-cadastrar" required />
+            <input type="text" id="cidade-cadastrar" placeholder="Insira a cidade da loja" required />
           </div>
           <button type="submit" class="btn-submit">Cadastrar</button>
         </form>
@@ -107,6 +113,7 @@
         >
         <h2>Editar Loja</h2>
         <form id="editar-loja-form">
+          <input type="hidden" id="id-loja-editar" />
           <div class="form-group">
             <label for="codigo-editar">Código</label>
             <input type="text" id="codigo-editar" required />
@@ -123,7 +130,5 @@
         </form>
       </div>
     </div>
-
-    <script src="lojas.js" type="module"></script>
   </body>
 </html>

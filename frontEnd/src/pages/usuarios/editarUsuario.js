@@ -141,9 +141,8 @@ document
       }
 
       alert("Usuário atualizado com sucesso!");
-      fecharModal("modal-editar-usuario");
       location.reload();
-      carregarUsuarios();
+      fecharModal("modal-editar-usuario");
     } catch (error) {
       console.error(error);
       alert(error.message);

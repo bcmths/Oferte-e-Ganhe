@@ -1,8 +1,11 @@
 const movementService = require("../services/movementService");
-const { movimentacaoSchema } = require("../utils/movementSchema");
+const {
+  createMovementSchema,
+  updateMovementSchema,
+} = require("../utils/movementSchema");
 
 exports.createMovimentacao = async (req, res) => {
-  const { error } = movimentacaoSchema.validate(req.body, {
+  const { error } = createMovementSchema.validate(req.body, {
     abortEarly: false,
   });
   if (error) {
@@ -52,7 +55,7 @@ exports.getAllMovimentacoes = async (req, res) => {
 };
 
 exports.updateMovimentacao = async (req, res) => {
-  const { error } = movimentacaoSchema.validate(req.body, {
+  const { error } = updateMovementSchema.validate(req.body, {
     abortEarly: false,
   });
   if (error) {

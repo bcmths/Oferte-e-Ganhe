@@ -66,9 +66,9 @@ const updateUserSchema = Joi.object({
     "number.positive": "O campo 'id_loja' deve ser um número positivo.",
   }),
   novaMatricula: Joi.string().min(5).max(20).optional().messages({
-    "string.base": "O campo 'novaMatricula' deve ser um texto.",
-    "string.min": "O campo 'novaMatricula' deve ter pelo menos 5 caracteres.",
-    "string.max": "O campo 'novaMatricula' deve ter no máximo 20 caracteres.",
+    "string.base": "O campo 'Nova matrícula' deve ser um texto.",
+    "string.min": "O campo 'Nova matrícula' deve ter pelo menos 5 caracteres.",
+    "string.max": "O campo 'Nova matrícula' deve ter no máximo 20 caracteres.",
   }),
 }).min(1);
 

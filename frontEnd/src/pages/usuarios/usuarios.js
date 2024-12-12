@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
       usuarios = data.usuarios;
       usuarios = data.usuarios.sort((a, b) => {
-        return new Date(b.created_at) - new Date(a.created_at);
+        return new Date(b.updated_at) - new Date(a.updated_at);
       });
       filtrarUsuarios();
     } catch (error) {
