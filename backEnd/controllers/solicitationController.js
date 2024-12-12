@@ -1,4 +1,5 @@
 const solicitationService = require("../services/solicitationService");
+const { solicitacaoSchema } = require("../utils/solicitationSchema");
 
 exports.getSolicitacoes = async (req, res) => {
   try {
@@ -17,6 +18,15 @@ exports.getSolicitacoes = async (req, res) => {
 };
 
 exports.createSolicitacao = async (req, res) => {
+  const { error } = solicitacaoSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) {
+    return res.status(400).json({
+      message: "Erro de validação.",
+      errors: error.details.map((err) => err.message),
+    });
+  }
   const { quantidade_taloes, id_status_solicitacao, id_usuario } = req.body;
   try {
     const novaSolicitacao = await solicitationService.inserirSolicitacao(
@@ -32,9 +42,17 @@ exports.createSolicitacao = async (req, res) => {
 };
 
 exports.updateSolicitacao = async (req, res) => {
+  const { error } = solicitacaoSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) {
+    return res.status(400).json({
+      message: "Erro de validação.",
+      errors: error.details.map((err) => err.message),
+    });
+  }
   const { id_solicitacao } = req.params;
-  const { quantidade_taloes, id_status_solicitacao, id_usuario } =
-    req.body;
+  const { quantidade_taloes, id_status_solicitacao, id_usuario } = req.body;
 
   try {
     const solicitacaoAtualizada = await solicitationService.editarSolicitacao(

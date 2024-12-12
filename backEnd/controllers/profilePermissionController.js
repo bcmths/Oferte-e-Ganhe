@@ -1,4 +1,5 @@
 const profilePermissionService = require("../services/profilePermissionService");
+const perfilPermissaoSchema = require("../utils/profilePermissionsSchema");
 
 exports.getPerfilPermissao = async (req, res) => {
   try {
@@ -19,6 +20,15 @@ exports.getPerfilPermissao = async (req, res) => {
 };
 
 exports.createPerfilPermissao = async (req, res) => {
+  const { error } = perfilPermissaoSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) {
+    return res.status(400).json({
+      message: "Erro de validação.",
+      errors: error.details.map((err) => err.message),
+    });
+  }
   const { id_perfil, permissoes } = req.body;
   try {
     const novaAssociacao =
@@ -36,6 +46,15 @@ exports.createPerfilPermissao = async (req, res) => {
 };
 
 exports.updatePerfilPermissao = async (req, res) => {
+  const { error } = perfilPermissaoSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) {
+    return res.status(400).json({
+      message: "Erro de validação.",
+      errors: error.details.map((err) => err.message),
+    });
+  }
   const { id_perfil } = req.params;
   const { permissoes } = req.body;
 

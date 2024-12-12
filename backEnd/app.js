@@ -15,6 +15,7 @@ const statusMovimentacaoRoutes = require("./routes/statusMovimentacaoRoutes");
 const authRoutes = require("./routes/authRoutes");
 const authenticateToken = require("./middlewares/authMiddleware");
 const cookieParser = require("cookie-parser");
+const validateSession = require("./middlewares/validateSessionMiddleware");
 
 const app = express();
 
@@ -52,6 +53,7 @@ app.use("/api/auth", authRoutes);
 
 // Middleware de autenticação
 app.use(authenticateToken);
+app.use(validateSession);
 
 // Rotas autenticadas
 app.use("/api/users", userRoutes);

@@ -45,8 +45,10 @@ document
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Erro ao cadastrar usuário.");
+        throw new Error(data.error || "Erro ao cadastrar usuário.");
       }
 
       alert("Usuário cadastrado com sucesso!");
@@ -54,8 +56,8 @@ document
       document.getElementById("novo-usuario-form").reset();
       carregarUsuarios();
     } catch (error) {
-      console.error("Erro ao cadastrar usuário:", error);
-      alert("Erro ao cadastrar usuário.");
+      console.error(error.message);
+      alert(error.message);
     }
   });
 

@@ -1,4 +1,9 @@
 const stockService = require("../services/stockService");
+const {
+  createStockSchema,
+  updateStockSchema,
+  deleteStockSchema,
+} = require("../utils/stockSchema");
 
 exports.getStocks = async (req, res) => {
   try {
@@ -17,6 +22,13 @@ exports.getStocks = async (req, res) => {
 };
 
 exports.createStock = async (req, res) => {
+  const { error } = createStockSchema.validate(req.body, { abortEarly: false });
+  if (error) {
+    return res.status(400).json({
+      message: "Erro de validação.",
+      errors: error.details.map((err) => err.message),
+    });
+  }
   const { estoque_atual, estoque_minimo, estoque_recomendado, id_loja } =
     req.body;
   try {
@@ -37,6 +49,13 @@ exports.createStock = async (req, res) => {
 };
 
 exports.updateStock = async (req, res) => {
+  const { error } = updateStockSchema.validate(req.body, { abortEarly: false });
+  if (error) {
+    return res.status(400).json({
+      message: "Erro de validação.",
+      errors: error.details.map((err) => err.message),
+    });
+  }
   const { id_estoque } = req.params;
   const { estoque_atual, estoque_minimo, estoque_recomendado, id_loja } =
     req.body;
@@ -66,6 +85,15 @@ exports.updateStock = async (req, res) => {
 };
 
 exports.deleteStock = async (req, res) => {
+  const { error } = deleteStockSchema.validate(req.params, {
+    abortEarly: false,
+  });
+  if (error) {
+    return res.status(400).json({
+      message: "Erro de validação.",
+      errors: error.details.map((err) => err.message),
+    });
+  }
   const { id_estoque } = req.params;
   try {
     const estoqueDeletado = await stockService.deletarEstoque(id_estoque);

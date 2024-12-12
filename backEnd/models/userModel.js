@@ -56,6 +56,10 @@ const Usuario = sequelize.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
+    active_session_token: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,

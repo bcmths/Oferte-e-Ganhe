@@ -59,6 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <button class="delete-btn" onclick="deletarEnvio('${
             envio.id_movimentacao
           }')">🗑️</button>
+          <button class="details-btn" onclick="abrirModalDetalhar('${
+            envio.id_movimentacao
+          }')">🔍</button>
         </td>
       `;
       tabelaEnvios.appendChild(tr);
@@ -91,7 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const enviosFiltrados = envios.filter((envio) => {
       return (
         envio.remessa?.toLowerCase().includes(termoPesquisa) ||
-        envio.solicitacao?.usuario?.loja?.nome?.toLowerCase().includes(termoPesquisa) ||
+        envio.solicitacao?.usuario?.loja?.nome
+          ?.toLowerCase()
+          .includes(termoPesquisa) ||
         envio.status?.status?.toLowerCase().includes(termoPesquisa)
       );
     });
@@ -190,3 +195,76 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+async function abrirModalDetalhar(idEnvio) {
+  const token = getToken();
+  try {
+    const response = await fetch("http://localhost:3000/api/talons/all", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+    const envios = data.movimentacoes;
+
+    const envio = envios.find((e) => e.id_movimentacao == idEnvio);
+
+    const remessa = envio.remessa;
+    const usuario = envio.solicitacao.usuario.nome;
+    const loja = envio.solicitacao.usuario.loja.nome;
+    const quantidade_solicitada = envio.solicitacao.quantidade_taloes;
+    const quantidade_enviada = envio.quantidade;
+    const data_envio = envio.data_movimentacao;
+    const data_prevista = envio.data_prevista;
+    const status = envio.status.status;
+
+    const conteudoModal = document.getElementById("conteudoModal");
+    conteudoModal.innerHTML = `
+      <table class="details-table">
+        <tr>
+          <td><strong>Remessa do Talão:</strong></td>
+          <td>${remessa}</td>
+        </tr>
+        <tr>
+          <td><strong>Quantidade Solicitada:</strong></td>
+          <td>${quantidade_solicitada}</td>
+        </tr>
+        <tr>
+          <td><strong>Quantidade Enviada:</strong></td>
+          <td>${quantidade_enviada}</td>
+        </tr>
+        <tr>
+          <td><strong>Status:</strong></td>
+          <td>${status}</td>
+        </tr>
+        <tr>
+          <td><strong>Data do Envio:</strong></td>
+          <td>${formatarDataHora(data_envio)}</td>
+        </tr>
+        <tr>
+          <td><strong>Entrega Prevista:</strong></td>
+          <td>${formatarDataHora(data_prevista)}</td>
+        </tr>
+        <tr>
+          <td><strong>Usuário:</strong></td>
+          <td>${usuario}</td>
+        </tr>
+        <tr>
+          <td><strong>Loja:</strong></td>
+          <td>${loja}</td>
+        </tr>
+      </table>
+    `;
+    const modal = document.getElementById("modalDetalhes");
+    modal.style.display = "block";
+  } catch (err) {
+    console.error("Erro ao abrir modal.", err);
+  }
+}
+
+function fecharModalDetalhar(modalId) {
+  document.getElementById(modalId).style.display = "none";
+}

@@ -71,7 +71,10 @@
             </select>
             <input type="text" id="search" placeholder="Pesquisar..." />
           </div>
-          <button class="add-envio-taloes-btn" onclick="abrirModal('modal-novo-envio')">
+          <button
+            class="add-envio-taloes-btn"
+            onclick="abrirModal('modal-novo-envio')"
+          >
             + Cadastrar Envio
           </button>
         </div>
@@ -98,6 +101,15 @@
           <button class="page-btn">Próxima</button>
         </div>
       </main>
+    </div>
+
+    <div id="modalDetalhes" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close-btn" onclick="fecharModalDetalhar('modalDetalhes')"
+          >&times;</span
+        >
+        <div id="conteudoModal"></div>
+      </div>
     </div>
 
     <div id="modal-novo-envio" class="modal">
@@ -146,7 +158,7 @@
         </form>
       </div>
     </div>
-   
+
     <div id="modal-editar-envio" class="modal">
       <div class="modal-content">
         <span class="close-btn" onclick="fecharModal('modal-editar-envio')"
@@ -184,7 +196,7 @@
           <div class="form-group">
             <label for="data-prevista">Data Prevista</label>
             <input
-              type="date"
+              type="datetime-local"
               id="data-editar"
               placeholder="Previsão de entrega"
               required

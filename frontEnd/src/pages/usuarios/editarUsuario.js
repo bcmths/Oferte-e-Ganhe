@@ -107,12 +107,14 @@ document
     e.preventDefault();
 
     const token = getToken();
-
     const matricula = document.getElementById("matricula-editar").value;
     const nome = document.getElementById("nome-editar").value;
     const email = document.getElementById("email-editar").value;
     const loja = document.getElementById("loja-editar").value;
     const perfil = document.getElementById("perfil-editar").value;
+    const novaMatricula = document.getElementById(
+      "nova-matricula-editar"
+    ).value;
 
     try {
       const response = await fetch(
@@ -128,20 +130,23 @@ document
             email,
             id_loja: loja,
             id_perfil: perfil,
+            novaMatricula: novaMatricula || undefined,
           }),
         }
       );
 
+      const data = await response.json();
       if (!response.ok) {
-        throw new Error("Erro ao atualizar o usuário.");
+        throw new Error(data.error || "Erro ao atualizar o usuário.");
       }
 
       alert("Usuário atualizado com sucesso!");
       fecharModal("modal-editar-usuario");
+      location.reload();
       carregarUsuarios();
     } catch (error) {
       console.error(error);
-      alert("Erro ao atualizar o usuário.");
+      alert(error.message);
     }
   });
 

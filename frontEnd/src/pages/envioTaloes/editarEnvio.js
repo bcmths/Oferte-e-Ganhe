@@ -15,6 +15,16 @@ function formatarDataHora(dataISO) {
   return `${dia}/${mes}/${ano} ${horas}:${minutos}`;
 }
 
+function formatarTimestampParaInput(dataISO) {
+  const data = new Date(dataISO);
+  const ano = data.getFullYear();
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
+  const dia = String(data.getDate()).padStart(2, "0");
+  const horas = String(data.getHours()).padStart(2, "0");
+  const minutos = String(data.getMinutes()).padStart(2, "0");
+  return `${ano}-${mes}-${dia}T${horas}:${minutos}`;
+}
+
 async function abrirModalEdicao(idEnvio) {
   const token = getToken();
 
@@ -42,10 +52,11 @@ async function abrirModalEdicao(idEnvio) {
     document.getElementById("id-envio-editar").value = idEnvio;
     document.getElementById("remessa-editar").value = envio.remessa;
     document.getElementById("quantidade-editar").value = envio.quantidade;
-    document.getElementById("data-editar").value = formatarDataHora(
+
+    document.getElementById("data-editar").value = formatarTimestampParaInput(
       envio.data_prevista
     );
-    console.log(document.getElementById("data-editar").value);
+    console.log(formatarTimestampParaInput(envio.data_prevista));
 
     carregarSolicitacaoEdicao(envio.solicitacao.id_solicitacao);
     carregarStatusEdicao(envio.status.id_status_solicitacao);

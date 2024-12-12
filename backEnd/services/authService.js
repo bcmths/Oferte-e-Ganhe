@@ -3,6 +3,7 @@ const Perfil = require("../models/profileModel");
 const Permissao = require("../models/permissionModel");
 const Loja = require("../models/storeModel");
 const bcrypt = require("bcryptjs");
+const { Sequelize } = require("sequelize");
 
 async function consultarUsuarioPorEmail(email) {
   try {
@@ -27,6 +28,33 @@ async function consultarUsuarioPorEmail(email) {
     return usuario;
   } catch (erro) {
     console.error("Erro ao consultar usuário por email:", erro);
+    throw erro;
+  }
+}
+
+async function consultarUsuarioPorMatricula(matricula) {
+  try {
+    const usuario = await Usuario.findOne({
+      where: { matricula },
+      include: [
+        {
+          model: Perfil,
+          as: "perfil",
+          include: [
+            {
+              model: Permissao,
+              as: "permissao",
+              through: { attributes: [] },
+            },
+          ],
+        },
+        { model: Loja, as: "loja" },
+      ],
+    });
+
+    return usuario;
+  } catch (erro) {
+    console.error("Erro ao consultar usuário por matricula:", erro);
     throw erro;
   }
 }
@@ -71,4 +99,5 @@ module.exports = {
   consultarUsuarioPorToken,
   removerTokenDeRedefinicao,
   atualizarSenha,
+  consultarUsuarioPorMatricula,
 };

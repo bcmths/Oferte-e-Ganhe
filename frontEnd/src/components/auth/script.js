@@ -1,4 +1,3 @@
-// auth.js
 document.addEventListener("DOMContentLoaded", () => {
   function getToken() {
     return document.cookie

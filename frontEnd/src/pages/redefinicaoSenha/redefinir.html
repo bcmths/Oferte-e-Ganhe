@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Redefinir Senha</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Link para Font Awesome (opcional, se usar ícones) -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script defer src="./script.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">
+        <img src="../../../public/images/logo.png" alt="Logo Quero-Quero" />
+      </div>
+      <h1 class="subtitle">Oferte e Ganhe</h1>
+      <div class="recover-password-box">
+        <h2>🔒 Redefinir Senha</h2>
+        <form>
+          <div class="input-group">
+            <label for="novaSenha">Nova Senha</label>
+            <input
+              type="password"
+              id="novaSenha"
+              name="novaSenha"
+              placeholder="Insira sua nova senha"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <label for="confirmaSenha">Confirme sua Senha</label>
+            <input
+              type="password"
+              id="confirmaSenha"
+              name="confirmaSenha"
+              placeholder="Confirme sua nova senha"
+              required
+            />
+          </div>
+          <button type="submit" class="btn green">Redefinir Senha</button>
+          <button
+            type="button"
+            class="btn yellow"
+            onclick="window.location.href='../login/index.html'"
+          >
+            Voltar para login
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

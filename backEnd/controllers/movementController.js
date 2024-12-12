@@ -1,6 +1,16 @@
 const movementService = require("../services/movementService");
+const movimentacaoSchema = require("../utils/movementSchema")
 
 exports.createMovimentacao = async (req, res) => {
+  const { error } = movimentacaoSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) {
+    return res.status(400).json({
+      message: "Erro de validação.",
+      errors: error.details.map((err) => err.message),
+    });
+  }
   const {
     remessa,
     tipo_movimentacao,
@@ -20,7 +30,7 @@ exports.createMovimentacao = async (req, res) => {
       quantidade,
       id_status,
       id_solicitacao
-    );    
+    );
     res.status(201).json(novaMovimentacao);
   } catch (erro) {
     console.error("Erro ao inserir movimentação:", erro);
@@ -42,6 +52,15 @@ exports.getAllMovimentacoes = async (req, res) => {
 };
 
 exports.updateMovimentacao = async (req, res) => {
+  const { error } = movimentacaoSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) {
+    return res.status(400).json({
+      message: "Erro de validação.",
+      errors: error.details.map((err) => err.message),
+    });
+  }
   const { id_movimentacao } = req.params;
   const {
     remessa,

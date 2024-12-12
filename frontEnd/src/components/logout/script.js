@@ -20,6 +20,5 @@ function logout() {
     console.log("Nenhum token encontrado.");
   }
 
-  // Redirecionar para a página de login
   window.location.href = "/frontEnd/src/pages/login/index.html";
 }

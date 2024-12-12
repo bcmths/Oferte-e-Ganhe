@@ -1,8 +1,27 @@
 const userService = require("../services/userService");
+const authService = require("../services/authService");
+const { creteUserSchema, updateUserSchema } = require("../utils/userSchema");
 
 exports.registerUser = async (req, res) => {
+  const { error } = creteUserSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
   const { nome, matricula, email, senha, id_perfil, id_loja } = req.body;
   try {
+    const emailExistente = await authService.consultarUsuarioPorEmail(email);
+    if (emailExistente) {
+      return res.status(400).json({ error: "E-mail já cadastrado!" });
+    }
+
+    const matriculaExistente = await authService.consultarUsuarioPorMatricula(
+      matricula
+    );
+    if (matriculaExistente) {
+      return res.status(400).json({ error: "Matrícula já cadastrada!" });
+    }
     const novoUsuario = await userService.inserirUsuario(
       nome,
       matricula,
@@ -32,16 +51,14 @@ exports.listUsers = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
+  const { error } = updateUserSchema.validate(req.body, { abortEarly: false });
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
   const { nome, email, senha, id_perfil, id_loja, novaMatricula } = req.body;
   const { matricula } = req.params;
 
   try {
-    if (!matricula) {
-      return res
-        .status(400)
-        .json({ message: "Matrícula do usuário é obrigatória." });
-    }
-
     if (senha && typeof senha !== "string") {
       return res
         .status(400)
