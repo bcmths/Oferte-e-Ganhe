@@ -1,72 +1,91 @@
-function getToken() {
-  const token = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("authToken="))
-    ?.split("=")[1];
-  return token;
-}
-
-function decodificarToken(token) {
-  return JSON.parse(atob(token.split(".")[1]));
-}
-
-const modulosSidebar = {
-  Usuários: "/frontEnd/src/pages/usuarios/index.html",
-  Perfis: "/frontEnd/src/pages/perfis/index.html",
-  Lojas: "/frontEnd/src/pages/lojas/index.html",
-  "Envio de Talões": "/frontEnd/src/pages/envioTaloes/index.html",
-  "Recebimento de Talões": "/frontEnd/src/pages/recebimentoTaloes/index.html",
-  Solicitações: "/frontEnd/src/pages/solicitacoes/index.html",
-  Estoque: "/frontEnd/src/pages/estoque/index.html",
-  Relatórios: "/frontEnd/src/pages/relatorios/index.html",
-};
-
-function getIconForModule(modulo) {
-  const icons = {
-    Usuários: "users",
-    Perfis: "user-tag",
-    Lojas: "store",
-    "Envio de Talões": "paper-plane",
-    "Recebimento de Talões": "inbox",
-    Solicitações: "file-alt",
-    Estoque: "boxes",
-    Relatórios: "chart-line",
-  };
-  return icons[modulo] || "circle";
-}
-
 export function atualizarSidebar() {
-  const token = getToken();
-  if (!token) {
-    alert("Token não encontrado. Faça login novamente.");
-    window.location.href = "/frontEnd/src/pages/login/index.html";
-    return;
-  }
-
-  const usuario = decodificarToken(token);
-  const permissoes = usuario.permissoes.map((p) => p.modulo);
-
-  const sidebar = document.querySelector(".sidebar");
-  sidebar.innerHTML = `
-      <a href="/frontEnd/src/pages/dashboard/index.html" class="active">
-        <i class="fas fa-tachometer-alt"></i> Dashboard
-      </a>
-    `;
-
-  permissoes.forEach((modulo) => {
-    const link = modulosSidebar[modulo];
-    if (link) {
-      sidebar.innerHTML += `
-          <a href="${link}">
-            <i class="fas fa-${getIconForModule(modulo)}"></i> ${modulo}
-          </a>
-        `;
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("authToken="))
+      ?.split("=")[1];
+  
+    if (!token) {
+      console.error("Token não encontrado.");
+      return;
     }
-  });
-
-  sidebar.innerHTML += `
-      <a href="/frontEnd/src/pages/login/index.html" class="logout">
-        <i class="fas fa-sign-out-alt"></i> Logout
-      </a>
-    `;
-}
+  
+    function parseJwt(token) {
+      try {
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split("")
+            .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+            .join("")
+        );
+        return JSON.parse(jsonPayload);
+      } catch (error) {
+        console.error("Erro ao decodificar o token:", error);
+        return null;
+      }
+    }
+  
+    try {
+      const decodedToken = parseJwt(token);
+      const permissoes = decodedToken.permissoes.map((p) => p.modulo);
+      const currentPath = window.location.pathname;
+  
+      const sidebar = document.querySelector(".sidebar");
+      sidebar.innerHTML = "";
+  
+      const dashboardLink = document.createElement("a");
+      dashboardLink.href = `/frontEnd/src/pages/dashboard/index.html`;
+      dashboardLink.className = currentPath.includes("dashboard") ? "active" : "";
+      dashboardLink.innerHTML = `<i class="fas fa-tachometer-alt"></i> Dashboard`;
+      sidebar.appendChild(dashboardLink);
+  
+      const opcoesSidebar = [
+        { modulo: "Usuários", icone: "fa-users", link: "usuarios" },
+        { modulo: "Perfis", icone: "fa-user-tag", link: "perfis" },
+        { modulo: "Lojas", icone: "fa-store", link: "lojas" },
+        {
+          modulo: "Movimentações",
+          submodulos: [
+            { modulo: "Envio de Talões", icone: "fa-paper-plane", link: "envioTaloes" },
+            { modulo: "Recebimento de Talões", icone: "fa-inbox", link: "recebimentoTaloes" },
+            { modulo: "Solicitações", icone: "fa-file-alt", link: "solicitacoes" },
+          ],
+        },
+        { modulo: "Estoque", icone: "fa-boxes", link: "estoque" },
+        { modulo: "Relatórios", icone: "fa-chart-line", link: "relatorios" },
+      ];
+  
+      opcoesSidebar.forEach((opcao) => {
+        if (opcao.submodulos) {
+          if (permissoes.includes("Movimentações")) {
+            opcao.submodulos.forEach((submodulo) => {
+              const link = document.createElement("a");
+              link.href = `/frontEnd/src/pages/${submodulo.link}/index.html`;
+              link.className = currentPath.includes(submodulo.link) ? "active" : "";
+              link.innerHTML = `<i class="fas ${submodulo.icone}"></i> ${submodulo.modulo}`;
+              sidebar.appendChild(link);
+            });
+          }
+        } else if (
+          (opcao.modulo === "Estoque" && permissoes.includes("Lojas")) ||
+          permissoes.includes(opcao.modulo)
+        ) {
+          const link = document.createElement("a");
+          link.href = `/frontEnd/src/pages/${opcao.link}/index.html`;
+          link.className = currentPath.includes(opcao.link) ? "active" : "";
+          link.innerHTML = `<i class="fas ${opcao.icone}"></i> ${opcao.modulo}`;
+          sidebar.appendChild(link);
+        }
+      });
+  
+      const logoutLink = document.createElement("a");
+      logoutLink.href = "/frontEnd/src/pages/login/index.html";
+      logoutLink.className = "logout";
+      logoutLink.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+      sidebar.appendChild(logoutLink);
+    } catch (error) {
+      console.error("Erro ao atualizar a sidebar:", error);
+    }
+  }
+  

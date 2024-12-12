@@ -56,7 +56,6 @@ async function abrirModalEdicao(idEnvio) {
     document.getElementById("data-editar").value = formatarTimestampParaInput(
       envio.data_prevista
     );
-    console.log(formatarTimestampParaInput(envio.data_prevista));
 
     carregarSolicitacaoEdicao(envio.solicitacao.id_solicitacao);
     carregarStatusEdicao(envio.status.id_status_solicitacao);
@@ -171,7 +170,6 @@ document
           }),
         }
       );
-      console.log(await response.json());
 
       if (!response.ok) {
         throw new Error("Erro ao atualizar o usuário.");

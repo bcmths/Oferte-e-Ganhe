@@ -12,7 +12,6 @@ document
 
     const loja = document.getElementById("loja").value;
     const estoqueAtual = document.getElementById("estoque-atual").value;
-    console.log(estoqueAtual);    
     const estoqueMinimo = document.getElementById("estoque-minimo").value;
     const estoqueRecomendado = document.getElementById(
       "estoque-recomendado"

@@ -51,7 +51,9 @@ async function preencherInformacoesUsuario() {
 async function abrirModalEdicaoSolicitacao(idSolicitacao) {
   const token = getToken();
   const solicitacaoInput = document.getElementById("id-solicitacao-editar");
-  const quantidadeInput = document.getElementById("quantidade");
+  const quantidadeInput = document.getElementById("quantidade-editar");
+  const status = document.getElementById("status-editar");
+  const usuario = document.getElementById("usuario-editar");
 
   try {
     const response = await fetch(
@@ -75,6 +77,7 @@ async function abrirModalEdicaoSolicitacao(idSolicitacao) {
     const solicitacao = solicitacoes.find(
       (sol) => sol.id_solicitacao === parseInt(idSolicitacao)
     );
+    console.log(solicitacao);
 
     if (!solicitacao) {
       throw new Error("Solicitação não encontrada.");
@@ -82,6 +85,8 @@ async function abrirModalEdicaoSolicitacao(idSolicitacao) {
 
     solicitacaoInput.value = idSolicitacao;
     quantidadeInput.value = solicitacao.quantidade_taloes;
+    status.value = solicitacao.status.id_status_solicitacao;
+    usuario.value = solicitacao.id_usuario;
 
     abrirModal("modal-editar-solicitacao");
   } catch (error) {
@@ -101,6 +106,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const token = getToken();
     const quantidade = document.getElementById("quantidade-editar").value;
+    const status = document.getElementById("status-editar").value;
+    const usuario = document.getElementById("usuario-editar").value;
+    
 
     const idSolicitacao = document.getElementById(
       "id-solicitacao-editar"
@@ -117,6 +125,8 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           body: JSON.stringify({
             quantidade_taloes: quantidade,
+            id_status_solicitacao: status,
+            id_usuario: usuario,
           }),
         }
       );

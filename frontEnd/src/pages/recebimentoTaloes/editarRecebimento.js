@@ -131,7 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }),
           }
         );
-        console.log(await response.json());
 
         if (!response.ok) {
           throw new Error("Erro ao atualizar o recebimento.");

@@ -13,42 +13,19 @@
     <script src="editarEnvio.js" defer></script>
     <script src="cadastrarEnvio.js" defer></script>
     <script src="../../components/cookie/script.js"></script>
-    <script src="/frontEnd/src/components/auth/script.js" defer></script>
+    <script type="module">
+      import { atualizarSidebar } from "/frontEnd/src/components/sidebar/updateSidebar.js";
+
+      document.addEventListener("DOMContentLoaded", () => {
+        atualizarSidebar();
+      });
+    </script>
   </head>
   <body>
     <div class="container">
       <!-- Sidebar -->
       <div class="sidebar">
-        <a href="/frontEnd/src/pages/dashboard/index.html">
-          <i class="fas fa-tachometer-alt"></i> Dashboard
-        </a>
-        <a href="/frontEnd/src/pages/usuarios/index.html">
-          <i class="fas fa-users"></i> Gestão de Usuários
-        </a>
-        <a href="/frontEnd/src/pages/perfis/index.html">
-          <i class="fas fa-user-tag"></i> Gestão de Perfis
-        </a>
-        <a href="/frontEnd/src/pages/lojas/index.html">
-          <i class="fas fa-store"></i> Gestão de Lojas
-        </a>
-        <a href="/frontEnd/src/pages/envioTaloes/index.html" class="active">
-          <i class="fas fa-paper-plane"></i> Envio de Talões
-        </a>
-        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html">
-          <i class="fas fa-inbox"></i> Recebimento de Talões
-        </a>
-        <a href="/frontEnd/src/pages/solicitacoes/index.html">
-          <i class="fas fa-file-alt"></i> Solicitações
-        </a>
-        <a href="/frontEnd/src/pages/estoque/index.html">
-          <i class="fas fa-boxes"></i> Estoque
-        </a>
-        <a href="/frontEnd/src/pages/relatorios/index.html">
-          <i class="fas fa-chart-line"></i> Relatórios
-        </a>
-        <a href="/frontEnd/src/pages/login/index.html" class="logout">
-          <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
+        <!-- A sidebar será preenchida dinamicamente pelo script -->
       </div>
 
       <!-- Main Content -->
@@ -120,7 +97,7 @@
         <form id="novo-envio-form">
           <h2>Cadastro de Novo Envio</h2>
           <div class="form-group">
-            <label for="remessa">Remessa *</label>
+            <label for="remessa">Remessa</label>
             <input
               type="text"
               id="remessa"
@@ -129,7 +106,7 @@
             />
           </div>
           <div class="form-group">
-            <label for="solicitacao">Solicitações *</label>
+            <label for="solicitacao">Solicitações</label>
             <select id="solicitacao" name="solicitacao" required>
               <option value="" disabled selected>
                 Selecione a solicitação
@@ -137,7 +114,7 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="quantidade">Quantidade *</label>
+            <label for="quantidade">Quantidade</label>
             <input
               type="text"
               id="quantidade"
@@ -146,7 +123,7 @@
             />
           </div>
           <div class="form-group">
-            <label for="data-prevista">Data Prevista *</label>
+            <label for="data-prevista">Data Prevista</label>
             <input
               type="date"
               id="data-prevista"
@@ -195,12 +172,7 @@
           </div>
           <div class="form-group">
             <label for="data-prevista">Data Prevista</label>
-            <input
-              type="datetime-local"
-              id="data-editar"
-              placeholder="Previsão de entrega"
-              required
-            />
+            <input type="datetime-local" id="data-editar" required />
           </div>
           <div class="form-group">
             <label for="status">Status</label>

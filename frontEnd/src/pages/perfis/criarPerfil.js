@@ -48,7 +48,6 @@ document
       }
 
       const perfilCriado = await responsePerfil.json();
-      console.log("Perfil criado:", perfilCriado);
 
       const responseAssociacao = await fetch(
         "http://localhost:3000/api/associations/cadastrar",

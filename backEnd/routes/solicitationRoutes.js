@@ -9,22 +9,22 @@ router.get("/", (req, res) => {
 
 router.post(
   "/cadastrar",
-  verificaPermissoes("Solicitações", "Edição"),
+  verificaPermissoes("Movimentações", "Edição"),
   solicitationController.createSolicitacao
 );
 router.get(
   "/all",
-  verificaPermissoes("Solicitações", "Leitura"),
+  verificaPermissoes("Movimentações", "Leitura"),
   solicitationController.getSolicitacoes
 );
 router.put(
   "/editar/:id_solicitacao",
-  verificaPermissoes("Solicitações", "Edição"),
+  verificaPermissoes("Movimentações", "Edição"),
   solicitationController.updateSolicitacao
 );
 router.delete(
   "/deletar/:id_solicitacao",
-  verificaPermissoes("Solicitações", "Edição"),
+  verificaPermissoes("Movimentações", "Edição"),
   solicitationController.deleteSolicitacao
 );
 

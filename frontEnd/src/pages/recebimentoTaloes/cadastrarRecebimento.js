@@ -80,8 +80,6 @@ async function carregarSolicitacao() {
     );
 
     const { solicitacoes } = await response.json();
-    console.log(solicitacoes);
-
     solicitacoes.forEach((solicitacao) => {
       const option = document.createElement("option");
       option.value = solicitacao.id_solicitacao;

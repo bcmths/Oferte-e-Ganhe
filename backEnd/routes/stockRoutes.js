@@ -9,22 +9,22 @@ router.get("/", (req, res) => {
 
 router.post(
   "/cadastrar",
-  verificaPermissoes("Estoque", "Edição"),
+  verificaPermissoes("Lojas", "Edição"),
   stockController.createStock
 );
 router.get(
   "/all",
-  verificaPermissoes("Estoque", "Leitura"),
+  verificaPermissoes("Lojas", "Leitura"),
   stockController.getStocks
 );
 router.put(
   "/editar/:id_estoque",
-  verificaPermissoes("Estoque", "Edição"),
+  verificaPermissoes("Lojas", "Edição"),
   stockController.updateStock
 );
 router.delete(
   "/deletar/:id_estoque",
-  verificaPermissoes("Estoque", "Edição"),
+  verificaPermissoes("Lojas", "Edição"),
   stockController.deleteStock
 );
 

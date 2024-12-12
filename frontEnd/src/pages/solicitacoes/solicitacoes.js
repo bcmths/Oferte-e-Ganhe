@@ -181,7 +181,6 @@ document.addEventListener("DOMContentLoaded", () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            data_solicitacao: solicitacao.data_solicitacao,
             quantidade_taloes: solicitacao.quantidade_taloes,
             id_status_solicitacao: novoStatus,
             id_usuario: solicitacao.usuario.id_usuario,

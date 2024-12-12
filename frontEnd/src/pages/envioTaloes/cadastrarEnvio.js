@@ -69,7 +69,7 @@ async function carregarSolicitacao() {
     '<option value="" disabled selected>Selecione uma solicitação</option>';
 
   try {
-    const response = await fetch(
+    const solicitacoesResponse = await fetch(
       "http://localhost:3000/api/solicitations/all",
       {
         method: "GET",
@@ -79,11 +79,39 @@ async function carregarSolicitacao() {
       }
     );
 
-    const { solicitacoes } = await response.json();
-    solicitacoes.forEach((solicitacao) => {
+    if (!solicitacoesResponse.ok) {
+      throw new Error("Erro ao obter solicitações");
+    }
+
+    const { solicitacoes } = await solicitacoesResponse.json();
+
+    const enviosResponse = await fetch("http://localhost:3000/api/talons/all", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!enviosResponse.ok) {
+      throw new Error("Erro ao obter envios");
+    }
+
+    const { movimentacoes } = await enviosResponse.json();
+
+    const idsSolicitacoesComEnvio = movimentacoes
+      .filter((mov) => mov.tipo_movimentacao === "Envio")
+      .map((mov) => mov.id_solicitacao);
+
+    const solicitacoesSemEnvio = solicitacoes.filter(
+      (s) =>
+        s.id_status_solicitacao == 2 &&
+        !idsSolicitacoesComEnvio.includes(s.id_solicitacao)
+    );
+
+    solicitacoesSemEnvio.forEach((solicitacao) => {
       const option = document.createElement("option");
       option.value = solicitacao.id_solicitacao;
-      option.textContent = `ID: ${solicitacao.id_solicitacao} - ${solicitacao.usuario.nome} - ${solicitacao.quantidade_taloes} talões`;
+      option.textContent = `ID: ${solicitacao.id_solicitacao} - ${solicitacao.usuario.loja.nome} - ${solicitacao.usuario.nome} - ${solicitacao.quantidade_taloes} talões`;
       solicitacaoSelect.appendChild(option);
     });
   } catch (error) {

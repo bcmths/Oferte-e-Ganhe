@@ -5,6 +5,7 @@ const verificaPermissoes = (modulo, tipoPermissao) => {
         message: "Usuário não autenticado ou permissões não encontradas",
       });
     }
+    
 
     const temPermissao = req.user.permissoes.some(
       (permissao) =>

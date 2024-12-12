@@ -9,42 +9,19 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <script src="/frontEnd/src/components/auth/script.js" defer></script>
+    <script type="module">
+      import { atualizarSidebar } from "/frontEnd/src/components/sidebar/updateSidebar.js";
+
+      document.addEventListener("DOMContentLoaded", () => {
+        atualizarSidebar();
+      });
+    </script>
   </head>
   <body>
     <div class="container">
       <!-- Sidebar -->
       <div class="sidebar">
-        <a href="/frontEnd/src/pages/dashboard/index.html">
-          <i class="fas fa-tachometer-alt"></i> Dashboard
-        </a>
-        <a href="/frontEnd/src/pages/usuarios/index.html">
-          <i class="fas fa-users"></i> Gestão de Usuários
-        </a>
-        <a href="/frontEnd/src/pages/perfis/index.html">
-          <i class="fas fa-user-tag"></i> Gestão de Perfis
-        </a>
-        <a href="/frontEnd/src/pages/lojas/index.html">
-          <i class="fas fa-store"></i> Gestão de Lojas
-        </a>
-        <a href="/frontEnd/src/pages/envioTaloes/index.html">
-          <i class="fas fa-paper-plane"></i> Envio de Talões
-        </a>
-        <a href="/frontEnd/src/pages/recebimentoTaloes/index.html">
-          <i class="fas fa-inbox"></i> Recebimento de Talões
-        </a>
-        <a href="/frontEnd/src/pages/solicitacoes/index.html">
-          <i class="fas fa-file-alt"></i> Solicitações
-        </a>
-        <a href="/frontEnd/src/pages/estoque/index.html" class="active">
-          <i class="fas fa-boxes"></i> Estoque
-        </a>
-        <a href="/frontEnd/src/pages/relatorios/index.html">
-          <i class="fas fa-chart-line"></i> Relatórios
-        </a>
-        <a href="/frontEnd/src/pages/login/index.html" class="logout">
-          <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
+        <!-- A sidebar será preenchida dinamicamente pelo script -->
       </div>
 
       <!-- Main Content -->
@@ -106,7 +83,7 @@
           <div class="form-group">
             <label for="quantidade-atual">Quantidade Atual</label>
             <input
-              type="text"
+              type="number"
               id="estoque-atual"
               placeholder="Quantidade Atual de Talões"
               required
@@ -115,16 +92,16 @@
           <div class="form-group">
             <label for="quantidade-minima">Quantidade Mínima</label>
             <input
-              type="text"
+              type="number"
               id="estoque-minimo"
               placeholder="Quantidade Mínima de Talões"
               required
             />
           </div>
           <div class="form-group">
-            <label for="email">Quantidade Recomendada</label>
+            <label for="quantidade-recomendada">Quantidade Recomendada</label>
             <input
-              type="text"
+              type="number"
               id="estoque-recomendado"
               placeholder="Quantidade Recomendada de Talões"
               required
@@ -136,7 +113,7 @@
               <option value="" disabled selected>Selecione a loja</option>
             </select>
           </div>
-          <button type="submit" class="btn-submit">Criar Usuário</button>
+          <button type="submit" class="btn-submit">Adicionar Estoque</button>
         </form>
       </div>
     </div>
@@ -147,12 +124,12 @@
           >&times;</span
         >
         <form id="editar-estoque-form">
-          <h2>Editar Usuário</h2>
+          <h2>Editar Estoque</h2>
           <div class="form-group">
             <input type="hidden" id="id-estoque-editar" />
             <label for="quantidade-atual">Quantidade Atual</label>
             <input
-              type="text"
+              type="number"
               id="estoque-atual-editar"
               placeholder="Quantidade Atual de Talões"
               required
@@ -161,16 +138,16 @@
           <div class="form-group">
             <label for="quantidade-minima">Quantidade Mínima</label>
             <input
-              type="text"
+              type="number"
               id="estoque-minimo-editar"
               placeholder="Quantidade Mínima de Talões"
               required
             />
           </div>
           <div class="form-group">
-            <label for="email">Quantidade Recomendada</label>
+            <label for="quantidade-recomendada">Quantidade Recomendada</label>
             <input
-              type="text"
+              type="number"
               id="estoque-recomendado-editar"
               placeholder="Quantidade Recomendada de Talões"
               required
@@ -182,7 +159,7 @@
               <option value="" disabled selected>Selecione a loja</option>
             </select>
           </div>
-          <button type="submit" class="btn-submit">Atualizar Usuário</button>
+          <button type="submit" class="btn-submit">Atualizar Estoque</button>
         </form>
       </div>
     </div>
