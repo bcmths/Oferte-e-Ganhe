@@ -5,6 +5,19 @@ function getToken() {
     ?.split("=")[1];
 }
 
+function parseJwt(token) {
+  if (!token) return null;
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map((c) => `%${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
+      .join("")
+  );
+  return JSON.parse(jsonPayload);
+}
+
 function formatarDataHora(dataISO) {
   const data = new Date(dataISO);
   const dia = String(data.getDate()).padStart(2, "0");
@@ -27,6 +40,12 @@ document
 
     try {
       const token = getToken();
+      const user = parseJwt(token);
+      if (user.id_loja !== 9) {
+        alert("Somente a Matriz pode realizar envios");
+        fecharModal("modal-novo-envio");
+        return;
+      }
 
       const response = await fetch(
         "http://localhost:3000/api/talons/cadastrar",
