@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const estoquesPaginados = estoquesFiltrados.slice(inicio, fim);
     const token = getToken();
-    const podeEditarEstoque = verificarPermissao(token, "Estoque", "Edição");
+    const podeEditarEstoque = verificarPermissao(token, "Lojas", "Edição");
 
     estoquesPaginados.forEach((estoque) => {
       const statusClass =
