@@ -5,13 +5,44 @@ function getToken() {
     ?.split("=")[1];
 }
 
+function deleteToken() {
+  document.cookie =
+    "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+function logout() {
+  const token = getToken();
+  if (token) {
+    deleteToken();
+  }
+  window.location.href = "/frontEnd/src/pages/login/index.html";
+}
+
+function parseJwt(token) {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error("Erro ao decodificar o token:", error);
+    return null;
+  }
+}
+
 document
   .getElementById("editar-perfil-form")
   .addEventListener("submit", async (e) => {
     e.preventDefault();
+    const token = getToken();
 
     const nome = document.getElementById("nome-editar").value;
     const idPerfil = document.getElementById("id-perfil-editar").value;
+    const perfilAtual = parseJwt(token);
 
     const checkboxes = document.querySelectorAll(
       "#permissoes-editar-container input[type='checkbox']:checked"
@@ -31,6 +62,10 @@ document
     }
 
     try {
+      if (idPerfil == 42) {
+        alert("Não é possível editar esse perfil");
+        return;
+      }
       const token = getToken();
 
       const responsePerfil = await fetch(
@@ -47,8 +82,8 @@ document
 
       const data = await responsePerfil.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || "Erro ao cadastrar perfil.");
+      if (!responsePerfil.ok) {
+        throw new Error(data.error || "Erro ao editar perfil.");
       }
 
       const responsePermissoes = await fetch(
@@ -65,9 +100,16 @@ document
 
       const dataPermissoes = await responsePermissoes.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || "Erro ao cadastrar perfil.");
+      if (!responsePermissoes.ok) {
+        throw new Error(dataPermissoes.error || "Erro ao cadastrar perfil.");
       }
+
+      if (perfilAtual.perfil === nome) {
+        alert("Você editou seu perfil. Faça login novamente para continuar.");
+        logout();
+        return;
+      }
+
       alert("Perfil editado com sucesso!");
       fecharModal("modal-editar-perfil");
       document.getElementById("editar-perfil-form").reset();

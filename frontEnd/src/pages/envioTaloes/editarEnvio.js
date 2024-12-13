@@ -188,8 +188,6 @@ document
       );
 
       const dataEnvio = await response.json();
-      console.log(data);
-      
 
       if (!response.ok) {
         throw new Error(dataEnvio.error || "Erro ao cadastrar envio.");

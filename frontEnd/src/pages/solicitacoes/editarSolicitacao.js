@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Solicitação editada com sucesso!");
       fecharModal("modal-editar-solicitacao");
       formEditarSolicitacao.reset();
-      location.reload();
+      window.location.href = "/frontEnd/src/pages/solicitacoes/index.html";
     } catch (error) {
       console.error(error);
       alert(error.message);

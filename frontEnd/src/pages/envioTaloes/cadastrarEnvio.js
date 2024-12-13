@@ -48,7 +48,7 @@ document
         }
       );
 
-      const dataEnvio = await responsePerfil.json();
+      const dataEnvio = await response.json();
 
       if (!response.ok) {
         throw new Error(dataEnvio.error || "Erro ao cadastrar perfil.");
@@ -57,7 +57,7 @@ document
       alert("Envio cadastrado com sucesso!");
       fecharModal("modal-novo-envio");
       document.getElementById("novo-envio-form").reset();
-      location.reload();
+      window.location.href = "/frontEnd/src/pages/envioTaloes/index.html";
     } catch (error) {
       console.error(error);
       alert(error.message);

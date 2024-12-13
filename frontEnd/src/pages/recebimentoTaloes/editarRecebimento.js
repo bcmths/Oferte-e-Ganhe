@@ -44,9 +44,6 @@ async function abrirModalEdicao(idRecebimento) {
     document.getElementById("id-recebimento-editar").value = idRecebimento;
     document.getElementById("remessa-editar").value = recebimento.remessa;
     document.getElementById("quantidade-editar").value = recebimento.quantidade;
-    document.getElementById("data-editar").value = formatarDataHora(
-      recebimento.data_prevista
-    );
 
     carregarSolicitacaoEdicao(recebimento.solicitacao.id_solicitacao);
 
@@ -108,7 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const remessa = document.getElementById("remessa-editar").value;
       const quantidade = document.getElementById("quantidade-editar").value;
-      const data = document.getElementById("data-editar").value;
       const solicitacao = document.getElementById("solicitacao-editar").value;
       const idRecebimento = document.getElementById(
         "id-recebimento-editar"
@@ -126,8 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify({
               remessa,
               quantidade,
-              data_prevista: data,
-              data_movimentação: Date.now(),
+              data_movimentacao: Date.now(),
               id_solicitacao: solicitacao,
               id_status: 7,
             }),
@@ -142,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         alert("Recebimento atualizado com sucesso!");
         fecharModal("modal-editar-recebimento");
-        location.reload();
+        window.location.href = "/frontEnd/src/pages/recebimentoTaloes/index.html";
       } catch (error) {
         console.error(error);
         alert(error.message);

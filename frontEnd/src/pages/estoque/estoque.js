@@ -75,21 +75,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function filtrarEstoques() {
-    const termoPesquisa = searchInput.value.toLowerCase();
-
-    const estoquesFiltrados = estoques.filter((estoque) => {
-      return (
-        estoque.loja.nome.toLowerCase().includes(termoPesquisa) ||
-        estoque.estoque_atual.toLowerCase().includes(termoPesquisa) ||
-        estoque.estoque_recomendado.toLowerCase().includes(termoPesquisa) ||
-        estoque.estoque_minimo.toLowerCase().includes(termoPesquisa)
-      );
-    });
-
-    renderizarTabela(estoquesFiltrados);
-  }
-
   rowsPerPageSelect.addEventListener("change", () => {
     rowsPerPage = parseInt(rowsPerPageSelect.value);
     paginaAtual = 1;
@@ -119,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = await response.json();
       estoques = data.estoques;
-      
+
       estoques = data.estoques.sort((a, b) => {
         return new Date(b.created_at) - new Date(a.created_at);
       });
@@ -129,6 +114,32 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Erro ao carregar estoques.");
     }
   }
+
+  function filtrarEstoques() {
+    const termoPesquisa = searchInput.value.toLowerCase();
+    const estoquesFiltrados = estoques.filter((estoque) => {
+      return (
+        estoque.loja.nome.toLowerCase().includes(termoPesquisa) ||
+        String(estoque.estoque_atual).toLowerCase().includes(termoPesquisa) ||
+        String(estoque.estoque_recomendado).toLowerCase().includes(termoPesquisa) ||
+        String(estoque.estoque_minimo).toLowerCase().includes(termoPesquisa)
+      );
+    });
+  
+    renderizarTabela(estoquesFiltrados);
+  }
+  
+
+  rowsPerPageSelect.addEventListener("change", () => {
+    rowsPerPage = parseInt(rowsPerPageSelect.value);
+    paginaAtual = 1;
+    filtrarEstoques();
+  });
+
+  searchInput.addEventListener("input", () => {
+    paginaAtual = 1;
+    filtrarEstoques();
+  });
 
   async function deletarEstoque(idEstoque) {
     const confirmacao = confirm("Tem certeza que deseja deletar este estoque?");

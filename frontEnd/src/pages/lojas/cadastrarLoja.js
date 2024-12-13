@@ -36,7 +36,7 @@ document
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Erro ao cadastrar loja.");
+        throw new Error(data.error);
       }
 
       alert("Loja cadastrada com sucesso!");

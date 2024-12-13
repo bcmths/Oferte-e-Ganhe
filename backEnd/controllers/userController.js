@@ -1,9 +1,9 @@
 const userService = require("../services/userService");
 const authService = require("../services/authService");
-const { creteUserSchema, updateUserSchema } = require("../utils/userSchema");
+const { createUserSchema, updateUserSchema } = require("../utils/userSchema");
 
 exports.registerUser = async (req, res) => {
-  const { error } = creteUserSchema.validate(req.body, {
+  const { error } = createUserSchema.validate(req.body, {
     abortEarly: false,
   });
   if (error) {

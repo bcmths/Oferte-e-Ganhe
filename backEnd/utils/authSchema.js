@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const createUserSchema = Joi.object({
+const registerUserSchema = Joi.object({
   nome: Joi.string().min(3).max(100).required().messages({
     "string.base": "O campo 'nome' deve ser um texto.",
     "string.empty": "O campo 'nome' não pode estar vazio.",
@@ -41,38 +41,7 @@ const createUserSchema = Joi.object({
   }),
 });
 
-const updateUserSchema = Joi.object({
-  nome: Joi.string().min(3).max(100).optional().messages({
-    "string.base": "O campo 'nome' deve ser um texto.",
-    "string.min": "O campo 'nome' deve ter pelo menos 3 caracteres.",
-    "string.max": "O campo 'nome' deve ter no máximo 100 caracteres.",
-  }),
-  email: Joi.string().email().optional().messages({
-    "string.base": "O campo 'email' deve ser um texto.",
-    "string.email": "O campo 'email' deve ser um endereço de e-mail válido.",
-  }),
-  senha: Joi.string().min(6).optional().messages({
-    "string.base": "O campo 'senha' deve ser um texto.",
-    "string.min": "O campo 'senha' deve ter pelo menos 6 caracteres.",
-  }),
-  id_perfil: Joi.number().integer().positive().optional().messages({
-    "number.base": "O campo 'id_perfil' deve ser um número.",
-    "number.integer": "O campo 'id_perfil' deve ser um número inteiro.",
-    "number.positive": "O campo 'id_perfil' deve ser um número positivo.",
-  }),
-  id_loja: Joi.number().integer().positive().optional().messages({
-    "number.base": "O campo 'id_loja' deve ser um número.",
-    "number.integer": "O campo 'id_loja' deve ser um número inteiro.",
-    "number.positive": "O campo 'id_loja' deve ser um número positivo.",
-  }),
-  novaMatricula: Joi.string().min(5).max(20).optional().messages({
-    "string.base": "O campo 'Nova matrícula' deve ser um texto.",
-    "string.min": "O campo 'Nova matrícula' deve ter pelo menos 5 caracteres.",
-    "string.max": "O campo 'Nova matrícula' deve ter no máximo 20 caracteres.",
-  }),
-}).min(1);
 
 module.exports = {
-  createUserSchema,
-  updateUserSchema,
+  registerUserSchema,
 };

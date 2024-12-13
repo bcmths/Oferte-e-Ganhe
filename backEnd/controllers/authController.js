@@ -3,24 +3,31 @@ const sendEmail = require("../services/emailService");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const Usuario = require("../models/userModel");
+const { registerUserSchema } = require("../utils/authSchema");
 require("dotenv").config();
 
 const jwtSecret = process.env.JWT_SECRET;
 
 const register = async (req, res) => {
   const { nome, matricula, email, senha, id_loja, id_perfil } = req.body;
+  const { error } = registerUserSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
 
   try {
     const emailExistente = await authService.consultarUsuarioPorEmail(email);
     if (emailExistente) {
-      return res.status(400).json({ message: "E-mail já cadastrado!" });
+      return res.status(400).json({ error: "E-mail já cadastrado!" });
     }
 
     const matriculaExistente = await authService.consultarUsuarioPorMatricula(
       matricula
     );
     if (matriculaExistente) {
-      return res.status(400).json({ message: "Matrícula já cadastrada!" });
+      return res.status(400).json({ error: "Matrícula já cadastrada!" });
     }
 
     const novoUsuario = await authService.inserirUsuario(

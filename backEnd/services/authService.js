@@ -93,6 +93,33 @@ const atualizarSenha = async (id_usuario, senha) => {
   await Usuario.update({ senha: senhaHashed }, { where: { id_usuario } });
 };
 
+async function inserirUsuario(
+  nome,
+  matricula,
+  email,
+  senha,
+  id_perfil,
+  id_loja
+) {
+  try {
+    const senhaHash = await bcrypt.hash(senha, 10);
+
+    const novoUsuario = await Usuario.create({
+      nome,
+      matricula,
+      email,
+      senha: senhaHash,
+      id_perfil,
+      id_loja,
+    });
+
+    return novoUsuario;
+  } catch (erro) {
+    console.error("Erro ao inserir usuário:", erro);
+    throw erro;
+  }
+}
+
 module.exports = {
   consultarUsuarioPorEmail,
   salvarTokenDeRedefinicao,
@@ -100,4 +127,5 @@ module.exports = {
   removerTokenDeRedefinicao,
   atualizarSenha,
   consultarUsuarioPorMatricula,
+  inserirUsuario,
 };

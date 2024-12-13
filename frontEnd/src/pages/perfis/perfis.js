@@ -123,6 +123,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!confirmacao) return;
 
     try {
+      if (id_perfil == 42) {
+        alert("Não é possível deletar esse perfil");
+        return;
+      }
       const response = await fetch(
         `http://localhost:3000/api/profiles/deletar/${id_perfil}`,
         {
@@ -168,4 +172,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-

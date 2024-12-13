@@ -124,7 +124,7 @@ document
 
       alert("Estoque atualizado com sucesso!");
       fecharModal("modal-editar-estoque");
-      location.reload()
+      window.location.href = "/frontEnd/src/pages/estoque/index.html";
     } catch (error) {
       console.error(error);
       alert(error.message);

@@ -5,6 +5,35 @@ function getToken() {
     ?.split("=")[1];
 }
 
+function deleteToken() {
+  document.cookie =
+    "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+function logout() {
+  const token = getToken();
+  if (token) {
+    deleteToken();
+  }
+  window.location.href = "/frontEnd/src/pages/login/index.html";
+}
+
+function parseJwt(token) {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error("Erro ao decodificar o token:", error);
+    return null;
+  }
+}
+
 async function abrirModalEdicao(matricula) {
   const token = getToken();
 
@@ -107,6 +136,7 @@ document
     e.preventDefault();
 
     const token = getToken();
+    const usuarioAtual = parseJwt(token);
     const matricula = document.getElementById("matricula-editar").value;
     const nome = document.getElementById("nome-editar").value;
     const email = document.getElementById("email-editar").value;
@@ -140,8 +170,14 @@ document
         throw new Error(data.error || "Erro ao atualizar o usuário.");
       }
 
+      if (usuarioAtual.matricula === matricula) {
+        alert("Você editou seu usuário. Faça login novamente para continuar.");
+        logout();
+        return;
+      }
+
       alert("Usuário atualizado com sucesso!");
-      location.reload();
+      window.location.href = "/frontEnd/src/pages/usuarios/index.html";
       fecharModal("modal-editar-usuario");
     } catch (error) {
       console.error(error);

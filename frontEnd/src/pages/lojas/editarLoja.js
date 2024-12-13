@@ -87,7 +87,7 @@ document
 
       alert("Loja atualizada com sucesso!");
       fecharModal("modal-editar-loja");
-      location.reload();
+      window.location.href = "/frontEnd/src/pages/lojas/index.html";
     } catch (error) {
       console.error(error);
       alert(error.message);

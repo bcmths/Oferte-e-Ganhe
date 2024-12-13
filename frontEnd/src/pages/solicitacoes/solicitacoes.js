@@ -38,6 +38,23 @@ document.addEventListener("DOMContentLoaded", () => {
         return "badge";
     }
   }
+  
+  function parseJwt(token) {
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error("Erro ao decodificar o token:", error);
+      return null;
+    }
+  }
 
   function renderizarTabela(solicitacoesFiltradas) {
     tabelaSolicitacoes.innerHTML = "";
@@ -170,8 +187,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function atualizarStatusSolicitacao(solicitacao, novoStatus) {
     const token = getToken();
-
+    const usuarioAtual = parseJwt(token);
     try {
+      if (usuarioAtual.id_usuario === solicitacao.usuario.id_usuario) {
+        alert("Você não pode atualizar o status da sua própria solicitação.");
+        return;
+      }
+
       const response = await fetch(
         `http://localhost:3000/api/solicitations/editar/${solicitacao.id_solicitacao}`,
         {

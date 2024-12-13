@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Solicitação cadastrada com sucesso!");
       fecharModal("modal-nova-solicitacao");
       formCadastrarSolicitacao.reset();
-      location.reload();
+      window.location.href = "/frontEnd/src/pages/solicitacoes/index.html";
     } catch (error) {
       console.error(error);
       alert(error.message);

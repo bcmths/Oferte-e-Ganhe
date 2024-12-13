@@ -43,13 +43,8 @@ document
         }
       );
 
-      const data = await responsePerfil.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Erro ao cadastrar perfil.");
-      }
-
       const perfilCriado = await responsePerfil.json();
+      
 
       const responseAssociacao = await fetch(
         "http://localhost:3000/api/associations/cadastrar",
@@ -68,9 +63,9 @@ document
 
       const dataAssociacao = await responseAssociacao.json();
 
-      if (!response.ok) {
+      if (!responseAssociacao.ok) {
         throw new Error(
-          data.error || "Erro ao cadastrar associação de permissões."
+          dataAssociacao.error || "Erro ao cadastrar associação de permissões."
         );
       }
       alert("Perfil cadastrado com sucesso!");
@@ -155,7 +150,6 @@ async function carregarPermissoes() {
       });
   } catch (error) {
     console.error("Erro ao carregar permissões:", error);
-    alert("Erro ao carregar permissões.");
   }
 }
 

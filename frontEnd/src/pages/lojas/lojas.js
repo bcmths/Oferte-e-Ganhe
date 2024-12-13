@@ -102,22 +102,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const termoPesquisa = searchInput.value.toLowerCase();
 
     const lojasFiltradas = lojas.filter((loja) => {
-      return loja.nome.toLowerCase().includes(termoPesquisa);
+      return (
+        loja.nome.toLowerCase().includes(termoPesquisa) ||
+        loja.cod_loja.toLowerCase().includes(termoPesquisa) ||
+        loja.cidade.toLowerCase().includes(termoPesquisa)
+      );
     });
 
     renderizarTabela(lojasFiltradas);
   }
-
-  rowsPerPageSelect.addEventListener("change", () => {
-    rowsPerPage = parseInt(rowsPerPageSelect.value);
-    paginaAtual = 1;
-    filtrarLojas();
-  });
-
-  searchInput.addEventListener("input", () => {
-    paginaAtual = 1;
-    filtrarLojas();
-  });
 
   async function deletarLoja(idLoja) {
     const token = getToken();
@@ -125,6 +118,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!confirmacao) return;
 
     try {
+      if (idLoja == 9) {
+        alert("Não é possível deletar essa loja");
+        return;
+      }
       const response = await fetch(
         `http://localhost:3000/api/stores/deletar/${idLoja}`,
         {
