@@ -64,6 +64,11 @@ document
     const cidade = document.getElementById("cidade-editar").value;
 
     try {
+      if (idLoja == 9) {
+        alert("Não é permitido editar a Matriz");
+        fecharModal("modal-editar-loja");
+        return;
+      }
       const response = await fetch(
         `http://localhost:3000/api/stores/editar/${idLoja}`,
         {
