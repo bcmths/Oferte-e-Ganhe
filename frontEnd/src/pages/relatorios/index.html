@@ -20,12 +20,8 @@
   </head>
   <body>
     <div class="container">
-      <!-- Sidebar -->
-      <div class="sidebar">
-        <!-- A sidebar será atualizada dinamicamente pelo script -->
-      </div>
+      <div class="sidebar"></div>
 
-      <!-- Main Content -->
       <main class="main-content">
         <header class="relatorios-header">
           <button id="sidebar-toggle" class="btn green">☰</button>
@@ -45,85 +41,7 @@
                 <th>Ações</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Usuários</td>
-                <td>
-                  <button
-                    class="btn-gerar-relatorio"
-                    onclick="gerarRelatorio('usuarios')"
-                  >
-                    Gerar Relatório
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Perfis</td>
-                <td>
-                  <button
-                    class="btn-gerar-relatorio"
-                    onclick="gerarRelatorio('perfis')"
-                  >
-                    Gerar Relatório
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Lojas</td>
-                <td>
-                  <button
-                    class="btn-gerar-relatorio"
-                    onclick="gerarRelatorio('lojas')"
-                  >
-                    Gerar Relatório
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Envio de Talões</td>
-                <td>
-                  <button
-                    class="btn-gerar-relatorio"
-                    onclick="gerarRelatorio('envio_taloes')"
-                  >
-                    Gerar Relatório
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Recebimento de Talões</td>
-                <td>
-                  <button
-                    class="btn-gerar-relatorio"
-                    onclick="gerarRelatorio('recebimento_taloes')"
-                  >
-                    Gerar Relatório
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Solicitação de Talões</td>
-                <td>
-                  <button
-                    class="btn-gerar-relatorio"
-                    onclick="gerarRelatorio('solicitacoes')"
-                  >
-                    Gerar Relatório
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Estoque</td>
-                <td>
-                  <button
-                    class="btn-gerar-relatorio"
-                    onclick="gerarRelatorio('estoques')"
-                  >
-                    Gerar Relatório
-                  </button>
-                </td>
-              </tr>
-            </tbody>
+            <tbody id="relatorios-tbody"></tbody>
           </table>
         </div>
       </main>
