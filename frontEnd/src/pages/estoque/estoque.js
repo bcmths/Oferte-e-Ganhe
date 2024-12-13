@@ -101,8 +101,9 @@ document.addEventListener("DOMContentLoaded", () => {
         },
       });
 
-      if (!response.ok) {
-        throw new Error("Erro ao carregar estoques.");
+      if (response.status === 401) {
+        alert("Sessão iniciada em outro lugar.")
+        window.location.href = "/frontEnd/src/pages/login/index.html";
       }
 
       const data = await response.json();
@@ -114,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
       filtrarEstoques();
     } catch (error) {
       console.error("Erro ao carregar estoques:", error);
-      alert("Erro ao carregar estoques.");
     }
   }
 

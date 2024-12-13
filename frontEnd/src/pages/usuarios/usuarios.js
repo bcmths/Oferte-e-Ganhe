@@ -112,8 +112,9 @@ document.addEventListener("DOMContentLoaded", () => {
         },
       });
 
-      if (!response.ok) {
-        throw new Error("Erro ao carregar os usuários.");
+      if (response.status === 401) {
+        alert("Sessão iniciada em outro lugar.")
+        window.location.href = "/frontEnd/src/pages/login/index.html";
       }
 
       const data = await response.json();
@@ -124,7 +125,6 @@ document.addEventListener("DOMContentLoaded", () => {
       filtrarUsuarios();
     } catch (error) {
       console.error(error);
-      alert("Erro ao carregar os usuários.");
     }
   }
 
