@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const fim = inicio + rowsPerPage;
 
     const usuariosPaginados = usuariosFiltrados.slice(inicio, fim);
+    const token = getToken();
+    const podeEditarUsuarios = verificarPermissao(token, "Usuários", "Edição");
 
     usuariosPaginados.forEach((usuario) => {
       const tr = document.createElement("tr");
@@ -39,14 +41,13 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${usuario.loja.nome}</td>
         <td>${formatarDataHora(usuario.created_at)}</td>
         <td>${usuario.perfil.nome}</td>
-        <td>
-          <button class="edit-btn" onclick="abrirModalEdicao('${
-            usuario.matricula
-          }')">✏️</button>
-          <button class="delete-btn" onclick="deletarUsuario('${
-            usuario.matricula
-          }')">🗑️</button>
-        </td>
+        ${
+          podeEditarUsuarios
+            ? `<td><button class="edit-btn" onclick="abrirModalEdicao('${usuario.matricula}')">✏️</button>
+          <button class="delete-btn" onclick="deletarUsuario('${usuario.matricula}')">🗑️</button>
+             </td>`
+            : ""
+        }
       `;
       tabelaUsuarios.appendChild(tr);
     });
@@ -176,4 +177,45 @@ document.addEventListener("DOMContentLoaded", () => {
       sidebar.classList.remove("active");
     }
   });
+});
+
+function parseJwt(token) {
+  if (!token) return null;
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map((c) => `%${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
+      .join("")
+  );
+  return JSON.parse(jsonPayload);
+}
+
+function verificarPermissao(token, modulo, tipoPermissao) {
+  const decodedToken = parseJwt(token);
+
+  if (decodedToken && decodedToken.permissoes) {
+    return decodedToken.permissoes.some(
+      (permissao) =>
+        permissao.modulo === modulo &&
+        permissao.tipo_permissao === tipoPermissao
+    );
+  }
+  return false;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const token = getToken();
+  const podeEditarUsuarios = verificarPermissao(token, "Usuários", "Edição");
+
+  const botaoCadastro = document.querySelector(".add-user-btn");
+  const colunaAcoes = document.querySelector(".user-actions");
+  const colunaPerfil = document.querySelector(".perfil-column");
+  if (!podeEditarUsuarios) {
+    botaoCadastro.style.display = "none";
+    colunaAcoes.style.display = "none";
+    colunaPerfil.style.borderTopRightRadius = "8px";
+    colunaPerfil.style.borderBottomRightRadius = "8px";
+  }
 });

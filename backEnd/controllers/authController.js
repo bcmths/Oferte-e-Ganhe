@@ -15,7 +15,7 @@ const register = async (req, res) => {
   });
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
-  }
+  }  
 
   try {
     const emailExistente = await authService.consultarUsuarioPorEmail(email);

@@ -641,6 +641,10 @@ table td:last-child {
   background-color: red;
 }
 
+.badge.status-pendente {
+  background-color: rgb(255, 196, 0);
+}
+
 button {
   border: none;
   cursor: pointer;

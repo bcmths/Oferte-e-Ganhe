@@ -98,8 +98,8 @@ async function inserirUsuario(
   matricula,
   email,
   senha,
-  id_perfil,
-  id_loja
+  id_loja,
+  id_perfil
 ) {
   try {
     const senhaHash = await bcrypt.hash(senha, 10);

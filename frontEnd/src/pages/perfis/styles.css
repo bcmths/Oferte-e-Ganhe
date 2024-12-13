@@ -629,7 +629,8 @@ table td:last-child {
 }
 
 .edit-btn,
-.delete-btn {
+.delete-btn,
+.details-btn {
   border: none;
   padding: 8px 12px;
   border-radius: 5px;
@@ -697,4 +698,44 @@ table td:last-child {
     font-size: 12px;
     padding: 8px;
   }
+}
+
+
+.details-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.details-table td {
+  padding: 10px;
+}
+
+.details-table td:first-child {
+  font-weight: bold;
+  background-color: #2b9348;
+  color: white;
+  width: 40%;
+}
+
+.details-table td:last-child {
+  text-align: left;
+  width: 60%;
+}
+
+.details-table tr:nth-child(even) {
+  background-color: #f0f7f3;
+}
+
+.details-table tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.details-table {
+  border: 1px solid #2b9348;
+}
+
+.details-table td {
+  border: 1px solid #2b9348;
 }

@@ -27,8 +27,8 @@ document
           matricula,
           email,
           senha,
-          id_loja: perfil,
-          id_perfil: loja,
+          id_loja: loja,
+          id_perfil: perfil,
         }),
       });
 

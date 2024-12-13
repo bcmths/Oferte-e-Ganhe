@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const fim = inicio + rowsPerPage;
 
     const perfisPaginados = perfisFiltrados.slice(inicio, fim);
+    const token = getToken();
+    const podeEditarPerfis = verificarPermissao(token, "Perfis", "Edição");
 
     perfisPaginados.forEach((perfil) => {
       const tr = document.createElement("tr");
@@ -37,12 +39,15 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${perfil.nome}</td>
         <td>${formatarDataHora(perfil.created_at)}</td>
         <td>
-          <button class="edit-btn" onclick="carregarPerfilParaEdicao('${
+        ${
+          podeEditarPerfis
+            ? `<button class="edit-btn" onclick="carregarPerfilParaEdicao('${perfil.id_perfil}')">✏️</button>
+          <button class="delete-btn" onclick="deletarPerfil('${perfil.id_perfil}')">🗑️</button>`
+            : ""
+        }          
+          <button class="details-btn" onclick="abrirModalDetalhar('${
             perfil.id_perfil
-          }')">✏️</button>
-          <button class="delete-btn" onclick="deletarPerfil('${
-            perfil.id_perfil
-          }')">🗑️</button>
+          }')">🔍</button>
         </td>
       `;
       tabelaPerfis.appendChild(tr);
@@ -154,6 +159,64 @@ document.addEventListener("DOMContentLoaded", () => {
   window.deletarPerfil = deletarPerfil;
 });
 
+async function abrirModalDetalhar(idPerfil) {
+  const token = getToken();
+  try {
+    const response = await fetch("http://localhost:3000/api/associations/all", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+    const associacoes = data.associacoes;
+
+    const perfisAssociados = associacoes.filter((a) => a.id_perfil == idPerfil);
+    if (perfisAssociados.length === 0) {
+      alert("Perfil sem permissões!");
+      return;
+    }
+
+    const perfil = perfisAssociados[0].perfil.nome;
+
+    const permissoes = perfisAssociados.map(
+      (a) => `${a.permissao.modulo}: ${a.permissao.tipo_permissao}`
+    );
+
+    const permissoesHtml = permissoes.map((p) => `<li>${p}</li>`).join("");
+
+    const conteudoModal = document.getElementById("conteudoModal");
+    conteudoModal.innerHTML = `
+      <table class="details-table">
+        <tr>
+          <td><strong>Perfil:</strong></td>
+          <td>${perfil}</td>
+        </tr>
+        <tr>
+          <td><strong>Permissões:</strong></td>
+          <td>
+            <ul>
+              ${permissoesHtml}
+            </ul>
+          </td>
+        </tr>        
+      </table>
+    `;
+
+    const modal = document.getElementById("modalDetalhes");
+    modal.style.display = "block";
+  } catch (err) {
+    console.error("Erro ao abrir modal.", err);
+    alert("Erro ao carregar os detalhes do perfil.");
+  }
+}
+
+function fecharModalDetalhar(modalId) {
+  document.getElementById(modalId).style.display = "none";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const sidebar = document.querySelector(".sidebar");
   const toggleButton = document.getElementById("sidebar-toggle");
@@ -171,4 +234,40 @@ document.addEventListener("DOMContentLoaded", () => {
       sidebar.classList.remove("active");
     }
   });
+});
+
+function parseJwt(token) {
+  if (!token) return null;
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map((c) => `%${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
+      .join("")
+  );
+  return JSON.parse(jsonPayload);
+}
+
+function verificarPermissao(token, modulo, tipoPermissao) {
+  const decodedToken = parseJwt(token);
+
+  if (decodedToken && decodedToken.permissoes) {
+    return decodedToken.permissoes.some(
+      (permissao) =>
+        permissao.modulo === modulo &&
+        permissao.tipo_permissao === tipoPermissao
+    );
+  }
+  return false;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const token = getToken();
+  const podeEditarPerfis = verificarPermissao(token, "Perfis", "Edição");
+
+  const botaoCadastro = document.querySelector(".add-profile-btn");
+  if (!podeEditarPerfis) {
+    botaoCadastro.style.display = "none";
+  }
 });

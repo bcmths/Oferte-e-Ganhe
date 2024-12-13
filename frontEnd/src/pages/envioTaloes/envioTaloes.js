@@ -32,6 +32,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const fim = inicio + rowsPerPage;
 
     const enviosPaginados = enviosFiltrados.slice(inicio, fim);
+    
+    const token = getToken();
+    const podeEditarMovimentacoes = verificarPermissao(
+      token,
+      "Movimentações",
+      "Edição"
+    );
 
     enviosPaginados.forEach((envio) => {
       const statusClass = envio.status.status
@@ -53,16 +60,16 @@ document.addEventListener("DOMContentLoaded", () => {
             </span>
         </td>
         <td>
-          <button class="edit-btn" onclick="abrirModalEdicao('${
-            envio.id_movimentacao
-          }')">✏️</button>
-          <button class="delete-btn" onclick="deletarEnvio('${
-            envio.id_movimentacao
-          }')">🗑️</button>
-          <button class="details-btn" onclick="abrirModalDetalhar('${
-            envio.id_movimentacao
-          }')">🔍</button>
-        </td>
+        ${
+          podeEditarMovimentacoes
+            ? `<button class="edit-btn" onclick="abrirModalEdicao('${envio.id_movimentacao}')">✏️</button>
+               <button class="delete-btn" onclick="deletarEnvio('${envio.id_movimentacao}')">🗑️</button>`
+            : ""
+        }
+        <button class="details-btn" onclick="abrirModalDetalhar('${
+          envio.id_movimentacao
+        }')">🔍</button>
+      </td>
       `;
       tabelaEnvios.appendChild(tr);
     });
@@ -268,3 +275,43 @@ async function abrirModalDetalhar(idEnvio) {
 function fecharModalDetalhar(modalId) {
   document.getElementById(modalId).style.display = "none";
 }
+
+function parseJwt(token) {
+  if (!token) return null;
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map((c) => `%${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
+      .join("")
+  );
+  return JSON.parse(jsonPayload);
+}
+
+function verificarPermissao(token, modulo, tipoPermissao) {
+  const decodedToken = parseJwt(token);
+
+  if (decodedToken && decodedToken.permissoes) {
+    return decodedToken.permissoes.some(
+      (permissao) =>
+        permissao.modulo === modulo &&
+        permissao.tipo_permissao === tipoPermissao
+    );
+  }
+  return false;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const token = getToken();
+  const podeEditarMovimentacoes = verificarPermissao(
+    token,
+    "Movimentações",
+    "Edição"
+  );
+
+  const botaoCadastro = document.querySelector(".add-envio-taloes-btn");
+  if (!podeEditarMovimentacoes) {
+    botaoCadastro.style.display = "none";
+  }
+});

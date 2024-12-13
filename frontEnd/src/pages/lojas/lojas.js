@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const fim = inicio + rowsPerPage;
 
     const lojasPaginadas = lojasFiltrados.slice(inicio, fim);
+    const token = getToken();
+    const podeEditarLoja = verificarPermissao(token, "Lojas", "Edição");
 
     lojasPaginadas.forEach((loja) => {
       const tr = document.createElement("tr");
@@ -29,10 +31,15 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${loja.cod_loja}</td>
         <td>${loja.nome}</td>
         <td>${loja.cidade}</td>
-        <td>
+        ${
+          podeEditarLoja
+            ? `<td>
           <button class="edit-btn" onclick="abrirModalEdicao(${loja.id_loja})">✏️</button>
           <button class="delete-btn" onclick="deletarLoja(${loja.id_loja})">🗑️</button>
-        </td>
+        </td>`
+            : ""
+        }
+        
       `;
       tabelaLojas.appendChild(tr);
     });
@@ -163,4 +170,52 @@ document.addEventListener("DOMContentLoaded", () => {
       sidebar.classList.remove("active");
     }
   });
+});
+
+function parseJwt(token) {
+  if (!token) return null;
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map((c) => `%${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
+      .join("")
+  );
+  return JSON.parse(jsonPayload);
+}
+
+function verificarPermissao(token, modulo, tipoPermissao) {
+  const decodedToken = parseJwt(token);
+
+  if (decodedToken && decodedToken.permissoes) {
+    return decodedToken.permissoes.some(
+      (permissao) =>
+        permissao.modulo === modulo &&
+        permissao.tipo_permissao === tipoPermissao
+    );
+  }
+  return false;
+}
+
+function getToken() {
+  return document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("authToken="))
+    ?.split("=")[1];
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const token = getToken();
+  const podeEditarLoja = verificarPermissao(token, "Lojas", "Edição");
+
+  const botaoCadastro = document.querySelector(".add-loja-btn");
+  const cidade = document.querySelector(".cidade-column");
+  const colunaAcoes = document.querySelector(".action-column");
+  if (!podeEditarLoja) {
+    botaoCadastro.style.display = "none";
+    colunaAcoes.style.display = "none";
+    cidade.style.borderTopRightRadius = "8px";
+    cidade.style.borderBottomRightRadius = "8px";
+  }
 });

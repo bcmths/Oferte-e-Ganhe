@@ -32,6 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const fim = inicio + rowsPerPage;
 
     const recebimentosPaginados = recebimentosFiltrados.slice(inicio, fim);
+    const token = getToken();
+    const podeEditarRecebimento = verificarPermissao(
+      token,
+      "Movimentações",
+      "Edição"
+    );
 
     recebimentosPaginados.forEach((recebimento) => {
       const statusClass = recebimento.status.status
@@ -53,14 +59,15 @@ document.addEventListener("DOMContentLoaded", () => {
             ${recebimento.status.status}
           </span>
         </td>
-        <td>
-          <button class="edit-btn" onclick="abrirModalEdicao('${
-            recebimento.id_movimentacao
-          }')">✏️</button>
-          <button class="delete-btn" onclick="deletarRecebimento('${
-            recebimento.id_movimentacao
-          }')">🗑️</button>
-        </td>
+        ${
+          podeEditarRecebimento
+            ? `<td>
+          <button class="edit-btn" onclick="abrirModalEdicao('${recebimento.id_movimentacao}')">✏️</button>
+          <button class="delete-btn" onclick="deletarRecebimento('${recebimento.id_movimentacao}')">🗑️</button>
+        </td>`
+            : ""
+        }
+        
       `;
       tabelaRecebimentos.appendChild(tr);
     });
@@ -194,4 +201,56 @@ document.addEventListener("DOMContentLoaded", () => {
       sidebar.classList.remove("active");
     }
   });
+});
+
+function parseJwt(token) {
+  if (!token) return null;
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map((c) => `%${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
+      .join("")
+  );
+  return JSON.parse(jsonPayload);
+}
+
+function verificarPermissao(token, modulo, tipoPermissao) {
+  const decodedToken = parseJwt(token);
+
+  if (decodedToken && decodedToken.permissoes) {
+    return decodedToken.permissoes.some(
+      (permissao) =>
+        permissao.modulo === modulo &&
+        permissao.tipo_permissao === tipoPermissao
+    );
+  }
+  return false;
+}
+
+function getToken() {
+  return document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("authToken="))
+    ?.split("=")[1];
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const token = getToken();
+  const podeEditarRecebimento = verificarPermissao(
+    token,
+    "Movimentações",
+    "Edição"
+  );
+
+  const botaoCadastro = document.querySelector(".add-recebimento-taloes-btn");
+  const status = document.querySelector(".status-column");
+  const colunaAcoes = document.querySelector(".action-column");
+  if (!podeEditarRecebimento) {
+    botaoCadastro.style.display = "none";
+    colunaAcoes.style.display = "none";
+    status.style.borderTopRightRadius = "8px";
+    status.style.borderBottomRightRadius = "8px";
+  }
 });

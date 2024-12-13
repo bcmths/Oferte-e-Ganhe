@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const fim = inicio + rowsPerPage;
 
     const estoquesPaginados = estoquesFiltrados.slice(inicio, fim);
+    const token = getToken();
+    const podeEditarEstoque = verificarPermissao(token, "Estoque", "Edição");
 
     estoquesPaginados.forEach((estoque) => {
       const statusClass =
@@ -41,14 +43,15 @@ document.addEventListener("DOMContentLoaded", () => {
           </td>
           <td>${estoque.estoque_minimo}</td>
           <td>${estoque.estoque_recomendado}</td>
-          <td>
-            <button class="edit-btn" onclick="abrirModalEdicao(${
-              estoque.id_estoque
-            })">✏️</button>
-            <button class="delete-btn" onclick="deletarEstoque(${
-              estoque.id_estoque
-            })">🗑️</button>
-          </td>
+          ${
+            podeEditarEstoque
+              ? `<td>
+            <button class="edit-btn" onclick="abrirModalEdicao(${estoque.id_estoque})">✏️</button>
+            <button class="delete-btn" onclick="deletarEstoque(${estoque.id_estoque})">🗑️</button>
+          </td>`
+              : ""
+          }
+          
         `;
       tabelaEstoques.appendChild(tr);
     });
@@ -121,14 +124,15 @@ document.addEventListener("DOMContentLoaded", () => {
       return (
         estoque.loja.nome.toLowerCase().includes(termoPesquisa) ||
         String(estoque.estoque_atual).toLowerCase().includes(termoPesquisa) ||
-        String(estoque.estoque_recomendado).toLowerCase().includes(termoPesquisa) ||
+        String(estoque.estoque_recomendado)
+          .toLowerCase()
+          .includes(termoPesquisa) ||
         String(estoque.estoque_minimo).toLowerCase().includes(termoPesquisa)
       );
     });
-  
+
     renderizarTabela(estoquesFiltrados);
   }
-  
 
   rowsPerPageSelect.addEventListener("change", () => {
     rowsPerPage = parseInt(rowsPerPageSelect.value);
@@ -189,4 +193,45 @@ document.addEventListener("DOMContentLoaded", () => {
       sidebar.classList.remove("active");
     }
   });
+});
+
+function parseJwt(token) {
+  if (!token) return null;
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map((c) => `%${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
+      .join("")
+  );
+  return JSON.parse(jsonPayload);
+}
+
+function verificarPermissao(token, modulo, tipoPermissao) {
+  const decodedToken = parseJwt(token);
+
+  if (decodedToken && decodedToken.permissoes) {
+    return decodedToken.permissoes.some(
+      (permissao) =>
+        permissao.modulo === modulo &&
+        permissao.tipo_permissao === tipoPermissao
+    );
+  }
+  return false;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const token = getToken();
+  const podeEditarEstoque = verificarPermissao(token, "Lojas", "Edição");
+
+  const botaoCadastro = document.querySelector(".add-estoque-btn");
+  const qtdRecom = document.querySelector(".qtdRecom");
+  const colunaAcoes = document.querySelector(".action-column");
+  if (!podeEditarEstoque) {
+    botaoCadastro.style.display = "none";
+    colunaAcoes.style.display = "none";
+    qtdRecom.style.borderTopRightRadius = "8px";
+    qtdRecom.style.borderBottomRightRadius = "8px";
+  }
 });

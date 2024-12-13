@@ -34,11 +34,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return "badge status-aceita";
       case "solicitação recusada":
         return "badge status-recusada";
+      case "pendente":
+        return "badge status-pendente";
       default:
         return "badge";
     }
   }
-  
+
   function parseJwt(token) {
     try {
       const base64Url = token.split(".")[1];
@@ -63,6 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const fim = inicio + rowsPerPage;
 
     const solicitacoesPaginadas = solicitacoesFiltradas.slice(inicio, fim);
+    const token = getToken();
+    const podeEditarSolicitacoes = verificarPermissao(
+      token,
+      "Movimentações",
+      "Edição"
+    );
 
     solicitacoesPaginadas.forEach((solicitacao) => {
       const statusClass = solicitacao.status.status
@@ -77,7 +85,9 @@ document.addEventListener("DOMContentLoaded", () => {
               <td>${solicitacao.quantidade_taloes}</td>
               <td>${formatarDataHora(solicitacao.updated_at)}</td>
               <td>${solicitacao.usuario.nome || "N/A"}</td>
-              <td>
+              ${
+                podeEditarSolicitacoes
+                  ? `<td>
                 ${
                   solicitacao.status.status === "Pendente"
                     ? `
@@ -88,19 +98,25 @@ document.addEventListener("DOMContentLoaded", () => {
                         solicitacao.status?.status || ""
                       )}">${solicitacao.status?.status || "N/A"}</span>`
                 }
-              </td>
-              <td>
-                <button class="edit-btn" onclick="abrirModalEdicaoSolicitacao(${
-                  solicitacao.id_solicitacao
-                })">✏️</button>
-                <button class="delete-btn" onclick="deletarSolicitacao(${
-                  solicitacao.id_solicitacao
-                })">🗑️</button>
-              </td>
+              </td>`
+                  : `<td><span class="${getBadgeClass(
+                      solicitacao.status?.status || ""
+                    )}">${solicitacao.status?.status || "N/A"}</span></td>`
+              }
+              
+              ${
+                podeEditarSolicitacoes
+                  ? ` <td>
+                <button class="edit-btn" onclick="abrirModalEdicaoSolicitacao(${solicitacao.id_solicitacao})">✏️</button>
+                <button class="delete-btn" onclick="deletarSolicitacao(${solicitacao.id_solicitacao})">🗑️</button>
+              </td>`
+                  : ""
+              }
+             
             `;
       tabelaSolicitacoes.appendChild(tr);
 
-      if (solicitacao.status.status === "Pendente") {
+      if (solicitacao.status.status === "Pendente" && podeEditarSolicitacoes) {
         tr.querySelector(".btn-status.aceitar").addEventListener("click", () =>
           atualizarStatusSolicitacao(solicitacao, 2)
         );
@@ -279,4 +295,56 @@ document.addEventListener("DOMContentLoaded", () => {
       sidebar.classList.remove("active");
     }
   });
+});
+
+function parseJwt(token) {
+  if (!token) return null;
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map((c) => `%${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
+      .join("")
+  );
+  return JSON.parse(jsonPayload);
+}
+
+function verificarPermissao(token, modulo, tipoPermissao) {
+  const decodedToken = parseJwt(token);
+
+  if (decodedToken && decodedToken.permissoes) {
+    return decodedToken.permissoes.some(
+      (permissao) =>
+        permissao.modulo === modulo &&
+        permissao.tipo_permissao === tipoPermissao
+    );
+  }
+  return false;
+}
+
+function getToken() {
+  return document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("authToken="))
+    ?.split("=")[1];
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const token = getToken();
+  const podeEditarSolicitacoes = verificarPermissao(
+    token,
+    "Movimentações",
+    "Edição"
+  );
+
+  const botaoCadastro = document.querySelector(".add-solicitacoes-btn");
+  const status = document.querySelector(".status-column");
+  const colunaAcoes = document.querySelector(".action-column");
+  if (!podeEditarSolicitacoes) {
+    botaoCadastro.style.display = "none";
+    colunaAcoes.style.display = "none";
+    status.style.borderTopRightRadius = "8px";
+    status.style.borderBottomRightRadius = "8px";
+  }
 });
