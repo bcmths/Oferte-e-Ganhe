@@ -50,8 +50,10 @@ document
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Erro ao cadastrar envio.");
+        throw new Error(data.error || "Erro ao cadastrar recebimento.");
       }
 
       alert("Recebimento cadastrado com sucesso!");
@@ -59,8 +61,8 @@ document
       document.getElementById("novo-recebimento-form").reset();
       location.reload();
     } catch (error) {
-      console.error("Erro ao cadastrar recebimento:", error);
-      alert("Erro ao cadastrar recebimento.");
+      console.error(error);
+      alert(error.message);
     }
   });
 

@@ -9,10 +9,7 @@ exports.createMovimentacao = async (req, res) => {
     abortEarly: false,
   });
   if (error) {
-    return res.status(400).json({
-      message: "Erro de validação.",
-      errors: error.details.map((err) => err.message),
-    });
+    return res.status(400).json({ error: error.details[0].message });
   }
   const {
     remessa,
@@ -59,10 +56,7 @@ exports.updateMovimentacao = async (req, res) => {
     abortEarly: false,
   });
   if (error) {
-    return res.status(400).json({
-      message: "Erro de validação.",
-      errors: error.details.map((err) => err.message),
-    });
+    return res.status(400).json({ error: error.details[0].message });
   }
   const { id_movimentacao } = req.params;
   const {

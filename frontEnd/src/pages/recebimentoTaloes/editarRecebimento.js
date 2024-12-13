@@ -110,7 +110,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const quantidade = document.getElementById("quantidade-editar").value;
       const data = document.getElementById("data-editar").value;
       const solicitacao = document.getElementById("solicitacao-editar").value;
-      const idRecebimento = document.getElementById("id-recebimento-editar").value;      
+      const idRecebimento = document.getElementById(
+        "id-recebimento-editar"
+      ).value;
 
       try {
         const response = await fetch(
@@ -131,20 +133,19 @@ document.addEventListener("DOMContentLoaded", () => {
             }),
           }
         );
-        console.log(await response.json());
+
+        const data = await response.json();
 
         if (!response.ok) {
-          throw new Error("Erro ao atualizar o recebimento.");
+          throw new Error(data.error || "Erro ao cadastrar usuário.");
         }
 
         alert("Recebimento atualizado com sucesso!");
         fecharModal("modal-editar-recebimento");
-
-        window.location.href =
-          "/frontEnd/src/pages/recebimentoTaloes/index.html";
+        location.reload();
       } catch (error) {
         console.error(error);
-        alert("Erro ao atualizar o recebimento.");
+        alert(error.message);
       }
     });
   }

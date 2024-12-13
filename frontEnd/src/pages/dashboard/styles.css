@@ -73,7 +73,6 @@ body {
   cursor: pointer;
 }
 
-
 .sidebar a.active,
 .sidebar a:hover {
   background-color: #2b9348;
@@ -167,17 +166,17 @@ body {
   background-color: #fffdf5;
   border: 2px solid #ff9800;
   padding: 20px;
+  margin-bottom: 0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Caixa de informações */
 #loja-info {
   background-color: #ffffff;
   border: 2px solid #2b9348;
   border-radius: 8px;
   padding: 20px;
-  margin: 20px 0;
+  margin-top: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   color: #333;
 }
@@ -312,4 +311,35 @@ body {
   .sidebar.active {
     transform: translateX(0);
   }
+}
+
+.user-info-header {
+  background-color: #ffffff;
+  border: 2px solid #2b9348;
+  border-radius: 8px;
+  padding: 1vh;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+.info-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-icon {
+  font-size: 40px;
+  color: #6c757d;
+}
+
+.user-text {
+  font-size: 14px;
+  color: #343a40;
+}
+
+.user-name,
+.user-profile {
+  margin: 0;
+  font-weight: normal;
 }

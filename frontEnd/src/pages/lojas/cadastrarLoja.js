@@ -33,8 +33,10 @@ document
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Erro ao cadastrar loja.");
+        throw new Error(data.error || "Erro ao cadastrar loja.");
       }
 
       alert("Loja cadastrada com sucesso!");
@@ -42,8 +44,8 @@ document
       document.getElementById("cadastrar-loja-form").reset();
       carregarLojas();
     } catch (error) {
-      console.error("Erro ao cadastrar estoque:", error);
-      alert("Erro ao cadastrar estoque.");
+      console.error(error);
+      alert(error.message);
     }
   });
 

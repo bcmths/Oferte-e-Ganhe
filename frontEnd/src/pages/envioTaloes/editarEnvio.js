@@ -52,10 +52,11 @@ async function abrirModalEdicao(idEnvio) {
     document.getElementById("id-envio-editar").value = idEnvio;
     document.getElementById("remessa-editar").value = envio.remessa;
     document.getElementById("quantidade-editar").value = envio.quantidade;
-
     document.getElementById("data-editar").value = formatarTimestampParaInput(
       envio.data_prevista
     );
+    document.getElementById("data-mov-editar").value =
+      formatarTimestampParaInput(envio.data_movimentacao);
 
     carregarSolicitacaoEdicao(envio.solicitacao.id_solicitacao);
     carregarStatusEdicao(envio.status.id_status_solicitacao);
@@ -112,14 +113,27 @@ async function carregarStatusEdicao(idStatus) {
       }
     );
 
+    if (!response.ok) {
+      throw new Error("Erro ao carregar os status.");
+    }
+
     const { statusMovimentacao } = await response.json();
-    statusMovimentacao.forEach((s) => {
-      const option = document.createElement("option");
-      option.value = s.id_status_movimentacao;
-      option.textContent = s.status;
-      if (s.id_status === idStatus) option.selected = true;
-      statusSelect.appendChild(option);
-    });
+    statusMovimentacao
+      .filter((s) => s.status !== "Recebido")
+      .forEach((s) => {
+        const option = document.createElement("option");
+        option.value = s.id_status_movimentacao;
+        option.textContent = s.status;
+        if (s.id_status_movimentacao == idStatus) {
+          option.selected = true;
+        }
+        statusSelect.appendChild(option);
+      });
+
+    if (!Array.from(statusSelect.options).some((opt) => opt.selected)) {
+      console.warn("Status não encontrado. Selecione o primeiro valor.");
+      statusSelect.options[0].selected = true;
+    }
   } catch (error) {
     console.error("Erro ao carregar status:", error);
   }
@@ -147,6 +161,7 @@ document
     const remessa = document.getElementById("remessa-editar").value;
     const quantidade = document.getElementById("quantidade-editar").value;
     const data = document.getElementById("data-editar").value;
+    const data_movimentacao = document.getElementById("data-mov-editar").value;
     const solicitacao = document.getElementById("solicitacao-editar").value;
     const status = document.getElementById("status-editar").value;
     const idEnvio = document.getElementById("id-envio-editar").value;
@@ -163,16 +178,21 @@ document
           body: JSON.stringify({
             remessa,
             quantidade,
+            tipo_movimentacao: "Envio",
             data_prevista: data,
-            data_movimentação: Date.now(),
+            data_movimentacao: data_movimentacao,
             id_solicitacao: solicitacao,
             id_status: status,
           }),
         }
       );
 
+      const dataEnvio = await response.json();
+      console.log(data);
+      
+
       if (!response.ok) {
-        throw new Error("Erro ao atualizar o usuário.");
+        throw new Error(dataEnvio.error || "Erro ao cadastrar envio.");
       }
 
       alert("Envio atualizado com sucesso!");
@@ -181,7 +201,7 @@ document
       window.location.href = "/frontEnd/src/pages/envioTaloes/index.html";
     } catch (error) {
       console.error(error);
-      alert("Erro ao atualizar o envio.");
+      alert(error.message);
     }
   });
 

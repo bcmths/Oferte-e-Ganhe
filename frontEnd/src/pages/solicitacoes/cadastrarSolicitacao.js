@@ -119,8 +119,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       );
 
+      
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Erro ao cadastrar a solicitação.");
+        throw new Error(data.error || "Erro ao cadastrar solicitação.");
       }
 
       alert("Solicitação cadastrada com sucesso!");
@@ -128,8 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
       formCadastrarSolicitacao.reset();
       location.reload();
     } catch (error) {
-      console.error("Erro ao cadastrar a solicitação:", error);
-      alert("Erro ao cadastrar a solicitação.");
+      console.error(error);
+      alert(error.message);
     }
   });
 

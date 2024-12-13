@@ -45,8 +45,10 @@ document
         }
       );
 
-      if (!responsePerfil.ok) {
-        throw new Error("Erro ao salvar alterações do perfil.");
+      const data = await responsePerfil.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Erro ao cadastrar perfil.");
       }
 
       const responsePermissoes = await fetch(
@@ -61,16 +63,18 @@ document
         }
       );
 
-      if (!responsePermissoes.ok) {
-        throw new Error("Erro ao salvar alterações das permissões.");
+      const dataPermissoes = await responsePermissoes.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Erro ao cadastrar perfil.");
       }
       alert("Perfil editado com sucesso!");
       fecharModal("modal-editar-perfil");
       document.getElementById("editar-perfil-form").reset();
       carregarPerfis();
     } catch (error) {
-      console.error("Erro ao editar perfil:", error);
-      alert("Erro ao editar perfil.");
+      console.error(error);
+      alert(error.message);
     }
   });
 
@@ -117,7 +121,9 @@ async function carregarPerfilParaEdicao(idPerfil) {
 
 async function carregarPermissoesEditar(permissoesAssociadas) {
   const token = getToken();
-  const permissoesContainer = document.getElementById("permissoes-editar-container");
+  const permissoesContainer = document.getElementById(
+    "permissoes-editar-container"
+  );
 
   try {
     const response = await fetch("http://localhost:3000/api/permissions/all", {
@@ -134,7 +140,6 @@ async function carregarPermissoesEditar(permissoesAssociadas) {
     const permissoesData = await response.json();
     const permissoes = permissoesData.permissoes;
 
-    // Organize as permissões por módulo e tipo
     const permissoesAgrupadas = permissoes.reduce((acc, permissao) => {
       if (!acc[permissao.modulo]) {
         acc[permissao.modulo] = {};
@@ -143,10 +148,11 @@ async function carregarPermissoesEditar(permissoesAssociadas) {
       return acc;
     }, {});
 
-    // Adicionar a classe "permission-container" para exibir os itens lado a lado
     permissoesContainer.innerHTML = "<div class='permission-container'></div>";
-    const permissionContainer = permissoesContainer.querySelector('.permission-container');
-    
+    const permissionContainer = permissoesContainer.querySelector(
+      ".permission-container"
+    );
+
     Object.keys(permissoesAgrupadas).forEach((modulo) => {
       const div = document.createElement("div");
 
@@ -208,7 +214,6 @@ async function carregarPermissoesEditar(permissoesAssociadas) {
     alert("Erro ao carregar permissões.");
   }
 }
-
 
 function abrirModal(modalId, idPerfil) {
   const modal = document.getElementById(modalId);

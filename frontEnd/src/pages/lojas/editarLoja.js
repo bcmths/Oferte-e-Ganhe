@@ -82,7 +82,7 @@ document
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || "Erro ao atualizar o usuário.");
+        throw new Error(data.error || "Erro ao atualizar o loja.");
       }
 
       alert("Loja atualizada com sucesso!");

@@ -48,8 +48,10 @@ document
         }
       );
 
+      const dataEnvio = await responsePerfil.json();
+
       if (!response.ok) {
-        throw new Error("Erro ao cadastrar envio.");
+        throw new Error(dataEnvio.error || "Erro ao cadastrar perfil.");
       }
 
       alert("Envio cadastrado com sucesso!");
@@ -57,8 +59,8 @@ document
       document.getElementById("novo-envio-form").reset();
       location.reload();
     } catch (error) {
-      console.error("Erro ao cadastrar envio:", error);
-      alert("Erro ao cadastrar envio.");
+      console.error(error);
+      alert(error.message);
     }
   });
 

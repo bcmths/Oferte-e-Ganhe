@@ -108,7 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const quantidade = document.getElementById("quantidade-editar").value;
     const status = document.getElementById("status-editar").value;
     const usuario = document.getElementById("usuario-editar").value;
-    
 
     const idSolicitacao = document.getElementById(
       "id-solicitacao-editar"
@@ -131,8 +130,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Erro ao editar a solicitação.");
+        throw new Error(data.error || "Erro ao cadastrar solicitação.");
       }
 
       alert("Solicitação editada com sucesso!");
@@ -140,8 +141,8 @@ document.addEventListener("DOMContentLoaded", () => {
       formEditarSolicitacao.reset();
       location.reload();
     } catch (error) {
-      console.error("Erro ao editar a solicitação:", error);
-      alert("Erro ao editar a solicitação.");
+      console.error(error);
+      alert(error.message);
     }
   });
 });

@@ -69,6 +69,7 @@ const login = async (req, res) => {
         id_perfil: usuario.id_perfil,
         id_loja: usuario.id_loja,
         loja: usuario.loja.nome,
+        perfil: usuario.perfil.nome,
         permissoes: permissao.map((p) => ({
           modulo: p.modulo,
           tipo_permissao: p.tipo_permissao,

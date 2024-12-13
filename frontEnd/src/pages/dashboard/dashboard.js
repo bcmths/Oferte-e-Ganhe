@@ -82,7 +82,6 @@ async function renderLojaDashboard(usuario) {
   const solicitacoes = await fetchData("solicitacoes");
 
   const lojaDoUsuario = lojas.find((loja) => loja.id_loja === usuario.id_loja);
-
   if (!lojaDoUsuario) {
     console.error("Loja do usuário não encontrada.");
     return;
@@ -238,6 +237,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (geralCharts) geralCharts.style.display = "flex";
 
     await renderFullDashboard();
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const usuario = getDecodedToken();
+  
+  if (usuario) {
+    document.getElementById("user-name").textContent = usuario.nome || "Usuário não identificado";
+    document.getElementById("user-profile").textContent = usuario.perfil || "Perfil não definido";
+  } else {
+    console.error("Usuário não autenticado");
+    document.getElementById("user-name").textContent = "Usuário não autenticado";
+    document.getElementById("user-profile").textContent = "N/A";
   }
 });
 

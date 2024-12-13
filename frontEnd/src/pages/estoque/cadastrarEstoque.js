@@ -37,8 +37,10 @@ document
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Erro ao cadastrar usuário.");
+        throw new Error(data.error || "Erro ao cadastrar estoque.");
       }
 
       alert("Estoque cadastrado com sucesso!");
@@ -46,8 +48,8 @@ document
       document.getElementById("novo-estoque-form").reset();
       carregarEstoques();
     } catch (error) {
-      console.error("Erro ao cadastrar estoque:", error);
-      alert("Erro ao cadastrar estoque.");
+      console.error(error);
+      alert(error.message);
     }
   });
 

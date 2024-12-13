@@ -116,8 +116,10 @@ document
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Erro ao atualizar o estoque.");
+        throw new Error(data.error || "Erro ao cadastrar estoque.");
       }
 
       alert("Estoque atualizado com sucesso!");
@@ -125,7 +127,7 @@ document
       location.reload()
     } catch (error) {
       console.error(error);
-      alert("Erro ao atualizar o estoque.");
+      alert(error.message);
     }
   });
 
