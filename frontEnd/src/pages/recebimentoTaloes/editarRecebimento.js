@@ -109,6 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const idRecebimento = document.getElementById(
         "id-recebimento-editar"
       ).value;
+      console.log(idRecebimento);
 
       try {
         const response = await fetch(
@@ -137,7 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         alert("Recebimento atualizado com sucesso!");
         fecharModal("modal-editar-recebimento");
-        window.location.href = "/frontEnd/src/pages/recebimentoTaloes/index.html";
+        window.location.href =
+          "/frontEnd/src/pages/recebimentoTaloes/index.html";
       } catch (error) {
         console.error(error);
         alert(error.message);

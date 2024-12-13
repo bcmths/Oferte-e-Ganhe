@@ -169,8 +169,6 @@ document
   .addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const token = getToken();
-
     const remessa = document.getElementById("remessa-editar").value;
     const quantidade = document.getElementById("quantidade-editar").value;
     const data = document.getElementById("data-editar").value;
