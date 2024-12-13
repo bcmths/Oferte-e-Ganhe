@@ -44,6 +44,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const novaSenha = document.getElementById("novaSenha").value;
     const confirmaSenha = document.getElementById("confirmaSenha").value;
 
+    if (novaSenha.length < 6) {
+      alert("A senha deve ter no mínimo 6 caracteres.");
+      return;
+    }
+
     if (novaSenha !== confirmaSenha) {
       alert("As senhas não coincidem. Por favor, verifique.");
       return;
